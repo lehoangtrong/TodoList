@@ -22,9 +22,6 @@ public partial class TodoApplicationPrn212Context : DbContext
     public virtual DbSet<Entities.Task> Tasks { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-<<<<<<< HEAD
-        => optionsBuilder.UseSqlServer("Server=(local);uid=sa;pwd=12345;database=TodoApplicationPRN212;TrustServerCertificate=True");
-=======
         => optionsBuilder.UseSqlServer(GetConnectionString());
 
     private string GetConnectionString()
@@ -37,7 +34,6 @@ public partial class TodoApplicationPrn212Context : DbContext
 
         return strConn;
     }
->>>>>>> 3cd39293b56175e1dc5a76ddc2009b9700657998
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
