@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TodoList.DAL.Entities;
+namespace Todolist.DAL.Entities;
 
 public partial class Category
 {

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using TodoList.DAL.Entities;
+using Microsoft.Extensions.Configuration;
+using Todolist.DAL.Entities;
 
-namespace TodoList.DAL;
+namespace Todolist.DAL;
 
 public partial class TodoApplicationPrn212Context : DbContext
 {
@@ -21,13 +22,28 @@ public partial class TodoApplicationPrn212Context : DbContext
     public virtual DbSet<Entities.Task> Tasks { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+<<<<<<< HEAD
         => optionsBuilder.UseSqlServer("Server=(local);uid=sa;pwd=12345;database=TodoApplicationPRN212;TrustServerCertificate=True");
+=======
+        => optionsBuilder.UseSqlServer(GetConnectionString());
+
+    private string GetConnectionString()
+    {
+        IConfiguration config = new ConfigurationBuilder()
+             .SetBasePath(Directory.GetCurrentDirectory())
+                  .AddJsonFile("appsettings.json", true, true)
+                  .Build();
+        var strConn = config["ConnectionStrings:DefaultConnectionStringDB"];
+
+        return strConn;
+    }
+>>>>>>> 3cd39293b56175e1dc5a76ddc2009b9700657998
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Category__3213E83F9C5F50D9");
+            entity.HasKey(e => e.Id).HasName("PK__Category__3213E83FBF471F4C");
 
             entity.ToTable("Category");
 
@@ -46,9 +62,7 @@ public partial class TodoApplicationPrn212Context : DbContext
 
         modelBuilder.Entity<Entities.Task>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Task__3213E83FB349E724");
-
-            entity.ToTable("Task");
+            entity.HasKey(e => e.Id).HasName("PK__Tasks__3213E83FF38AD6BB");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CategoryId).HasColumnName("categoryId");
@@ -76,7 +90,7 @@ public partial class TodoApplicationPrn212Context : DbContext
             entity.HasOne(d => d.Category).WithMany(p => p.Tasks)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK__Task__categoryId__2B3F6F97");
+                .HasConstraintName("FK__Tasks__categoryI__2B3F6F97");
         });
 
         OnModelCreatingPartial(modelBuilder);

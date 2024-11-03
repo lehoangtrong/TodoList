@@ -6,10 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TodoList.DAL\TodoList.DAL.csproj">
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
-
 </Project>
