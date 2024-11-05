@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TodoList
+namespace TodoList.Pages
 {
     /// <summary>
-    /// Interaction logic for LoginWindow.xaml
+    /// Interaction logic for TodoPage.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class TodoPage : Page
     {
-        public LoginWindow()
+        public TodoPage()
         {
             InitializeComponent();
         }

@@ -1,0 +1,98 @@
+﻿<Page x:Class="TodoList.Pages.TodoPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local="clr-namespace:TodoList.Pages"
+      mc:Ignorable="d"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      Title="TodoPage">
+
+    <Grid>
+        <!-- Define rows -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Search Section - Row 0 -->
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Top"
+                    Grid.Row="0"
+                    Margin="0,10,0,0">
+            <TextBlock Text="Search By"
+                       Margin="0,0,10,0"
+                       VerticalAlignment="Center"
+                       FontSize="14" />
+            <ComboBox Width="100"
+                      Margin="0,0,20,0">
+                <ComboBoxItem Content="All" />
+                <ComboBoxItem Content="Priority" />
+                <ComboBoxItem Content="Task Name" />
+            </ComboBox>
+            <TextBox Width="200"
+                     materialDesign:HintAssist.Hint="Enter search keyword"
+                     Margin="0,0,20,0" />
+        </StackPanel>
+
+
+        <!-- Task List Section - Row 1 -->
+        <GroupBox Header="Tasks"
+                  Margin="0,10,0,0"
+                  Grid.Row="2"
+                  VerticalAlignment="Top">
+            <Grid>
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,10,0,0">
+                    <TextBlock Text="Sorted By"
+                               Margin="0,0,10,0"
+                               VerticalAlignment="Center" />
+                    <ComboBox Width="100"
+                              Margin="0,0,20,0">
+                        <ComboBoxItem Content="Id" />
+                        <ComboBoxItem Content="Priority" />
+                        <ComboBoxItem Content="Date" />
+                    </ComboBox>
+                    <CheckBox Content="Descending" />
+                </StackPanel>
+
+                <!-- DataGrid for Task List -->
+                <DataGrid Name="TaskDataGrid"
+                          Margin="0,0,0,0"
+                          AutoGenerateColumns="False"
+                          Height="200">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id"
+                                            Binding="{Binding Id}" />
+                        <DataGridTextColumn Header="Task"
+                                            Binding="{Binding Task}" />
+                        <DataGridTextColumn Header="Priority"
+                                            Binding="{Binding Priority}" />
+                        <DataGridTextColumn Header="Date"
+                                            Binding="{Binding Date}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Pagination Section -->
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,10,0,0">
+                    <Button Content="First"
+                            Width="80"
+                            Style="{DynamicResource MaterialDesignRaisedButton}" />
+                    <Button Content="Previous"
+                            Width="80"
+                            Style="{DynamicResource MaterialDesignRaisedButton}" />
+                    <Button Content="Next"
+                            Width="80"
+                            Style="{DynamicResource MaterialDesignRaisedButton}" />
+                    <Button Content="Last"
+                            Width="80"
+                            Style="{DynamicResource MaterialDesignRaisedButton}" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Page>

@@ -13,5 +13,5 @@ public partial class Category
 
     public DateTime? CreatedDate { get; set; }
 
-    public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
+    public virtual ICollection<TaskJob> TaskJobs { get; set; } = new List<TaskJob>();
 }

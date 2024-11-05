@@ -19,7 +19,7 @@ public partial class TodoApplicationPrn212Context : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<Entities.Task> Tasks { get; set; }
+    public virtual DbSet<TaskJob> TaskJobs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer(GetConnectionString());
@@ -39,54 +39,38 @@ public partial class TodoApplicationPrn212Context : DbContext
     {
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Category__3213E83FBF471F4C");
+            entity.HasKey(e => e.Id).HasName("PK__Category__3214EC071DA6B1B9");
 
             entity.ToTable("Category");
 
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("createdDate");
-            entity.Property(e => e.Description)
-                .HasMaxLength(200)
-                .HasColumnName("description");
-            entity.Property(e => e.Type)
-                .HasMaxLength(80)
-                .HasColumnName("type");
+                .HasColumnType("datetime");
+            entity.Property(e => e.Description).HasMaxLength(200);
+            entity.Property(e => e.Type).HasMaxLength(80);
         });
 
-        modelBuilder.Entity<Entities.Task>(entity =>
+        modelBuilder.Entity<TaskJob>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tasks__3213E83FF38AD6BB");
+            entity.HasKey(e => e.Id).HasName("PK__TaskJob__3214EC07C6101D4F");
 
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CategoryId).HasColumnName("categoryId");
+            entity.ToTable("TaskJob");
+
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("createdDate");
-            entity.Property(e => e.Description)
-                .HasMaxLength(500)
-                .HasColumnName("description");
-            entity.Property(e => e.DueDate)
-                .HasColumnType("datetime")
-                .HasColumnName("dueDate");
-            entity.Property(e => e.Priority)
-                .HasMaxLength(20)
-                .HasColumnName("priority");
+                .HasColumnType("datetime");
+            entity.Property(e => e.Description).HasMaxLength(500);
+            entity.Property(e => e.DueDate).HasColumnType("datetime");
+            entity.Property(e => e.Priority).HasMaxLength(20);
             entity.Property(e => e.Status)
                 .HasMaxLength(20)
-                .HasDefaultValue("Pending")
-                .HasColumnName("status");
-            entity.Property(e => e.Title)
-                .HasMaxLength(100)
-                .HasColumnName("title");
+                .HasDefaultValue("Pending");
+            entity.Property(e => e.Title).HasMaxLength(100);
 
-            entity.HasOne(d => d.Category).WithMany(p => p.Tasks)
+            entity.HasOne(d => d.Category).WithMany(p => p.TaskJobs)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK__Tasks__categoryI__2B3F6F97");
+                .HasConstraintName("FK__TaskJob__Categor__2B3F6F97");
         });
 
         OnModelCreatingPartial(modelBuilder);
