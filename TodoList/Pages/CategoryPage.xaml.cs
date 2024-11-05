@@ -29,7 +29,7 @@ namespace TodoList.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            CategoryDataGrid.ItemsSource =_categoryService.GetAllCategories();
+            CategoryDataGrid.ItemsSource =_categoryService.GetAllCategorys();
         }
     }
 }
