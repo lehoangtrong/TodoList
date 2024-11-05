@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Todolist.DAL.Entities;
 
-public partial class Task
+public partial class TaskJob
 {
     public int Id { get; set; }
 

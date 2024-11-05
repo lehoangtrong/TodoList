@@ -5,151 +5,173 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:uc="clr-namespace:TodoList.UserControls"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}"
         Title="Todo List App"
         Width="1200"
         Height="1000"
-        WindowStartupLocation="CenterScreen">
-    <Grid Margin="20">
-        <!-- Define columns and rows -->
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="8*" />
-            <RowDefinition Height="2*" />
-            <!-- New row for the navigation button and frame -->
-        </Grid.RowDefinitions>
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+    <materialDesign:DialogHost x:Name="DialogHostMain"
+                               Identifier="DialogHostMain">
+        <Grid Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <!-- Search Section - Row 0 -->
-        <StackPanel Orientation="Horizontal"
-                    VerticalAlignment="Top"
-                    Grid.Row="0"
-                    Margin="0,10,0,0">
-            <TextBlock Text="Search By"
-                       Margin="0,0,10,0"
-                       VerticalAlignment="Center"
-                       FontSize="14" />
-            <ComboBox Width="100"
-                      Margin="0,0,20,0">
-                <ComboBoxItem Content="All" />
-                <ComboBoxItem Content="Priority" />
-                <ComboBoxItem Content="Task Name" />
-            </ComboBox>
-            <TextBox Width="200"
-                     materialDesign:HintAssist.Hint="Enter search keyword"
-                     Margin="0,0,20,0" />
-        </StackPanel>
 
-        <!-- Add Task Section - Row 1 -->
-        <GroupBox Header="Add Task"
-                  Margin="0,10,0,0"
-                  Grid.Row="1"
-                  VerticalAlignment="Top">
-            <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Center">
-                <TextBlock Text="Priority"
-                           Margin="0,0,10,0"
-                           VerticalAlignment="Center" />
-                <ComboBox Width="100"
-                          Margin="0,0,20,0">
-                    <ComboBoxItem Content="Priority 1" />
-                    <ComboBoxItem Content="Priority 2" />
-                    <ComboBoxItem Content="Priority 3" />
-                    <ComboBoxItem Content="Priority 4" />
-                </ComboBox>
+            <Border CornerRadius="10"
+                    Background="#F0F0F0">
+                <StackPanel Grid.Column="0"
+                            Background="#F0F0F0"
+                            Width="200"
+                            Margin="10">
 
-                <TextBox Width="200"
-                         materialDesign:HintAssist.Hint="Enter task name"
-                         Margin="0,0,20,0" />
+                    <TextBlock Text="Menu"
+                               HorizontalAlignment="Center"
+                               Margin="10"
+                               FontSize="16"
+                               FontWeight="Bold" />
 
-                <!-- Date Picker for Task Date -->
-                <DatePicker Width="150"
-                            Margin="0,0,20,0" />
+                    <Button x:Name="TodayBtn"
+                            Content="Today"
+                            Margin="10"
+                            Click="TodayBtn_Click"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CalendarToday"
+                                                             Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                    <Button x:Name="UpcommingBtn"
+                            Content="Upcoming"
+                            Margin="10"
+                            Click="UpcommingBtn_Click"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CalendarPlus"
+                                                             Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                    <Button x:Name="ImportantBtn"
+                            Margin="10"
+                            Content="Important"
+                            Click="ImportantBtn_Click"
+                            HorizontalContentAlignment="Left"
+                            HorizontalAlignment="Stretch">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Star"
+                                                             Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                    <Button x:Name="PlannedBtn"
+                            Margin="10"
+                            Content="Planned"
+                            Click="PlannedBtn_Click"
+                            HorizontalContentAlignment="Left"
+                            HorizontalAlignment="Stretch">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Calendar"
+                                                             Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                    <Button x:Name="CompletedBtn"
+                            Content="Completed"
+                            Margin="10"
+                            Click="CompletedBtn_Click"
+                            HorizontalContentAlignment="Left"
+                            HorizontalAlignment="Stretch">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Check"
+                                                             Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                    <Button x:Name="AllBtn"
+                            Content="All"
+                            Margin="10"
+                            Click="AllBtn_Click"
+                            HorizontalContentAlignment="Left"
+                            HorizontalAlignment="Stretch">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ViewList"
+                                                             Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                </StackPanel>
+            </Border>
 
-                <!-- Add Button -->
-                <Button IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                        Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                        ToolTip="MaterialDesignFloatingActionMiniLightButton">
-                    <materialDesign:PackIcon Kind="Add" />
-                </Button>
-            </StackPanel>
-        </GroupBox>
 
-        <!-- Task List Section - Row 2 -->
-        <GroupBox Header="Tasks"
-                  Margin="0,10,0,0"
-                  Grid.Row="2"
-                  VerticalAlignment="Top">
-            <Grid>
+            <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Sorting Options -->
-                <StackPanel Orientation="Horizontal"
-                            Margin="0,10,0,0"
-                            Grid.Row="0">
-                    <TextBlock Text="Sorted By"
-                               Margin="0,0,10,0"
-                               VerticalAlignment="Center" />
-                    <ComboBox Width="100"
-                              Margin="0,0,20,0">
-                        <ComboBoxItem Content="Id" />
-                        <ComboBoxItem Content="Priority" />
-                        <ComboBoxItem Content="Date" />
-                    </ComboBox>
-                    <CheckBox Content="Descending" />
-                </StackPanel>
+                <Frame x:Name="FrameTodo"
+                       NavigationUIVisibility="Hidden" />
 
-                <!-- DataGrid for Task List -->
-                <DataGrid Name="TaskDataGrid"
-                          Margin="0,10,0,10"
-                          AutoGenerateColumns="False"
-                          Height="200"
-                          Grid.Row="1">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Id"
-                                            Binding="{Binding Id}" />
-                        <DataGridTextColumn Header="Task"
-                                            Binding="{Binding Task}" />
-                        <DataGridTextColumn Header="Priority"
-                                            Binding="{Binding Priority}" />
-                        <DataGridTextColumn Header="Date"
-                                            Binding="{Binding Date}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-
-                <!-- Pagination Section -->
-                <StackPanel Orientation="Horizontal"
-                            Margin="0,10,0,0"
-                            Grid.Row="2">
-                    <Button Content="First"
-                            Width="80"
-                            Style="{DynamicResource MaterialDesignRaisedButton}" />
-                    <Button Content="Previous"
-                            Width="80"
-                            Style="{DynamicResource MaterialDesignRaisedButton}" />
-                    <Button Content="Next"
-                            Width="80"
-                            Style="{DynamicResource MaterialDesignRaisedButton}" />
-                    <Button Content="Last"
-                            Width="80"
-                            Style="{DynamicResource MaterialDesignRaisedButton}" />
-                </StackPanel>
+                <Button x:Name="AddTaskBtn"
+                        Content="Add Task"
+                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                        Grid.Row="1"
+                        Margin="10"
+                        HorizontalAlignment="Right"
+                        Click="AddTaskBtn_Click" />
             </Grid>
-        </GroupBox>
+        </Grid>
 
-        <!-- Navigation Section - Row 3 -->
-        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="Go to Category Page"
-                    Width="150"
-                    Margin="10"
-                    Click="NavigateToCategoryPage_Click" />
-            <Frame Name="MainFrame" NavigationUIVisibility="Hidden" Width="800" Height="400" Margin="10,0,0,0"/>
-        </StackPanel>
-    </Grid>
+        <materialDesign:DialogHost.DialogContent>
+            <Grid x:Name="DialogContentGrid">
+                <!-- Hiệu ứng loading -->
+                <StackPanel x:Name="LoadingPanel"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed">
+                    <ProgressBar IsIndeterminate="True"
+                                 Width="150" />
+                    <TextBlock Text="Loading..."
+                               Margin="10"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
+
+
+            </Grid>
+        </materialDesign:DialogHost.DialogContent>
+    </materialDesign:DialogHost>
 </Window>
