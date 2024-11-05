@@ -32,25 +32,86 @@ namespace TodoList.UserControls
 
         private void AddTaskButton_Click(object sender, RoutedEventArgs e)
         {
-            TaskJob job = new TaskJob();
-            job.Title = TitleNameTextBox.Text;
-            job.Description = DescriptionTextBox.Text;
+            if (!IsValid()) return;
 
-            job.Status = StatusButton.SelectedValue?.ToString();
-            job.DueDate = DateTime.Parse(DueDateDatePicker.ToString());
-            job.Priority = PriorityComboBox.Text;
-            job.CreatedDate = DateTime.Now;
-
-            if (int.TryParse(CategoryComboBox.SelectedValue?.ToString(), out int categoryId))
+            TaskJob job = new TaskJob
             {
-                job.CategoryId = categoryId;
+                Title = TaskTitleTextBox.Text,
+                Description = DescriptionTextBox.Text,
+                Status = (StatusButton.SelectedItem as ComboBoxItem)?.Content.ToString(),
+                DueDate = DueDateDatePicker.SelectedDate ?? DateTime.Now,
+                Priority = PriorityComboBox.Text,
+                CreatedDate = DateTime.Now,
+                CategoryId = int.TryParse(CategoryComboBox.SelectedValue?.ToString(), out int categoryId) ? categoryId : (int?)null
+            };
+
+            Job = job;
+
+            // close dialog
+            DialogHost.CloseDialogCommand.Execute(null, null);
+        }
+
+        private bool IsValid()
+        {
+            bool isValid = true;
+
+            // Check TaskTitleTextBox
+            bool hasError = string.IsNullOrWhiteSpace(TaskTitleTextBox.Text);
+            SetValidationError(TaskTitleTextBox, TaskTitleErrorText, hasError, "Task Title is required.");
+            if (hasError) isValid = false;
+
+            // Check TaskNameTextBox
+            hasError = string.IsNullOrWhiteSpace(TaskNameTextBox.Text);
+            SetValidationError(TaskNameTextBox, TaskNameErrorText, hasError, "Task Name is required.");
+            if (hasError) isValid = false;
+
+            // Check DescriptionTextBox
+            hasError = string.IsNullOrWhiteSpace(DescriptionTextBox.Text);
+            SetValidationError(DescriptionTextBox, DescriptionErrorText, hasError, "Description is required.");
+            if (hasError) isValid = false;
+
+            // Check DueDateDatePicker
+            hasError = !DueDateDatePicker.SelectedDate.HasValue;
+            SetValidationError(DueDateDatePicker, DueDateErrorText, hasError, "Due Date is required.");
+            if (hasError) isValid = false;
+
+            // Check PriorityComboBox
+            hasError = PriorityComboBox.SelectedItem == null;
+            SetValidationError(PriorityComboBox, null, hasError, "Priority is required.");
+            if (hasError) isValid = false;
+
+            // Check CategoryComboBox
+            hasError = CategoryComboBox.SelectedItem == null;
+            SetValidationError(CategoryComboBox, null, hasError, "Category is required.");
+            if (hasError) isValid = false;
+
+            // Check StatusButton
+            hasError = StatusButton.SelectedItem == null;
+            SetValidationError(StatusButton, null, hasError, "Status is required.");
+            if (hasError) isValid = false;
+
+            return isValid;
+        }
+
+
+        private void SetValidationError(Control control, TextBlock errorTextBlock, bool hasError, string errorMessage)
+        {
+            if (hasError)
+            {
+                if (errorTextBlock != null)
+                    errorTextBlock.Visibility = Visibility.Visible;
+
+                control.ToolTip = errorMessage;
+                control.BorderBrush = Brushes.Red;
             }
             else
             {
-                job.CategoryId = null;
-            }
+                if (errorTextBlock != null)
+                    errorTextBlock.Visibility = Visibility.Collapsed;
 
-            Job = job;
+                control.ToolTip = null;
+                control.ClearValue(BorderBrushProperty);
+            }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -60,11 +121,10 @@ namespace TodoList.UserControls
 
         private void LoadCategories()
         {
-            CategoryComboBox.Items.Clear();
             CategoryComboBox.ItemsSource = Categories;
-            CategoryComboBox.SelectedIndex = 0;
             CategoryComboBox.SelectedValuePath = "Id";
             CategoryComboBox.DisplayMemberPath = "Type";
+            CategoryComboBox.SelectedIndex = 0;
         }
     }
 }

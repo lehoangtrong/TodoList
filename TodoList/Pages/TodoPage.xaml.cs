@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Todolist.DAL.Entities;
 
 namespace TodoList.Pages
 {
@@ -20,9 +21,19 @@ namespace TodoList.Pages
     /// </summary>
     public partial class TodoPage : Page
     {
+        public List<TaskJob> TasksList { get; set; }
         public TodoPage()
         {
             InitializeComponent();
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            // show tasks in list
+            if (TasksList != null)
+            {
+                TasksListItem.ItemsSource = TasksList;
+            }
         }
     }
 }

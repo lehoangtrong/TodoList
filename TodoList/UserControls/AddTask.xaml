@@ -19,29 +19,60 @@
                        Margin="0,0,0,10"
                        HorizontalAlignment="Center" />
 
-            <TextBox x:Name="TitleNameTextBox"
-                     materialDesign:HintAssist.Hint="Title Name"
-                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     Margin="0,0,0,10" />
+            <StackPanel>
+                <TextBox x:Name="TaskTitleTextBox"
+                         materialDesign:HintAssist.Hint="Title Name"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Margin="0,0,0,10" />
 
-            <TextBox x:Name="TaskNameTextBox"
-                     materialDesign:HintAssist.Hint="Task Name"
-                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     Margin="0,0,0,10" />
+                <!-- TextBlock hiển thị lỗi bên dưới TextBox -->
+                <TextBlock x:Name="TaskTitleErrorText"
+                           Foreground="Red"
+                           FontSize="12"
+                           Margin="5,0,0,10"
+                           Visibility="Collapsed"
+                           Text="Title Name is Required" />
+            </StackPanel>
 
-            <TextBox x:Name="DescriptionTextBox"
-                     materialDesign:HintAssist.Hint="Description"
-                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     Height="100"
-                     TextWrapping="Wrap"
-                     AcceptsReturn="True"
-                     Margin="0,0,0,10" />
+            <StackPanel>
+                <TextBox x:Name="TaskNameTextBox"
+                         materialDesign:HintAssist.Hint="Task Name"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Margin="0,0,0,10" />
 
+                <TextBlock x:Name="TaskNameErrorText"
+                           Foreground="Red"
+                           FontSize="12"
+                           Margin="5,0,0,10"
+                           Visibility="Collapsed"
+                           Text="Task Name is Required" />
+            </StackPanel>
+            <StackPanel Margin="0,0,0,10">
+                <TextBox x:Name="DescriptionTextBox"
+                         materialDesign:HintAssist.Hint="Description"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Height="100"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True" />
+                <TextBlock x:Name="DescriptionErrorText"
+                           Text="Description is required."
+                           Foreground="Red"
+                           Visibility="Collapsed"
+                           FontSize="12"
+                           Margin="5,0,0,0" />
+            </StackPanel>
 
-            <DatePicker x:Name="DueDateDatePicker"
-                        materialDesign:HintAssist.Hint="Due Date"
-                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                        Margin="0,0,0,10" />
+            <StackPanel Margin="0,0,0,10">
+                <DatePicker x:Name="DueDateDatePicker"
+                            materialDesign:HintAssist.Hint="Due Date"
+                            Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                <TextBlock x:Name="DueDateErrorText"
+                           Text="Due Date is required."
+                           Foreground="Red"
+                           Visibility="Collapsed"
+                           FontSize="12"
+                           Margin="5,0,0,0" />
+            </StackPanel>
 
             <ComboBox x:Name="PriorityComboBox"
                       materialDesign:HintAssist.Hint="Priority"
@@ -63,7 +94,8 @@
                 <ComboBox x:Name="StatusButton"
                           materialDesign:HintAssist.Hint="Status"
                           Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                          Width="230">
+                          Width="230"
+                          SelectedIndex="0">
                     <ComboBoxItem Content="Pending" />
                     <ComboBoxItem Content="Completed" />
                     <ComboBoxItem Content="In Process" />

@@ -25,6 +25,7 @@ namespace TodoList
     public partial class MainWindow : Window
     {
         private CategoryService _categoryService = new CategoryService();
+        private TaskService _taskService = new TaskService();
         public bool IsDialogOpen { get; set; }
 
         private readonly DialogHost _dialogs;
@@ -38,11 +39,6 @@ namespace TodoList
 
         private void OnShowDialog()
         {
-        }
-
-        private void AddTaskControl_TaskAdded(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -59,7 +55,10 @@ namespace TodoList
 
         private void TodayBtn_Click(object sender, RoutedEventArgs e)
         {
-            FrameTodo.Navigate(new TodayTasksPage());
+            TodoPage todoPage = new TodoPage();
+            todoPage.TodoTextBlock.Text = "Today Tasks!!";
+            todoPage.TasksList = _taskService.GetTodayTasks();
+            FrameTodo.Navigate(todoPage);
         }
 
         private void UpcommingBtn_Click(object sender, RoutedEventArgs e)
@@ -97,7 +96,14 @@ namespace TodoList
         {
             AddTask addTask = new();
             addTask.Categories = _categoryService.GetAllCategorys();
-            await DialogHost.Show(addTask, "DialogHostMain");
+            _ = await DialogHost.Show(addTask, "DialogHostMain");
+            TaskJob newTask = new();
+            newTask = addTask.Job;
+
+            if (newTask == null) return;
+            // save to database
+            // loading screen while saving
+            _taskService.AddTaskJob(newTask);
         }
     }
 }
