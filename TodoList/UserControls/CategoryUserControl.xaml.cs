@@ -24,6 +24,7 @@ namespace TodoList.UserControls
     public partial class CategoryUserControl : UserControl
     {
         private CategoryService _categoryService = new();
+        public Category EditedOne { get; set; }
         public CategoryUserControl()
         {
             InitializeComponent();
@@ -32,12 +33,37 @@ namespace TodoList.UserControls
         private void SaveCategoryButton_Click(object sender, RoutedEventArgs e)
         {
             Category obj = new();
+           
             obj.Type = TypeTextBox.Text;
             obj.Description = DescriptionTextBox.Text;
-            _categoryService.AddCategory(obj);
+            if (EditedOne == null) 
+            {
+                _categoryService.AddCategory(obj);
+
+            }
+            else
+            {
+                obj.Id = EditedOne.Id;
+                obj.CreatedDate = EditedOne.CreatedDate;
+                _categoryService.UpdateCategory(obj);
+            }
+
+            
             DialogHost.CloseDialogCommand.Execute(null, this);
 
         }
-       
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (EditedOne == null)
+            {
+                TitleWindowModeTextBlock.Text = "Add new category";
+                return;
+            }
+            TitleWindowModeTextBlock.Text = "Update current category";
+            TypeTextBox.Text = EditedOne.Type;
+            DescriptionTextBox.Text = EditedOne.Description;
+
+        }
     }
 }
