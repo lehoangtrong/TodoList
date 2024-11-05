@@ -28,5 +28,12 @@ namespace TodoList
         {
 
         }
+
+        private void NavigateToCategoryPage_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate to CategoryPage.xaml within the Frame
+            MainFrame.Navigate(new Uri("Pages/CategoryPage.xaml", UriKind.Relative));
+        }
+
     }
 }

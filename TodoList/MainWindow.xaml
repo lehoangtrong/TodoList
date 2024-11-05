@@ -5,16 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="Todo List
-        App"
-        Width="
-        1200"
-        Height="
-        1000"
-        WindowStartupLocation="
-        CenterScreen">
-    <Grid Margin="
-        20">
+        Title="Todo List App"
+        Width="1200"
+        Height="1000"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
         <!-- Define columns and rows -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -22,7 +17,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
             <RowDefinition Height="2*" />
-            <RowDefinition Height="10*" />
+            <RowDefinition Height="8*" />
+            <RowDefinition Height="2*" />
+            <!-- New row for the navigation button and frame -->
         </Grid.RowDefinitions>
 
         <!-- Search Section - Row 0 -->
@@ -45,7 +42,7 @@
                      Margin="0,0,20,0" />
         </StackPanel>
 
-        <!-- Add Task Section - Row 2 -->
+        <!-- Add Task Section - Row 1 -->
         <GroupBox Header="Add Task"
                   Margin="0,10,0,0"
                   Grid.Row="1"
@@ -80,14 +77,22 @@
             </StackPanel>
         </GroupBox>
 
-        <!-- Task List Section - Row 1 -->
+        <!-- Task List Section - Row 2 -->
         <GroupBox Header="Tasks"
                   Margin="0,10,0,0"
                   Grid.Row="2"
                   VerticalAlignment="Top">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Sorting Options -->
                 <StackPanel Orientation="Horizontal"
-                            Margin="0,10,0,0">
+                            Margin="0,10,0,0"
+                            Grid.Row="0">
                     <TextBlock Text="Sorted By"
                                Margin="0,0,10,0"
                                VerticalAlignment="Center" />
@@ -102,9 +107,10 @@
 
                 <!-- DataGrid for Task List -->
                 <DataGrid Name="TaskDataGrid"
-                          Margin="0,0,0,0"
+                          Margin="0,10,0,10"
                           AutoGenerateColumns="False"
-                          Height="200">
+                          Height="200"
+                          Grid.Row="1">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Id"
                                             Binding="{Binding Id}" />
@@ -119,7 +125,8 @@
 
                 <!-- Pagination Section -->
                 <StackPanel Orientation="Horizontal"
-                            Margin="0,10,0,0">
+                            Margin="0,10,0,0"
+                            Grid.Row="2">
                     <Button Content="First"
                             Width="80"
                             Style="{DynamicResource MaterialDesignRaisedButton}" />
@@ -135,5 +142,14 @@
                 </StackPanel>
             </Grid>
         </GroupBox>
+
+        <!-- Navigation Section - Row 3 -->
+        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="Go to Category Page"
+                    Width="150"
+                    Margin="10"
+                    Click="NavigateToCategoryPage_Click" />
+            <Frame Name="MainFrame" NavigationUIVisibility="Hidden" Width="800" Height="400" Margin="10,0,0,0"/>
+        </StackPanel>
     </Grid>
 </Window>
