@@ -16,6 +16,7 @@ using Todolist.DAL;
 using Todolist.DAL.Entities;
 using TodoList.Pages;
 using TodoList.UserControls;
+using TodoList.Windows;
 
 namespace TodoList
 {
@@ -105,5 +106,13 @@ namespace TodoList
             // loading screen while saving
             _taskService.AddTaskJob(newTask);
         }
+
+        private void CategoryBtn_Click(object sender, RoutedEventArgs e)
+        {
+            CategoryWindow categoryWindow = new CategoryWindow();
+            categoryWindow.ShowDialog();
+        }
+
+
     }
 }

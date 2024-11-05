@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Exclude appsettings.json
+appsettings.json
+/TodoList.DAL/Repositories/CategoryRepository.cs
+/TodoList.DAL/Repositories/TaskRepository.cs
