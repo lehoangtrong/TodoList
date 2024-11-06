@@ -109,8 +109,8 @@ namespace TodoList
 
         private void CategoryBtn_Click(object sender, RoutedEventArgs e)
         {
-            CategoryWindow categoryWindow = new CategoryWindow();
-            categoryWindow.ShowDialog();
+            CategoryPage categoryPage = new();
+            FrameTodo.Navigate(categoryPage);
         }
 
 

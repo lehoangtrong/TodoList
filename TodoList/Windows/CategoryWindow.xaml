@@ -22,7 +22,7 @@
             <DataGrid x:Name="CategoryDataGrid"
                       AutoGenerateColumns="False"
                       Margin="0,0,0,10"
-                      Style="{StaticResource MaterialDesignDataGrid}">
+                      Style="{StaticResource MaterialDesignDataGrid}" CanUserAddRows="False" >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
                     <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="*"/>
@@ -50,10 +50,10 @@
                         Click="AddButton_Click" />
                 <Button x:Name="UpdateButton" Content="Update" 
                         Margin="5" 
-                        Style="{DynamicResource MaterialDesignRaisedButton}" />
+                        Style="{DynamicResource MaterialDesignRaisedButton}" Click="UpdateButton_Click" />
                 <Button x:Name="DeleteButton" Content="Delete" 
                         Margin="5" 
-                        Style="{DynamicResource MaterialDesignRaisedButton}" />
+                        Style="{DynamicResource MaterialDesignRaisedButton}" Click="DeleteButton_Click" />
             </StackPanel>
         </Grid>
     </materialDesign:DialogHost>
