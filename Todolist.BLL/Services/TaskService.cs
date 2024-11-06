@@ -44,7 +44,8 @@ namespace Todolist.BLL.Services
         public List<TaskJob> GetTasks(TaskType type)
         {
             List<TaskJob> tasks = _repo.GetAll().OrderByDescending(x => x.DueDate).ToList();
-
+            if (type != TaskType.Completed && type != TaskType.All)
+                tasks.RemoveAll(x => x.Status.Equals("Completed"));
             return type switch
             {
                 TaskType.Today => tasks.Where(x => x.DueDate == DateTime.Today).ToList(),

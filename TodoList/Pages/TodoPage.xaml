@@ -90,11 +90,25 @@
                                 </StackPanel>
 
                                 <!-- Mark as done (Status) -->
-                                <Button  x:Name="DoneBtn"
-                                         Grid.Column="1"
-                                         Style="{StaticResource MaterialDesignRaisedButton}"
-                                         ToolTip="Mark as completed"
-                                         Click="DoneBtn_Click" />
+                                <Button x:Name="DoneBtn"
+                                        Grid.Column="1"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        ToolTip="Mark as completed"
+                                        Width="35"
+                                        Height="35"
+                                        Click="DoneBtn_Click">
+                                    <materialDesign:PackIcon Kind="Check" />
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Ellipse Fill="Green" />
+                                                <materialDesign:PackIcon Kind="Check"
+                                                                         HorizontalAlignment="Center"
+                                                                         VerticalAlignment="Center" />
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
                             </Grid>
                         </materialDesign:Card>
                     </DataTemplate>
