@@ -4,65 +4,80 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TodoList.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="CategoryPage" Loaded="Page_Loaded" >
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      Title="CategoryPage"
+      Loaded="Page_Loaded">
    
-
+    <materialDesign:DialogHost x:Name="DialogHost"
+                               Margin="20"
+                               Identifier="RootDialog">
     <Grid>
-        <GroupBox Header="Category"
-             Margin="0,10,0,0"
-             Grid.Row="2"
-             VerticalAlignment="Top">
-            <Grid>
-                <StackPanel Orientation="Horizontal"
-                       Margin="0,10,0,0">
-                    <TextBlock Text="Sorted By"
-                          Margin="0,0,10,0"
-                          VerticalAlignment="Center" />
-                    <ComboBox Width="100"
-                         Margin="0,0,20,0">
-                        <ComboBoxItem Content="Id" />
-                        <ComboBoxItem Content="Priority" />
-                        <ComboBoxItem Content="Date" />
-                    </ComboBox>
-                    <CheckBox Content="Descending" />
-                </StackPanel>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                <!-- DataGrid for Task List -->
-                <DataGrid Name="CategoryDataGrid"
-                     Margin="0,0,0,0"
+            <DataGrid x:Name="CategoryDataGrid"
                      AutoGenerateColumns="False"
-                     Height="200">
+                      Margin="0,0,0,10"
+                      Style="{StaticResource MaterialDesignDataGrid}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID"
-                                       Binding="{Binding Id}" />
+                    <DataGridTextColumn Header="Id"
+                                        Binding="{Binding Id}"
+                                        Width="*" />
                         <DataGridTextColumn Header="Type"
-                                       Binding="{Binding Type}" />
+                                        Binding="{Binding Type}"
+                                        Width="*" />
                         <DataGridTextColumn Header="Description"
-                                       Binding="{Binding Description}" />
-                        <DataGridTextColumn Header="Created Date"
-                                       Binding="{Binding CreatedDate}" />
+                                        Binding="{Binding Description}"
+                                        Width="*" />
+                    <DataGridTextColumn Header="Create Date"
+                                        Binding="{Binding CreatedDate, StringFormat='{}{0:yyyy-MM-dd}'}"
+                                        Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <!-- Pagination Section -->
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="1"
+                        HorizontalAlignment="Right"
+                        Margin="0,10,0,0">
+                <Button x:Name="PreviousButton"
+                        Content="Previous"
+                        Margin="5"
+                        Style="{DynamicResource MaterialDesignRaisedButton}"
+                        Click="PreviousButton_Click" />
+                <TextBlock x:Name="PageNumberTextBlock"
+                           Margin="5"
+                           VerticalAlignment="Center" />
+                <Button x:Name="NextButton"
+                        Content="Next"
+                        Margin="5"
+                        Style="{DynamicResource MaterialDesignRaisedButton}"
+                        Click="NextButton_Click" />
+            </StackPanel>
+
                 <StackPanel Orientation="Horizontal"
+                        Grid.Row="2"
+                        HorizontalAlignment="Right"
                        Margin="0,10,0,0">
-                    <Button Content="First"
-                       Width="80"
+                <Button x:Name="AddButton"
+                        Content="Add"
+                        Margin="5"
+                        Style="{DynamicResource MaterialDesignRaisedButton}"
+                        Click="AddButton_Click" />
+                <Button x:Name="UpdateButton"
+                        Content="Update"
+                        Margin="5"
                        Style="{DynamicResource MaterialDesignRaisedButton}" />
-                    <Button Content="Previous"
-                       Width="80"
-                       Style="{DynamicResource MaterialDesignRaisedButton}" />
-                    <Button Content="Next"
-                       Width="80"
-                       Style="{DynamicResource MaterialDesignRaisedButton}" />
-                    <Button Content="Last"
-                       Width="80"
+                <Button x:Name="DeleteButton"
+                        Content="Delete"
+                        Margin="5"
                        Style="{DynamicResource MaterialDesignRaisedButton}" />
                 </StackPanel>
             </Grid>
-        </GroupBox>
-    </Grid>
+    </materialDesign:DialogHost>
 </Page>
