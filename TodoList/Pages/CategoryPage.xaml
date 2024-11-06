@@ -9,38 +9,47 @@
       d:DesignHeight="450"
       d:DesignWidth="800"
       Title="CategoryPage"
+      Background="{DynamicResource MaterialDesignPaper}"
       Loaded="Page_Loaded">
-   
+
     <materialDesign:DialogHost x:Name="DialogHost"
                                Margin="20"
                                Identifier="RootDialog">
-    <Grid>
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
+            <!-- DataGrid for Category List -->
             <DataGrid x:Name="CategoryDataGrid"
-                     AutoGenerateColumns="False"
+                      AutoGenerateColumns="False"
                       Margin="0,0,0,10"
-                      Style="{StaticResource MaterialDesignDataGrid}">
-                    <DataGrid.Columns>
+                      Style="{StaticResource MaterialDesignDataGrid}"
+                      CanUserAddRows="False"
+                      AlternatingRowBackground="{DynamicResource MaterialDesignBackground}"
+                      RowBackground="White"
+                      GridLinesVisibility="None"
+                      ColumnHeaderHeight="40">
+
+                <DataGrid.Columns>
                     <DataGridTextColumn Header="Id"
                                         Binding="{Binding Id}"
                                         Width="*" />
-                        <DataGridTextColumn Header="Type"
+                    <DataGridTextColumn Header="Type"
                                         Binding="{Binding Type}"
                                         Width="*" />
-                        <DataGridTextColumn Header="Description"
+                    <DataGridTextColumn Header="Description"
                                         Binding="{Binding Description}"
                                         Width="*" />
                     <DataGridTextColumn Header="Create Date"
                                         Binding="{Binding CreatedDate, StringFormat='{}{0:yyyy-MM-dd}'}"
                                         Width="*" />
-                    </DataGrid.Columns>
-                </DataGrid>
+                </DataGrid.Columns>
+            </DataGrid>
 
+            <!-- Pagination Controls -->
             <StackPanel Orientation="Horizontal"
                         Grid.Row="1"
                         HorizontalAlignment="Right"
@@ -48,36 +57,51 @@
                 <Button x:Name="PreviousButton"
                         Content="Previous"
                         Margin="5"
-                        Style="{DynamicResource MaterialDesignRaisedButton}"
+                        Width="80"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
                         Click="PreviousButton_Click" />
+
                 <TextBlock x:Name="PageNumberTextBlock"
-                           Margin="5"
-                           VerticalAlignment="Center" />
+                           FontWeight="Bold"
+                           FontSize="16"
+                           Margin="10,0,10,0"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center" />
+
                 <Button x:Name="NextButton"
                         Content="Next"
                         Margin="5"
-                        Style="{DynamicResource MaterialDesignRaisedButton}"
+                        Width="80"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
                         Click="NextButton_Click" />
             </StackPanel>
 
-                <StackPanel Orientation="Horizontal"
+            <!-- Action Buttons -->
+            <StackPanel Orientation="Horizontal"
                         Grid.Row="2"
-                        HorizontalAlignment="Right"
-                       Margin="0,10,0,0">
+                        HorizontalAlignment="Center"
+                        Margin="0,20,0,0">
                 <Button x:Name="AddButton"
                         Content="Add"
                         Margin="5"
-                        Style="{DynamicResource MaterialDesignRaisedButton}"
+                        Width="80"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
                         Click="AddButton_Click" />
+
                 <Button x:Name="UpdateButton"
                         Content="Update"
                         Margin="5"
-                       Style="{DynamicResource MaterialDesignRaisedButton}" />
+                        Width="80"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Click="UpdateButton_Click" />
+
                 <Button x:Name="DeleteButton"
                         Content="Delete"
                         Margin="5"
-                       Style="{DynamicResource MaterialDesignRaisedButton}" />
-                </StackPanel>
-            </Grid>
+                        Width="80"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Click="DeleteButton_Click" />
+            </StackPanel>
+        </Grid>
     </materialDesign:DialogHost>
 </Page>

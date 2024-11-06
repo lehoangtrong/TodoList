@@ -9,7 +9,8 @@
              mc:Ignorable="d"
              d:DesignWidth="500"
              Width="500"
-             Height="300"
+             Height="Auto"
+             Loaded="UserControl_Loaded"
              >
     <Grid Margin="20">
         <StackPanel>
