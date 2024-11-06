@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,11 @@ namespace TodoList.Pages
     /// </summary>
     public partial class TodoPage : Page
     {
-        public List<TaskJob> TasksList { get; set; }
+        public List<TaskJob>? TasksList { get; set; }
+
+        // Define the event handler delegate
+        public event EventHandler<TaskJob>? MarkDone;
+
         public TodoPage()
         {
             InitializeComponent();
@@ -34,6 +39,28 @@ namespace TodoList.Pages
             {
                 TasksListItem.ItemsSource = TasksList;
             }
+        }
+
+        private void DoneBtn_Click(object sender, RoutedEventArgs e)
+        {
+            // add material design button click event
+            var task = (TaskJob)((Button)sender).DataContext;
+            if (task == null)
+            {
+                MessageBox.Show("Task not found");
+                return;
+            }
+
+            Button button = (Button)sender;
+            // add material design button progress assist
+            ButtonProgressAssist.SetIsIndeterminate(button, true);
+            ButtonProgressAssist.SetIsIndicatorVisible(button, true);
+
+            // task status change
+            task.Status = "Completed";
+
+            // Invoke the external event handler
+            MarkDone?.Invoke(this, task);
         }
     }
 }

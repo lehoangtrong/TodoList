@@ -89,5 +89,39 @@ namespace TodoList.Windows
                 UpdatePageNumber();
             }
         }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+             Category? selectedCategory =  CategoryDataGrid.SelectedItem as Category;
+            if (selectedCategory == null) 
+            {
+                MessageBox.Show("Please select category before deleting", "Select one", MessageBoxButton.OK, MessageBoxImage.Stop);
+                return;
+            }
+            MessageBoxResult answer = MessageBox.Show("Are you sure to delete this category", "Confirm ?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (answer == MessageBoxResult.No)
+            {
+                return;
+            }
+            _categoryService.RemoveCategory(selectedCategory);
+            LoadCategories();
+        }
+
+        private async void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            Category? selectedCategory = CategoryDataGrid.SelectedItem as Category;
+            if (selectedCategory == null)
+            {
+                MessageBox.Show("Please select category before updating", "Select one", MessageBoxButton.OK, MessageBoxImage.Stop);
+                return;
+            }
+            var categoryUserControl = new CategoryUserControl();
+            // Show the UserControl in the DialogHost
+            categoryUserControl.EditedOne = selectedCategory;
+            await DialogHost.Show(categoryUserControl, "RootDialog");
+
+            // Reload categories and refresh the DataGrid
+            LoadCategories();
+        }
     }
 }

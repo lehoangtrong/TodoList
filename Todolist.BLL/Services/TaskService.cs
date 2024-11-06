@@ -12,7 +12,15 @@ namespace Todolist.BLL.Services
     {
 
         private TaskRepo _repo = new TaskRepo();
-
+        public enum TaskType
+        {
+            Today,
+            Upcoming,
+            Important,
+            Planned,
+            Completed,
+            All
+        }
         public List<TaskJob> GetAllTaskJobs()
         {
             return _repo.GetAll();
@@ -33,12 +41,21 @@ namespace Todolist.BLL.Services
             _repo.Delete(entity);
         }
 
-        public List<TaskJob>? GetTodayTasks()
+        public List<TaskJob> GetTasks(TaskType type)
         {
-            List<TaskJob> tasks = _repo.GetAll();
-            List<TaskJob> todayTasks = tasks.Where(x => x.DueDate == DateTime.Today).ToList();
-
-            return todayTasks;
+            List<TaskJob> tasks = _repo.GetAll().OrderByDescending(x => x.DueDate).ToList();
+            if (type != TaskType.Completed && type != TaskType.All)
+                tasks.RemoveAll(x => x.Status.Equals("Completed"));
+            return type switch
+            {
+                TaskType.Today => tasks.Where(x => x.DueDate == DateTime.Today).ToList(),
+                TaskType.Upcoming => tasks.Where(x => x.DueDate > DateTime.Today).ToList(),
+                TaskType.Important => tasks.Where(x => x.Priority == "High").ToList(),
+                TaskType.Planned => tasks.Where(x => x.Status == "Pending").ToList(),
+                TaskType.Completed => tasks.Where(x => x.Status == "Completed").ToList(),
+                TaskType.All => tasks.ToList(),
+                _ => new List<TaskJob>()
+            };
         }
 
 

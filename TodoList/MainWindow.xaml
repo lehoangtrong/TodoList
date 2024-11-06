@@ -15,6 +15,7 @@
         Height="734"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
+
     <materialDesign:DialogHost x:Name="DialogHostMain"
                                Identifier="DialogHostMain">
         <Grid Margin="20">
@@ -53,12 +54,13 @@
                             </DataTemplate>
                         </Button.ContentTemplate>
                     </Button>
-                    <Button x:Name="UpcommingBtn"
+                    <Button x:Name="UpcomingBtn"
                             Content="Upcoming"
                             Margin="10"
                             Click="UpcommingBtn_Click"
                             HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Left">
+                            HorizontalContentAlignment="Left"
+                            Click="UpcomingBtn_Click">
                         <Button.ContentTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -134,15 +136,16 @@
                         </Button.ContentTemplate>
                     </Button>
                     <Button x:Name="CategoryBtn"
-                        Content="Categories"
-                        Margin="10"
-                        Click="CategoryBtn_Click"
-                        HorizontalContentAlignment="Left"
-                        HorizontalAlignment="Stretch">
+                            Content="Categories"
+                            Margin="10"
+                            Click="CategoryBtn_Click"
+                            HorizontalContentAlignment="Left"
+                            HorizontalAlignment="Stretch">
                         <Button.ContentTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Folder" Margin="0,0,5,0" />
+                                    <materialDesign:PackIcon Kind="Folder"
+                                                             Margin="0,0,5,0" />
                                     <TextBlock Text="{Binding}" />
                                 </StackPanel>
                             </DataTemplate>
