@@ -105,5 +105,13 @@ namespace TodoList
             // loading screen while saving
             _taskService.AddTaskJob(newTask);
         }
+
+        private void CategoryBtn_Click(object sender, RoutedEventArgs e)
+        {
+            CategoryPage categoryPage = new();
+            FrameTodo.Navigate(categoryPage);
+        }
+
+
     }
 }
