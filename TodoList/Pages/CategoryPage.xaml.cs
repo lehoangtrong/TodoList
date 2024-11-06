@@ -27,7 +27,7 @@ namespace TodoList.Pages
         private CategoryService _categoryService = new();
         private List<Category> _categories;
         private int _currentPage = 0;  // Current page index
-        private const int _itemsPerPage = 10;  // Items per page
+        private const int _itemsPerPage = 20;  // Items per page
 
         public CategoryPage()
         {
@@ -98,6 +98,39 @@ namespace TodoList.Pages
                 DisplayCurrentPage();
                 UpdatePageNumber();
             }
+        }
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            Category? selectedCategory = CategoryDataGrid.SelectedItem as Category;
+            if (selectedCategory == null)
+            {
+                MessageBox.Show("Please select category before deleting", "Select one", MessageBoxButton.OK, MessageBoxImage.Stop);
+                return;
+            }
+            MessageBoxResult answer = MessageBox.Show("Are you sure to delete this category", "Confirm ?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (answer == MessageBoxResult.No)
+            {
+                return;
+            }
+            _categoryService.RemoveCategory(selectedCategory);
+            LoadCategories();
+        }
+
+        private async void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            Category? selectedCategory = CategoryDataGrid.SelectedItem as Category;
+            if (selectedCategory == null)
+            {
+                MessageBox.Show("Please select category before updating", "Select one", MessageBoxButton.OK, MessageBoxImage.Stop);
+                return;
+            }
+            var categoryUserControl = new CategoryUserControl();
+            // Show the UserControl in the DialogHost
+            categoryUserControl.EditedOne = selectedCategory;
+            await DialogHost.Show(categoryUserControl, "RootDialog");
+
+            // Reload categories and refresh the DataGrid
+            LoadCategories();
         }
     }
 }
