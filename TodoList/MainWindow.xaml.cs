@@ -28,28 +28,21 @@ namespace TodoList
         private CategoryService _categoryService = new CategoryService();
         private TaskService _taskService = new TaskService();
         public bool IsDialogOpen { get; set; }
-        private readonly DialogHost _dialogs;
         private TaskService.TaskType _currentTaskType;
 
         public MainWindow()
         {
             InitializeComponent();
-            FrameTodo.Navigate(null);
-
-            _dialogs = new DialogHost();
         }
 
-        private void OnShowDialog()
-        {
-        }
-
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             LoadPage(TaskService.TaskType.Today);
         }
 
         private async void LoadPage(TaskService.TaskType type)
         {
+            SetButton(TodayBtn);
             ShowLoadingPage();
             string title = type switch
             {
@@ -64,6 +57,12 @@ namespace TodoList
 
             TodoPage todoPage = new TodoPage();
             todoPage.TodoTextBlock.Text = title;
+            todoPage.MarkDone += (s, task) =>
+            {
+                task.Status = "Completed";
+                _taskService.UpdateTaskJob(task);
+                LoadPage(_currentTaskType);
+            };
 
             await Task.Run(() =>
             {
@@ -74,6 +73,29 @@ namespace TodoList
             FrameTodo.Navigate(todoPage);
         }
 
+        private void SetButton(Button button)
+        {
+            SetButtonHighlight(TodayBtn, button == TodayBtn);
+            SetButtonHighlight(UpcomingBtn, button == UpcomingBtn);
+            SetButtonHighlight(ImportantBtn, button == ImportantBtn);
+            SetButtonHighlight(CompletedBtn, button == CompletedBtn);
+            SetButtonHighlight(PlannedBtn, button == PlannedBtn);
+            SetButtonHighlight(AllBtn, button == AllBtn);
+            SetButtonHighlight(CategoryBtn, button == CategoryBtn);
+        }
+
+        private void SetButtonHighlight(Button button, bool isHighlighted)
+        {
+            if (isHighlighted)
+            {
+                button.Style = (Style)FindResource("MaterialDesignRaisedButton");
+            }
+            else
+            {
+                button.Style = (Style)FindResource("MaterialDesignFlatButton");
+            }
+        }
+
         private void ShowLoadingPage()
         {
             FrameTodo.Navigate(new LoadingPage());
@@ -82,31 +104,44 @@ namespace TodoList
         private void TodayBtn_Click(object sender, RoutedEventArgs e)
         {
             LoadPage(TaskService.TaskType.Today);
+            SetButton(TodayBtn);
         }
 
-        private void UpcommingBtn_Click(object sender, RoutedEventArgs e)
+        private void UpcomingBtn_Click(object sender, RoutedEventArgs e)
         {
             LoadPage(TaskService.TaskType.Upcoming);
+            SetButton(UpcomingBtn);
         }
 
         private void ImportantBtn_Click(object sender, RoutedEventArgs e)
         {
             LoadPage(TaskService.TaskType.Important);
+            SetButton(ImportantBtn);
         }
 
         private void CompletedBtn_Click(object sender, RoutedEventArgs e)
         {
             LoadPage(TaskService.TaskType.Completed);
+            SetButton(CompletedBtn);
         }
 
         private void PlannedBtn_Click(object sender, RoutedEventArgs e)
         {
             LoadPage(TaskService.TaskType.Planned);
+            SetButton(PlannedBtn);
         }
 
         private void AllBtn_Click(object sender, RoutedEventArgs e)
         {
             LoadPage(TaskService.TaskType.All);
+            SetButton(AllBtn);
+        }
+
+        private void CategoryBtn_Click(object sender, RoutedEventArgs e)
+        {
+            CategoryPage categoryPage = new();
+            FrameTodo.Navigate(categoryPage);
+            SetButton(CategoryBtn);
         }
 
         private async void AddTaskBtn_Click(object sender, RoutedEventArgs e)
@@ -114,8 +149,7 @@ namespace TodoList
             AddTask addTask = new();
             addTask.Categories = _categoryService.GetAllCategorys();
             _ = await DialogHost.Show(addTask, "DialogHostMain");
-            TaskJob newTask = new();
-            newTask = addTask.Job;
+            TaskJob newTask = addTask.Job;
 
             if (newTask == null) return;
             // save to database
@@ -124,13 +158,5 @@ namespace TodoList
 
             LoadPage(_currentTaskType);
         }
-
-        private void CategoryBtn_Click(object sender, RoutedEventArgs e)
-        {
-            CategoryPage categoryPage = new();
-            FrameTodo.Navigate(categoryPage);
-        }
-
-
     }
 }

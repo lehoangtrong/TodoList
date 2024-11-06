@@ -15,13 +15,14 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
+            <ProgressBar IsIndeterminate="True"
+                         Width="700"
+                         HorizontalAlignment="Center" />
             <TextBlock Text="Loading..."
                        FontSize="24"
                        FontWeight="Bold"
                        Margin="0,0,0,10"
                        HorizontalAlignment="Center" />
-            <ProgressBar IsIndeterminate="True"
-                         HorizontalAlignment="Center" />
         </StackPanel>
     </Grid>
 </Page>
