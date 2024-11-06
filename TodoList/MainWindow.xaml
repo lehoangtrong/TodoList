@@ -59,8 +59,7 @@
                             Margin="10"
                             Click="UpcommingBtn_Click"
                             HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Left"
-                            Click="UpcomingBtn_Click">
+                            HorizontalContentAlignment="Left">
                         <Button.ContentTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

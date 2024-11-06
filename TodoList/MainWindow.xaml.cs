@@ -159,11 +159,8 @@ namespace TodoList
             // save to database
             // loading screen while saving
             _taskService.AddTaskJob(newTask);
-        }
 
             LoadPage(_currentTaskType);
         }
-
-
     }
 }
