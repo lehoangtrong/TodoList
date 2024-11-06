@@ -12,28 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Todolist.DAL.Entities;
 
 namespace TodoList.Pages
 {
     /// <summary>
-    /// Interaction logic for TodoPage.xaml
+    /// Interaction logic for LoadingPage.xaml
     /// </summary>
-    public partial class TodoPage : Page
+    public partial class LoadingPage : Page
     {
-        public List<TaskJob>? TasksList { get; set; }
-        public TodoPage()
+        public LoadingPage()
         {
             InitializeComponent();
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            // show tasks in list
-            if (TasksList != null)
-            {
-                TasksListItem.ItemsSource = TasksList;
-            }
         }
     }
 }

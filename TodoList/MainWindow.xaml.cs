@@ -29,7 +29,7 @@ namespace TodoList
         private TaskService _taskService = new TaskService();
         public bool IsDialogOpen { get; set; }
         private readonly DialogHost _dialogs;
-        private TaskService.TaskType _currentTaskType = TaskService.TaskType.Today;
+        private TaskService.TaskType _currentTaskType;
 
         public MainWindow()
         {
@@ -45,11 +45,12 @@ namespace TodoList
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadPage(_currentTaskType);
+            LoadPage(TaskService.TaskType.Today);
         }
 
-        private void LoadPage(TaskService.TaskType type)
+        private async void LoadPage(TaskService.TaskType type)
         {
+            ShowLoadingPage();
             string title = type switch
             {
                 TaskService.TaskType.Today => "Today Tasks!!",
@@ -63,9 +64,19 @@ namespace TodoList
 
             TodoPage todoPage = new TodoPage();
             todoPage.TodoTextBlock.Text = title;
-            todoPage.TasksList = _taskService.GetTasks(type);
-            _currentTaskType = type;
+
+            await Task.Run(() =>
+            {
+                todoPage.TasksList = _taskService.GetTasks(type);
+                _currentTaskType = type;
+            });
+
             FrameTodo.Navigate(todoPage);
+        }
+
+        private void ShowLoadingPage()
+        {
+            FrameTodo.Navigate(new LoadingPage());
         }
 
         private void TodayBtn_Click(object sender, RoutedEventArgs e)
@@ -119,5 +130,7 @@ namespace TodoList
             CategoryPage categoryPage = new();
             FrameTodo.Navigate(categoryPage);
         }
+
+
     }
 }

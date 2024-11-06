@@ -43,7 +43,7 @@ namespace Todolist.BLL.Services
 
         public List<TaskJob> GetTasks(TaskType type)
         {
-            List<TaskJob> tasks = _repo.GetAll();
+            List<TaskJob> tasks = _repo.GetAll().OrderByDescending(x => x.DueDate).ToList();
 
             return type switch
             {
