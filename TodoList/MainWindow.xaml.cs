@@ -28,8 +28,9 @@ namespace TodoList
         private CategoryService _categoryService = new CategoryService();
         private TaskService _taskService = new TaskService();
         public bool IsDialogOpen { get; set; }
-
         private readonly DialogHost _dialogs;
+        private TaskService.TaskType _currentTaskType = TaskService.TaskType.Today;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -44,53 +45,57 @@ namespace TodoList
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            List<Category> categories = _categoryService.GetAllCategorys();
-            IsDialogOpen = true;
+            LoadPage(_currentTaskType);
+        }
 
-            AddTask addTask = new()
+        private void LoadPage(TaskService.TaskType type)
+        {
+            string title = type switch
             {
-                Categories = categories
+                TaskService.TaskType.Today => "Today Tasks!!",
+                TaskService.TaskType.Upcoming => "Upcoming Tasks!!",
+                TaskService.TaskType.Important => "Important Tasks!!",
+                TaskService.TaskType.Completed => "Completed Tasks!!",
+                TaskService.TaskType.Planned => "Planned Tasks!!",
+                TaskService.TaskType.All => "All Tasks!!",
+                _ => "Tasks"
             };
-            _ = await _dialogs.ShowDialog(addTask);
+
+            TodoPage todoPage = new TodoPage();
+            todoPage.TodoTextBlock.Text = title;
+            todoPage.TasksList = _taskService.GetTasks(type);
+            _currentTaskType = type;
+            FrameTodo.Navigate(todoPage);
         }
 
         private void TodayBtn_Click(object sender, RoutedEventArgs e)
         {
-            TodoPage todoPage = new TodoPage();
-            todoPage.TodoTextBlock.Text = "Today Tasks!!";
-            todoPage.TasksList = _taskService.GetTodayTasks();
-            FrameTodo.Navigate(todoPage);
+            LoadPage(TaskService.TaskType.Today);
         }
 
         private void UpcommingBtn_Click(object sender, RoutedEventArgs e)
         {
-            FrameTodo.Navigate("Upcomming Page");
+            LoadPage(TaskService.TaskType.Upcoming);
         }
 
         private void ImportantBtn_Click(object sender, RoutedEventArgs e)
         {
-            FrameTodo.Navigate("Important Page");
-
+            LoadPage(TaskService.TaskType.Important);
         }
 
         private void CompletedBtn_Click(object sender, RoutedEventArgs e)
         {
-            FrameTodo.Navigate("Complete Page");
+            LoadPage(TaskService.TaskType.Completed);
         }
 
         private void PlannedBtn_Click(object sender, RoutedEventArgs e)
         {
-            FrameTodo.Navigate("Planned Page");
+            LoadPage(TaskService.TaskType.Planned);
         }
 
         private void AllBtn_Click(object sender, RoutedEventArgs e)
         {
-            FrameTodo.Navigate("All Page");
-        }
-
-        private void OverdueBtn_Click(object sender, RoutedEventArgs e)
-        {
-            FrameTodo.Navigate("Overdue Page");
+            LoadPage(TaskService.TaskType.All);
         }
 
         private async void AddTaskBtn_Click(object sender, RoutedEventArgs e)
@@ -105,6 +110,8 @@ namespace TodoList
             // save to database
             // loading screen while saving
             _taskService.AddTaskJob(newTask);
+
+            LoadPage(_currentTaskType);
         }
 
         private void CategoryBtn_Click(object sender, RoutedEventArgs e)
@@ -112,7 +119,5 @@ namespace TodoList
             CategoryPage categoryPage = new();
             FrameTodo.Navigate(categoryPage);
         }
-
-
     }
 }
