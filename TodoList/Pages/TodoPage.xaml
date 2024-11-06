@@ -5,18 +5,20 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:TodoList.Pages"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:entities="clr-namespace:Todolist.DAL.Entities;assembly=Todolist.DAL"
       mc:Ignorable="d"
       d:DesignHeight="450"
       d:DesignWidth="800"
       Title="TodoPage"
       Background="White"
       Loaded="Page_Loaded">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
 
         <TextBlock x:Name="TodoTextBlock"
                    Grid.Row="0"
@@ -63,13 +65,13 @@
                                                 Margin="0,5,0,0">
                                         <materialDesign:PackIcon Kind="ClockOutline"
                                                                  Margin="0,0,5,0" />
-                                        <TextBlock Text="{Binding DueDate, StringFormat='{}{0:MM/dd/yyyy h:mm tt}'}"
+                                        <TextBlock Text="{Binding DueDate, StringFormat='{}{0:dd/MM/yyyy h:mm tt}'}"
                                                    FontSize="12"
                                                    Foreground="Gray" />
                                     </StackPanel>
 
                                     <!-- Ngày tạo (Created Date) -->
-                                    <TextBlock Text="{Binding CreatedDate, StringFormat='Created: {0:MM/dd/yyyy}'}"
+                                    <TextBlock Text="{Binding CreatedDate, StringFormat='Created: {0:dd/MM/yyyy}'}"
                                                FontSize="12"
                                                Foreground="Gray"
                                                Margin="0,5,0,0" />
@@ -80,14 +82,33 @@
                                                Foreground="Gray"
                                                Margin="0,5,0,0" />
 
+                                    <!-- Trạng thái (Status) -->
+                                    <TextBlock Text="{Binding Status}"
+                                               FontSize="12"
+                                               Foreground="Gray"
+                                               Margin="0,5,0,0" />
                                 </StackPanel>
 
-                                <!-- Trạng thái (Status) -->
-                                <CheckBox Grid.Column="1"
-                                          Style="{StaticResource MaterialDesignActionCheckBox}"
-                                          VerticalAlignment="Center"
-                                          Margin="10,0,0,0"
-                                          ToolTip="Mark as completed" />
+                                <!-- Mark as done (Status) -->
+                                <Button x:Name="DoneBtn"
+                                        Grid.Column="1"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        ToolTip="Mark as completed"
+                                        Width="35"
+                                        Height="35"
+                                        Click="DoneBtn_Click">
+                                    <materialDesign:PackIcon Kind="Check" />
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+                                                <Ellipse Fill="Green" />
+                                                <materialDesign:PackIcon Kind="Check"
+                                                                         HorizontalAlignment="Center"
+                                                                         VerticalAlignment="Center" />
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
                             </Grid>
                         </materialDesign:Card>
                     </DataTemplate>
