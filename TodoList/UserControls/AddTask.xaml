@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="TodoList.UserControls.AddTask"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TodoList.UserControls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="White"
+             mc:Ignorable="d"
+             d:DesignWidth="500"
+             Width="500"
+             Loaded="UserControl_Loaded"
+             Height="570">
+    <Grid Margin="20">
+        <StackPanel>
+            <TextBlock Text="Add Task"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Margin="0,0,0,10"
+                       HorizontalAlignment="Center" />
+
+            <StackPanel>
+                <TextBox x:Name="TaskTitleTextBox"
+                         materialDesign:HintAssist.Hint="Title Name"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Margin="0,0,0,10" />
+
+                <!-- TextBlock hiển thị lỗi bên dưới TextBox -->
+                <TextBlock x:Name="TaskTitleErrorText"
+                           Foreground="Red"
+                           FontSize="12"
+                           Margin="5,0,0,10"
+                           Visibility="Collapsed"
+                           Text="Title Name is Required" />
+            </StackPanel>
+
+            <StackPanel>
+                <TextBox x:Name="TaskNameTextBox"
+                         materialDesign:HintAssist.Hint="Task Name"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Margin="0,0,0,10" />
+
+                <TextBlock x:Name="TaskNameErrorText"
+                           Foreground="Red"
+                           FontSize="12"
+                           Margin="5,0,0,10"
+                           Visibility="Collapsed"
+                           Text="Task Name is Required" />
+            </StackPanel>
+            <StackPanel Margin="0,0,0,10">
+                <TextBox x:Name="DescriptionTextBox"
+                         materialDesign:HintAssist.Hint="Description"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Height="100"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True" />
+                <TextBlock x:Name="DescriptionErrorText"
+                           Text="Description is required."
+                           Foreground="Red"
+                           Visibility="Collapsed"
+                           FontSize="12"
+                           Margin="5,0,0,0" />
+            </StackPanel>
+
+            <StackPanel Margin="0,0,0,10">
+                <DatePicker x:Name="DueDateDatePicker"
+                            materialDesign:HintAssist.Hint="Due Date"
+                            Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                <TextBlock x:Name="DueDateErrorText"
+                           Text="Due Date is required."
+                           Foreground="Red"
+                           Visibility="Collapsed"
+                           FontSize="12"
+                           Margin="5,0,0,0" />
+            </StackPanel>
+
+            <ComboBox x:Name="PriorityComboBox"
+                      materialDesign:HintAssist.Hint="Priority"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Margin="0,0,0,10">
+                <ComboBoxItem Content="High" />
+                <ComboBoxItem Content="Medium" />
+                <ComboBoxItem Content="Low" />
+            </ComboBox>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,10,0,10">
+                <ComboBox x:Name="CategoryComboBox"
+                          materialDesign:HintAssist.Hint="Category"
+                          Margin="0, 0, 10, 0"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Width="220" />
+                <ComboBox x:Name="StatusButton"
+                          materialDesign:HintAssist.Hint="Status"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Width="230"
+                          SelectedIndex="0">
+                    <ComboBoxItem Content="Pending" />
+                    <ComboBoxItem Content="Completed" />
+                    <ComboBoxItem Content="In Process" />
+                </ComboBox>
+            </StackPanel>
+
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Margin="0,20,0,0">
+                <Button x:Name="AddTaskButton"
+                        Content="Add Task"
+                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                        Command="{Binding AddTaskCommand}"
+                        Margin="0,0,10,0"
+                        Click="AddTaskButton_Click" />
+
+                <Button x:Name="CancelButton"
+                        Content="Cancel"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                        Margin="10,0,0,0" />
+
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
