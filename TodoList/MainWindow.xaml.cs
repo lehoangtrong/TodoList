@@ -59,7 +59,8 @@ namespace TodoList
                 _ => "Tasks"
             };
 
-            TodoPage todoPage = new TodoPage(_currentTaskType);
+            TodoPage todoPage = new TodoPage();
+            todoPage.SetTaskType(type);
             todoPage.TodoTextBlock.Text = title;
             todoPage.MarkDone += (s, task) =>
             {
