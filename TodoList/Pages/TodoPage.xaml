@@ -29,28 +29,35 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal"
-                    Margin="218,9,-47,11"
-                    Grid.ColumnSpan="2">
+        <Grid Grid.Row="0"
+              Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             <TextBox x:Name="SearchTextBox"
+                     Style="{StaticResource MaterialDesignTextBox}"
                      Width="386"
                      Height="30"
+                     Grid.Column="1"
                      materialDesign:HintAssist.Hint="Search tasks..."
                      VerticalAlignment="Center"
                      Margin="0,0,10,0" />
             <Button Content="Search"
                     Width="80"
                     Height="30"
+                    Grid.Column="2"
                     Click="SearchBtn_Click" />
-        </StackPanel>
 
-        <TextBlock x:Name="TodoTextBlock"
-                   Text="Today's Tasks"
-                   FontSize="24"
-                   FontWeight="Bold"
-                   Margin="10,0,0,0"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center" />
+            <TextBlock x:Name="TodoTextBlock"
+                       Text="Today's Tasks"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Margin="10,0,0,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center" />
+        </Grid>
 
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto"
