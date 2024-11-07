@@ -87,5 +87,28 @@ namespace TodoList.Pages
             TasksListItem.ItemsSource = TasksList;
         }
 
+        private void UpdateTaskStatus(object sender, string newStatus)
+        {
+            var checkBox = (CheckBox)sender;
+            var task = (TaskJob)checkBox.DataContext;
+            if (task != null)
+            {
+                task.Status = newStatus;
+                MarkDone?.Invoke(this, task);
+
+                // Lấy binding expression
+                var bindingExpression = BindingOperations.GetBindingExpression(checkBox, CheckBox.IsCheckedProperty);
+
+                // Cập nhật target của binding
+                bindingExpression?.UpdateTarget();
+            }
+        }
+
+        private void DoneCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            var checkBox = (CheckBox)sender;
+            string newStatus = checkBox.IsChecked == true ? "Completed" : "Pending";
+            UpdateTaskStatus(sender, newStatus);
+        }
     }
 }

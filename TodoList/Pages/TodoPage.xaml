@@ -7,6 +7,7 @@
       xmlns:local="clr-namespace:TodoList.Pages"
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:entities="clr-namespace:Todolist.DAL.Entities;assembly=Todolist.DAL"
+      xmlns:converters="clr-namespace:TodoList.Converters"
       mc:Ignorable="d"
       d:DesignHeight="450"
       d:DesignWidth="800"
@@ -14,23 +15,33 @@
       Background="White"
       Loaded="Page_Loaded">
 
+    <Page.Resources>
+        <converters:StatusToIsDoneConverter x:Key="StatusToIsDoneConverter" />
+    </Page.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="649*"/>
-            <ColumnDefinition Width="151*"/>
+            <ColumnDefinition Width="649*" />
+            <ColumnDefinition Width="151*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="218,9,-47,11" Grid.ColumnSpan="2">
-            <TextBox x:Name="SearchTextBox" Width="386"
-             Height="30"
-             materialDesign:HintAssist.Hint="Search tasks..."
-             VerticalAlignment="Center"
-             Margin="0,0,10,0"/>
-            <Button Content="Search" Width="80" Height="30" Click="SearchBtn_Click"/>
+        <StackPanel Orientation="Horizontal"
+                    Margin="218,9,-47,11"
+                    Grid.ColumnSpan="2">
+            <TextBox x:Name="SearchTextBox"
+                     Width="386"
+                     Height="30"
+                     materialDesign:HintAssist.Hint="Search tasks..."
+                     VerticalAlignment="Center"
+                     Margin="0,0,10,0" />
+            <Button Content="Search"
+                    Width="80"
+                    Height="30"
+                    Click="SearchBtn_Click" />
         </StackPanel>
 
         <TextBlock x:Name="TodoTextBlock"
@@ -42,7 +53,8 @@
                    VerticalAlignment="Center" />
 
         <ScrollViewer Grid.Row="1"
-                      VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2">
+                      VerticalScrollBarVisibility="Auto"
+                      Grid.ColumnSpan="2">
             <!-- Add ScrollViewer -->
             <ItemsControl x:Name="TasksListItem"
                           Margin="10">
@@ -102,25 +114,13 @@
                                 </StackPanel>
 
                                 <!-- Mark as done (Status) -->
-                                <Button x:Name="DoneBtn"
-                                        Grid.Column="1"
-                                        Style="{StaticResource MaterialDesignRaisedButton}"
-                                        ToolTip="Mark as completed"
-                                        Width="35"
-                                        Height="35"
-                                        Click="DoneBtn_Click">
-                                    <materialDesign:PackIcon Kind="Check" />
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <Grid>
-                                                <Ellipse Fill="Green" />
-                                                <materialDesign:PackIcon Kind="Check"
-                                                                         HorizontalAlignment="Center"
-                                                                         VerticalAlignment="Center" />
-                                            </Grid>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
+                                <CheckBox x:Name="DoneCheckBox"
+                                          Grid.Column="1"
+                                          Style="{StaticResource MaterialDesignActionDarkCheckBox}"
+                                          Width="35"
+                                          Height="35"
+                                          IsChecked="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
+                                          Click="DoneCheckBox_Click" />
                             </Grid>
                         </materialDesign:Card>
                     </DataTemplate>

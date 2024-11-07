@@ -41,12 +41,12 @@ namespace TodoList
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            SetButton(TodayBtn);
             LoadPage(TaskService.TaskType.Today);
         }
 
         private async void LoadPage(TaskService.TaskType type)
         {
-            SetButton(TodayBtn);
             ShowLoadingPage();
             string title = type switch
             {
@@ -63,7 +63,6 @@ namespace TodoList
             todoPage.TodoTextBlock.Text = title;
             todoPage.MarkDone += (s, task) =>
             {
-                task.Status = "Completed";
                 _taskService.UpdateTaskJob(task);
                 LoadPage(_currentTaskType);
             };
