@@ -59,7 +59,7 @@ namespace TodoList
                 _ => "Tasks"
             };
 
-            TodoPage todoPage = new TodoPage(_currentTaskType);
+            TodoPage todoPage = new TodoPage();
             todoPage.TodoTextBlock.Text = title;
             todoPage.MarkDone += (s, task) =>
             {
@@ -68,12 +68,27 @@ namespace TodoList
                 LoadPage(_currentTaskType);
             };
 
+            todoPage.Search += TodoPage_SearchHandler;
+
             await Task.Run(() =>
             {
                 todoPage.TasksList = _taskService.GetTasks(type);
                 _currentTaskType = type;
             });
 
+            FrameTodo.Navigate(todoPage);
+        }
+
+        private void TodoPage_SearchHandler(object? sender, string e)
+        {
+            if (e == null)
+            {
+                LoadPage(_currentTaskType);
+                return;
+            }
+
+            TodoPage todoPage = (TodoPage)sender;
+            todoPage.TasksList = _taskService.Search(e);
             FrameTodo.Navigate(todoPage);
         }
 

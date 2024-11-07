@@ -25,15 +25,13 @@ namespace TodoList.Pages
     public partial class TodoPage : Page
     {
         public List<TaskJob>? TasksList { get; set; }
-        private TaskService _taskService = new();
-        private TaskService.TaskType _currentTaskType;
         // Define the event handler delegate
         public event EventHandler<TaskJob>? MarkDone;
+        public event EventHandler<string>? Search;
 
-        public TodoPage(TaskService.TaskType taskType)
+        public TodoPage()
         {
             InitializeComponent();
-            _currentTaskType = taskType;  // Lưu kiểu nhiệm vụ vào biến
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -72,25 +70,22 @@ namespace TodoList.Pages
             string keyword = SearchTextBox.Text.Trim();
             if (string.IsNullOrWhiteSpace(keyword))
             {
-                TasksList = _taskService.GetTasks(_currentTaskType);
-                RefreshPage();
+                // return search all tasks
+                Search?.Invoke(this, "all");
                 return;
             }
-            var result = _taskService.Search(keyword);
-            if (result == null)
-            {
-                MessageBox.Show("No task found", "Search?", MessageBoxButton.OK, MessageBoxImage.Error);
-                TasksList = _taskService.GetTasks(_currentTaskType);
-                RefreshPage();
-                return ;
-            }
-            TasksList = result;
+
+            // Invoke the external event handler
+            Search?.Invoke(this, keyword);
+
             RefreshPage();
         }
+
         private void RefreshPage()
         {
             TasksListItem.ItemsSource = null;
             TasksListItem.ItemsSource = TasksList;
         }
+
     }
 }
