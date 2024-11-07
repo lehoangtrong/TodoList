@@ -39,6 +39,21 @@ namespace Todolist.DAL.Repositories
             _context.TaskJobs.Remove(entity);
             _context.SaveChanges();
         }
+        public List<TaskJob?> Search(string keyword)
+        {
+            _context = new TodoApplicationPrn212Context();
+            var list = _context.TaskJobs.ToList();
+            keyword = keyword.ToLower();
 
+            // Duyệt qua danh sách các task và kiểm tra tất cả các trường
+            var result = list.Where(t => t.GetType().GetProperties()
+            .Any(prop => prop.GetValue(t) != null && prop.GetValue(t).ToString().ToLower().Contains(keyword))).ToList();
+
+            if (result.Count <= 0 || result == null)
+            {
+                return null;
+            }
+            return result;
+        }
     }
 }
