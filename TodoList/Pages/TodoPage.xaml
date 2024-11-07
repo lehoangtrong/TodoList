@@ -15,23 +15,34 @@
       Loaded="Page_Loaded">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="649*"/>
+            <ColumnDefinition Width="151*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <StackPanel Orientation="Horizontal" Margin="218,9,-47,11" Grid.ColumnSpan="2">
+            <TextBox x:Name="SearchTextBox" Width="386"
+             Height="30"
+             materialDesign:HintAssist.Hint="Search tasks..."
+             VerticalAlignment="Center"
+             Margin="0,0,10,0"/>
+            <Button Content="Search" Width="80" Height="30" Click="SearchBtn_Click"/>
+        </StackPanel>
 
         <TextBlock x:Name="TodoTextBlock"
-                   Grid.Row="0"
                    Text="Today's Tasks"
                    FontSize="24"
                    FontWeight="Bold"
-                   Margin="10"
+                   Margin="10,0,0,0"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center" />
 
         <ScrollViewer Grid.Row="1"
-                      VerticalScrollBarVisibility="Auto">
+                      VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2">
             <!-- Add ScrollViewer -->
             <ItemsControl x:Name="TasksListItem"
                           Margin="10">

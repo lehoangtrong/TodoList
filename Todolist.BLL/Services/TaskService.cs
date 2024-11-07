@@ -41,6 +41,12 @@ namespace Todolist.BLL.Services
             _repo.Delete(entity);
         }
 
+        public List<TaskJob?> Search(string keyword)
+        {
+            
+            return _repo.Search(keyword);
+        }
+
         public List<TaskJob> GetTasks(TaskType type)
         {
             List<TaskJob> tasks = _repo.GetAll().OrderByDescending(x => x.DueDate).ToList();
@@ -57,7 +63,6 @@ namespace Todolist.BLL.Services
                 _ => new List<TaskJob>()
             };
         }
-
 
     }
 }
