@@ -61,13 +61,10 @@ namespace TodoList
 
             TodoPage todoPage = new TodoPage();
             todoPage.TodoTextBlock.Text = title;
-            todoPage.MarkDone += (s, task) =>
-            {
-                _taskService.UpdateTaskJob(task);
-                LoadPage(_currentTaskType);
-            };
+            todoPage.MarkDone += TodoPage_MarkDone;
 
             todoPage.Search += TodoPage_SearchHandler;
+            todoPage.ShowDetail += TodoPage_ShowDetail;
 
             await Task.Run(() =>
             {
@@ -76,6 +73,27 @@ namespace TodoList
             });
 
             FrameTodo.Navigate(todoPage);
+        }
+
+        private void TodoPage_MarkDone(object? sender, TaskJob e)
+        {
+            _taskService.UpdateTaskJob(e);
+            LoadPage(_currentTaskType);
+        }
+
+        private void TodoPage_ShowDetail(object? sender, TaskJob e)
+        {
+            DetailTask detailTask = new();
+            detailTask.Categories = _categoryService.GetAllCategorys();
+            detailTask.UpdateTask += DetailTask_UpdateTask;
+            detailTask.TaskJob = e;
+            _ = DialogHost.Show(detailTask, "DialogHostMain");
+        }
+
+        private void DetailTask_UpdateTask(object? sender, TaskJob e)
+        {
+            _taskService.UpdateTaskJob(e);
+            LoadPage(_currentTaskType);
         }
 
         private void TodoPage_SearchHandler(object? sender, string e)

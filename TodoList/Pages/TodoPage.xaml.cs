@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Todolist.BLL.Services;
 using Todolist.DAL.Entities;
 using static Todolist.BLL.Services.TaskService;
@@ -28,7 +29,8 @@ namespace TodoList.Pages
         // Define the event handler delegate
         public event EventHandler<TaskJob>? MarkDone;
         public event EventHandler<string>? Search;
-
+        public event EventHandler<TaskJob>? ShowDetail;
+        private MediaPlayer _mediaPlayer;
         public TodoPage()
         {
             InitializeComponent();
@@ -41,28 +43,6 @@ namespace TodoList.Pages
             {
                 TasksListItem.ItemsSource = TasksList;
             }
-        }
-
-        private void DoneBtn_Click(object sender, RoutedEventArgs e)
-        {
-            // add material design button click event
-            var task = (TaskJob)((Button)sender).DataContext;
-            if (task == null)
-            {
-                MessageBox.Show("Task not found");
-                return;
-            }
-
-            Button button = (Button)sender;
-            // add material design button progress assist
-            ButtonProgressAssist.SetIsIndeterminate(button, true);
-            ButtonProgressAssist.SetIsIndicatorVisible(button, true);
-
-            // task status change
-            task.Status = "Completed";
-
-            // Invoke the external event handler
-            MarkDone?.Invoke(this, task);
         }
 
         private void SearchBtn_Click(object sender, RoutedEventArgs e)
@@ -108,7 +88,44 @@ namespace TodoList.Pages
         {
             var checkBox = (CheckBox)sender;
             string newStatus = checkBox.IsChecked == true ? "Completed" : "Pending";
+            if (newStatus == "Completed")
+            {
+                PlayCompletionSound();
+            }
+            // Open sound completed
             UpdateTaskStatus(sender, newStatus);
+        }
+
+        private void PlayCompletionSound()
+        {
+            try
+            {
+                if (_mediaPlayer == null)
+                {
+                    _mediaPlayer = new MediaPlayer();
+                }
+                _mediaPlayer.Open(new Uri("https://cdn.pixabay.com/download/audio/2022/03/10/audio_2318350b97.mp3?filename=correct-choice-43861.mp3"));
+                _mediaPlayer.Play();
+                _mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void MediaPlayer_MediaEnded(object sender, EventArgs e)
+        {
+            _mediaPlayer.Stop();
+            _mediaPlayer.Close();
+        }
+
+        private void Card_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is MaterialDesignThemes.Wpf.Card card && card.DataContext is TaskJob task)
+            {
+                ShowDetail?.Invoke(this, task);
+            }
         }
     }
 }

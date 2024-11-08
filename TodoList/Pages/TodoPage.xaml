@@ -19,7 +19,7 @@
         <converters:StatusToIsDoneConverter x:Key="StatusToIsDoneConverter" />
     </Page.Resources>
 
-    <Grid>
+    <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="649*" />
             <ColumnDefinition Width="151*" />
@@ -30,46 +30,67 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
-              Grid.ColumnSpan="2">
+              Grid.ColumnSpan="2"
+              VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="5*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="SearchTextBox"
-                     Style="{StaticResource MaterialDesignTextBox}"
-                     Width="386"
-                     Height="30"
-                     Grid.Column="1"
-                     materialDesign:HintAssist.Hint="Search tasks..."
-                     VerticalAlignment="Center"
-                     Margin="0,0,10,0" />
-            <Button Content="Search"
-                    Width="80"
-                    Height="30"
-                    Grid.Column="2"
-                    Click="SearchBtn_Click" />
-
             <TextBlock x:Name="TodoTextBlock"
                        Text="Today's Tasks"
                        FontSize="24"
                        FontWeight="Bold"
                        Margin="10,0,0,0"
                        HorizontalAlignment="Left"
-                       VerticalAlignment="Center" />
+                       VerticalAlignment="Center"
+                       Grid.ColumnSpan="2"
+                       Width="224" />
+            <TextBox x:Name="SearchTextBox"
+                     Style="{StaticResource MaterialDesignTextBox}"
+                     Width="386"
+                     Height="30"
+                     FontSize="16"
+                     Grid.Column="1"
+                     materialDesign:HintAssist.Hint="Search tasks..." />
+            <Button Content="Search"
+                    Width="80"
+                    Height="30"
+                    Grid.Column="2"
+                    Click="SearchBtn_Click" />
         </Grid>
 
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto"
-                      Grid.ColumnSpan="2">
+                      Grid.ColumnSpan="2"
+                      Margin="0,10,0,0">
             <!-- Add ScrollViewer -->
             <ItemsControl x:Name="TasksListItem"
                           Margin="10">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <materialDesign:Card Margin="5"
-                                             Padding="10">
+                                             Padding="10"
+                                             PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown">
+                            <materialDesign:Card.Style>
+                                <Style TargetType="materialDesign:Card">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
+                                                     Value="false">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource MaterialDesignCardSelectedBackground}" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
+                                                     Value="true">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AttentionToActionBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </materialDesign:Card.Style>
                             <Grid>
+
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
@@ -127,7 +148,8 @@
                                           Width="35"
                                           Height="35"
                                           IsChecked="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
-                                          Click="DoneCheckBox_Click" />
+                                          Click="DoneCheckBox_Click"
+                                          ToolTip="Mark as Done" />
                             </Grid>
                         </materialDesign:Card>
                     </DataTemplate>
