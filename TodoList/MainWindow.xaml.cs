@@ -158,5 +158,17 @@ namespace TodoList
 
             LoadPage(_currentTaskType);
         }
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Hiển thị thông báo xác nhận
+            MessageBoxResult result = MessageBox.Show("Kiểm tra lại việc cần làm trước khi thoát nhé ?", "Xác nhận thoát",
+                                                      MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.No)
+            {
+                // Hủy sự kiện đóng cửa sổ nếu người dùng chọn "No"
+                e.Cancel = true;
+            }
+        }
     }
 }
