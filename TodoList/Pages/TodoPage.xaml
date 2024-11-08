@@ -5,38 +5,92 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:TodoList.Pages"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:entities="clr-namespace:Todolist.DAL.Entities;assembly=Todolist.DAL"
+      xmlns:converters="clr-namespace:TodoList.Converters"
       mc:Ignorable="d"
       d:DesignHeight="450"
       d:DesignWidth="800"
       Title="TodoPage"
       Background="White"
       Loaded="Page_Loaded">
-    <Grid>
+
+    <Page.Resources>
+        <converters:StatusToIsDoneConverter x:Key="StatusToIsDoneConverter" />
+    </Page.Resources>
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="649*" />
+            <ColumnDefinition Width="151*" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-
-        <TextBlock x:Name="TodoTextBlock"
-                   Grid.Row="0"
-                   Text="Today's Tasks"
-                   FontSize="24"
-                   FontWeight="Bold"
-                   Margin="10"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center" />
+        <Grid Grid.Row="0"
+              Grid.ColumnSpan="2"
+              VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="TodoTextBlock"
+                       Text="Today's Tasks"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Margin="10,0,0,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Grid.ColumnSpan="2"
+                       Width="224" />
+            <TextBox x:Name="SearchTextBox"
+                     Style="{StaticResource MaterialDesignTextBox}"
+                     Width="386"
+                     Height="30"
+                     FontSize="16"
+                     Grid.Column="1"
+                     materialDesign:HintAssist.Hint="Search tasks..." />
+            <Button Content="Search"
+                    Width="80"
+                    Height="30"
+                    Grid.Column="2"
+                    Click="SearchBtn_Click" />
+        </Grid>
 
         <ScrollViewer Grid.Row="1"
-                      VerticalScrollBarVisibility="Auto">
+                      VerticalScrollBarVisibility="Auto"
+                      Grid.ColumnSpan="2"
+                      Margin="0,10,0,0">
             <!-- Add ScrollViewer -->
             <ItemsControl x:Name="TasksListItem"
                           Margin="10">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <materialDesign:Card Margin="5"
-                                             Padding="10">
+                                             Padding="10"
+                                             PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown">
+                            <materialDesign:Card.Style>
+                                <Style TargetType="materialDesign:Card">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
+                                                     Value="false">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource MaterialDesignCardSelectedBackground}" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
+                                                     Value="true">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource AttentionToActionBrush}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </materialDesign:Card.Style>
                             <Grid>
+
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
@@ -63,13 +117,13 @@
                                                 Margin="0,5,0,0">
                                         <materialDesign:PackIcon Kind="ClockOutline"
                                                                  Margin="0,0,5,0" />
-                                        <TextBlock Text="{Binding DueDate, StringFormat='{}{0:MM/dd/yyyy h:mm tt}'}"
+                                        <TextBlock Text="{Binding DueDate, StringFormat='{}{0:dd/MM/yyyy h:mm tt}'}"
                                                    FontSize="12"
                                                    Foreground="Gray" />
                                     </StackPanel>
 
                                     <!-- Ngày tạo (Created Date) -->
-                                    <TextBlock Text="{Binding CreatedDate, StringFormat='Created: {0:MM/dd/yyyy}'}"
+                                    <TextBlock Text="{Binding CreatedDate, StringFormat='Created: {0:dd/MM/yyyy}'}"
                                                FontSize="12"
                                                Foreground="Gray"
                                                Margin="0,5,0,0" />
@@ -80,14 +134,22 @@
                                                Foreground="Gray"
                                                Margin="0,5,0,0" />
 
+                                    <!-- Trạng thái (Status) -->
+                                    <TextBlock Text="{Binding Status}"
+                                               FontSize="12"
+                                               Foreground="Gray"
+                                               Margin="0,5,0,0" />
                                 </StackPanel>
 
-                                <!-- Trạng thái (Status) -->
-                                <CheckBox Grid.Column="1"
-                                          Style="{StaticResource MaterialDesignActionCheckBox}"
-                                          VerticalAlignment="Center"
-                                          Margin="10,0,0,0"
-                                          ToolTip="Mark as completed" />
+                                <!-- Mark as done (Status) -->
+                                <CheckBox x:Name="DoneCheckBox"
+                                          Grid.Column="1"
+                                          Style="{StaticResource MaterialDesignActionDarkCheckBox}"
+                                          Width="35"
+                                          Height="35"
+                                          IsChecked="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
+                                          Click="DoneCheckBox_Click"
+                                          ToolTip="Mark as Done" />
                             </Grid>
                         </materialDesign:Card>
                     </DataTemplate>
