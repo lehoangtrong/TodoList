@@ -71,7 +71,7 @@
                     <DataTemplate>
                         <materialDesign:Card Margin="5"
                                              Padding="10"
-                                             PreviewMouseLeftButtonDown="Card_PreviewMouseLeftButtonDown">
+                                             MouseLeftButtonDown="Card_MouseLeftButtonDown">
                             <materialDesign:Card.Style>
                                 <Style TargetType="materialDesign:Card">
                                     <Style.Triggers>
@@ -148,8 +148,8 @@
                                           Width="35"
                                           Height="35"
                                           IsChecked="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
-                                          Click="DoneCheckBox_Click"
-                                          ToolTip="Mark as Done" />
+                                          ToolTip="Mark as Done"
+                                          PreviewMouseLeftButtonDown="DoneCheckBox_PreviewMouseLeftButtonDown" />
                             </Grid>
                         </materialDesign:Card>
                     </DataTemplate>

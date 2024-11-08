@@ -1,7 +1,10 @@
 ﻿using MaterialDesignThemes.Wpf;
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,6 +19,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using Todolist.BLL.Services;
 using Todolist.DAL.Entities;
+using TodoList.UserControls;
 using static Todolist.BLL.Services.TaskService;
 
 namespace TodoList.Pages
@@ -30,7 +34,8 @@ namespace TodoList.Pages
         public event EventHandler<TaskJob>? MarkDone;
         public event EventHandler<string>? Search;
         public event EventHandler<TaskJob>? ShowDetail;
-        private MediaPlayer _mediaPlayer;
+        private IWavePlayer waveOut;
+        private Mp3FileReader mp3Reader;
         public TodoPage()
         {
             InitializeComponent();
@@ -75,38 +80,32 @@ namespace TodoList.Pages
             {
                 task.Status = newStatus;
                 MarkDone?.Invoke(this, task);
-
-                // Lấy binding expression
-                var bindingExpression = BindingOperations.GetBindingExpression(checkBox, CheckBox.IsCheckedProperty);
-
-                // Cập nhật target của binding
-                bindingExpression?.UpdateTarget();
             }
-        }
-
-        private void DoneCheckBox_Click(object sender, RoutedEventArgs e)
-        {
-            var checkBox = (CheckBox)sender;
-            string newStatus = checkBox.IsChecked == true ? "Completed" : "Pending";
-            if (newStatus == "Completed")
-            {
-                PlayCompletionSound();
-            }
-            // Open sound completed
-            UpdateTaskStatus(sender, newStatus);
         }
 
         private void PlayCompletionSound()
         {
             try
             {
-                if (_mediaPlayer == null)
+                // Lấy tài nguyên nhúng MP3 từ ứng dụng và chuyển thành MemoryStream
+                var resourceStream = Application.GetResourceStream(new Uri("pack://application:,,,/TodoList;component/Resources/finish.mp3")).Stream;
+                var memoryStream = new MemoryStream();
+                resourceStream.CopyTo(memoryStream);
+                memoryStream.Position = 0;
+
+                // Khởi tạo NAudio để phát âm thanh từ MemoryStream
+                mp3Reader = new Mp3FileReader(memoryStream);
+                waveOut = new WaveOutEvent();
+                waveOut.Init(mp3Reader);
+                waveOut.Play();
+
+                // Đăng ký sự kiện để dừng và giải phóng tài nguyên sau khi phát xong
+                waveOut.PlaybackStopped += (s, e) =>
                 {
-                    _mediaPlayer = new MediaPlayer();
-                }
-                _mediaPlayer.Open(new Uri("https://cdn.pixabay.com/download/audio/2022/03/10/audio_2318350b97.mp3?filename=correct-choice-43861.mp3"));
-                _mediaPlayer.Play();
-                _mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
+                    waveOut.Dispose();
+                    mp3Reader.Dispose();
+                    memoryStream.Dispose();
+                };
             }
             catch (Exception ex)
             {
@@ -114,18 +113,45 @@ namespace TodoList.Pages
             }
         }
 
-        private void MediaPlayer_MediaEnded(object sender, EventArgs e)
+        private void Card_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _mediaPlayer.Stop();
-            _mediaPlayer.Close();
-        }
+            if (e.OriginalSource is CheckBox)
+            {
+                return; // Bỏ qua nếu click vào CheckBox
+            }
 
-        private void Card_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
             if (sender is MaterialDesignThemes.Wpf.Card card && card.DataContext is TaskJob task)
             {
                 ShowDetail?.Invoke(this, task);
             }
+        }
+
+        private void DoneCheckBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var checkBox = (CheckBox)sender;
+            string initStatus = checkBox.IsChecked == true ? "Completed" : "Pending";
+            if (initStatus != "Completed")
+            {
+                PlayCompletionSound();
+            }
+            // Cập nhật binding expression để giao diện phản ánh thay đổi
+            var bindingExpression = BindingOperations.GetBindingExpression(checkBox, CheckBox.IsCheckedProperty);
+            bindingExpression?.UpdateTarget();
+            // Force the UI to render immediately
+            Dispatcher.Invoke(() => { });
+
+            // Delay 5 giây trước khi cập nhật task status
+            Dispatcher.InvokeAsync(async () =>
+            {
+                await Task.Delay(5000);
+
+                string currentStatus = checkBox.IsChecked == true ? "Completed" : "Pending";
+
+                if (initStatus != currentStatus)
+                {
+                    UpdateTaskStatus(sender, currentStatus);
+                }
+            });
         }
     }
 }

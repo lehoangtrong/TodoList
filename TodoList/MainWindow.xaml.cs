@@ -29,7 +29,6 @@ namespace TodoList
         private TaskService _taskService = new TaskService();
         public bool IsDialogOpen { get; set; }
         private TaskService.TaskType _currentTaskType;
-
         private readonly DialogHost _dialogs;
         public MainWindow()
         {
@@ -176,8 +175,50 @@ namespace TodoList
         private void CategoryBtn_Click(object sender, RoutedEventArgs e)
         {
             CategoryPage categoryPage = new();
+            categoryPage.AddCategory += CategoryPage_AddCategory;
+            categoryPage.UpdateCategory += CategoryPage_UpdateCategory;
+            categoryPage.DeleteCategory += CategoryPage_DeleteCategory;
+            categoryPage.Category = _categoryService.GetAllCategorys();
             FrameTodo.Navigate(categoryPage);
             SetButton(CategoryBtn);
+        }
+        private void LoadCategoryPage(object s, Category e)
+        {
+            CategoryPage categoryPage = new();
+            categoryPage.Category = _categoryService.GetAllCategorys();
+            categoryPage.AddCategory += CategoryPage_AddCategory;
+            categoryPage.UpdateCategory += CategoryPage_UpdateCategory;
+            categoryPage.DeleteCategory += CategoryPage_DeleteCategory;
+            FrameTodo.Navigate(categoryPage);
+        }
+
+        private void CategoryPage_DeleteCategory(object? sender, Category e)
+        {
+            _categoryService.RemoveCategory(e);
+            LoadCategoryPage(sender, e);
+        }
+
+        private void CategoryPage_AddCategory(object? sender, EventArgs e)
+        {
+            CategoryUserControl addCategory = new();
+            addCategory.AddCategory += (s, e) =>
+            {
+                _categoryService.AddCategory(e);
+                LoadCategoryPage(s, e);
+            };
+            _ = DialogHost.Show(addCategory, "DialogHostMain");
+        }
+
+        private void CategoryPage_UpdateCategory(object? sender, Category e)
+        {
+            CategoryUserControl updateCategory = new();
+            updateCategory.UpdateCategory += (s, e) =>
+            {
+                _categoryService.UpdateCategory(e);
+                LoadCategoryPage(s, e);
+            };
+            updateCategory.EditedOne = e;
+            _ = DialogHost.Show(updateCategory, "DialogHostMain");
         }
 
         private async void AddTaskBtn_Click(object sender, RoutedEventArgs e)
@@ -191,12 +232,6 @@ namespace TodoList
             // save to database
             // loading screen while saving
             _taskService.AddTaskJob(newTask);
-
-        private void CategoryBtn_Click(object sender, RoutedEventArgs e)
-        {
-            CategoryPage categoryPage = new();
-            categoryPage.CategoryService = _categoryService;
-            FrameTodo.Navigate(categoryPage);
         }
     }
 }

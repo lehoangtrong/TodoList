@@ -26,7 +26,8 @@ namespace TodoList.UserControls
     /// </summary>
     public partial class CategoryUserControl : UserControl
     {
-        public CategoryService CategoryService { get; set; }
+        public event EventHandler<Category> AddCategory;
+        public event EventHandler<Category> UpdateCategory;
         public Category EditedOne { get; set; }
         public CategoryUserControl()
         {
@@ -43,21 +44,18 @@ namespace TodoList.UserControls
 
             obj.Type = TypeTextBox.Text;
             obj.Description = DescriptionTextBox.Text;
-            if (EditedOne == null) 
+            if (EditedOne == null)
             {
-                CategoryService.AddCategory(obj);
-
+                AddCategory?.Invoke(this, obj);
             }
             else
             {
                 obj.Id = EditedOne.Id;
                 obj.CreatedDate = EditedOne.CreatedDate;
-                CategoryService.UpdateCategory(obj);
+                UpdateCategory?.Invoke(this, obj);
             }
 
-            
             DialogHost.CloseDialogCommand.Execute(null, this);
-
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -85,12 +83,13 @@ namespace TodoList.UserControls
                 TypeErrorText.Visibility = Visibility.Visible;
                 isValid = false;
             }
-            else if (categoryType.Length < 5 || categoryType.Length > 80) 
-            { 
-                TypeErrorText.Visibility= Visibility.Visible;
+            else if (categoryType.Length < 5 || categoryType.Length > 80)
+            {
+                TypeErrorText.Visibility = Visibility.Visible;
                 TypeErrorText.Text = "Category type must be between 5-80 chars long";
                 isValid = false;
-            }else
+            }
+            else
             {
                 TypeErrorText.Visibility = Visibility.Collapsed;
                 TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
@@ -105,10 +104,11 @@ namespace TodoList.UserControls
             }
             else if (description.Length < 5 || description.Length > 100)
             {
-                DescriptionErrorText.Visibility= Visibility.Visible;
+                DescriptionErrorText.Visibility = Visibility.Visible;
                 DescriptionErrorText.Text = "Description must be between 5-200 chars long";
-                isValid= false;
-            }else
+                isValid = false;
+            }
+            else
             {
                 DescriptionErrorText.Visibility = Visibility.Collapsed;
             }
