@@ -26,7 +26,7 @@ namespace TodoList.UserControls
     /// </summary>
     public partial class CategoryUserControl : UserControl
     {
-        private CategoryService _categoryService = new();
+        public CategoryService CategoryService { get; set; }
         public Category EditedOne { get; set; }
         public CategoryUserControl()
         {
@@ -45,14 +45,14 @@ namespace TodoList.UserControls
             obj.Description = DescriptionTextBox.Text;
             if (EditedOne == null) 
             {
-                _categoryService.AddCategory(obj);
+                CategoryService.AddCategory(obj);
 
             }
             else
             {
                 obj.Id = EditedOne.Id;
                 obj.CreatedDate = EditedOne.CreatedDate;
-                _categoryService.UpdateCategory(obj);
+                CategoryService.UpdateCategory(obj);
             }
 
             

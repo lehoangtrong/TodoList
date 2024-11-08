@@ -24,7 +24,7 @@ namespace TodoList.Pages
     /// </summary>
     public partial class CategoryPage : Page
     {
-        private CategoryService _categoryService = new();
+        public CategoryService CategoryService { get; set; }
         private List<Category> _categories;
         private int _currentPage = 0;  // Current page index
         private const int _itemsPerPage = 20;  // Items per page
@@ -42,7 +42,7 @@ namespace TodoList.Pages
 
         private void LoadCategories()
         {
-            _categories = _categoryService.GetAllCategorys();
+            _categories = CategoryService.GetAllCategorys();
             DisplayCurrentPage();
         }
 
@@ -112,7 +112,7 @@ namespace TodoList.Pages
             {
                 return;
             }
-            _categoryService.RemoveCategory(selectedCategory);
+            CategoryService.RemoveCategory(selectedCategory);
             LoadCategories();
         }
 
@@ -126,6 +126,7 @@ namespace TodoList.Pages
             }
             var categoryUserControl = new CategoryUserControl();
             // Show the UserControl in the DialogHost
+            categoryUserControl.CategoryService = CategoryService;
             categoryUserControl.EditedOne = selectedCategory;
             await DialogHost.Show(categoryUserControl, "RootDialog");
 

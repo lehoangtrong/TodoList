@@ -110,6 +110,7 @@ namespace TodoList
         private void CategoryBtn_Click(object sender, RoutedEventArgs e)
         {
             CategoryPage categoryPage = new();
+            categoryPage.CategoryService = _categoryService;
             FrameTodo.Navigate(categoryPage);
         }
 
