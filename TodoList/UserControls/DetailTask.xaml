@@ -1,0 +1,204 @@
+﻿<UserControl x:Class="TodoList.UserControls.DetailTask"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TodoList.UserControls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             Background="White"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <!-- Style cho Completed -->
+        <Style x:Key="CompletedStyle"
+               TargetType="TextBlock">
+            <Setter Property="Foreground"
+                    Value="Green" />
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+        </Style>
+
+        <!-- Style cho In Progress -->
+        <Style x:Key="InProgressStyle"
+               TargetType="TextBlock">
+            <Setter Property="Foreground"
+                    Value="Orange" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+        </Style>
+
+        <!-- Style cho Planned -->
+        <Style x:Key="PlannedStyle"
+               TargetType="TextBlock">
+            <Setter Property="Foreground"
+                    Value="Gray" />
+            <Setter Property="FontStyle"
+                    Value="Italic" />
+        </Style>
+
+        <!-- Style động để áp dụng style theo giá trị Status -->
+        <Style x:Key="StatusTextBlockStyle"
+               TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status}"
+                             Value="Completed">
+                    <Setter Property="Style"
+                            Value="{StaticResource CompletedStyle}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}"
+                             Value="In Progress">
+                    <Setter Property="Style"
+                            Value="{StaticResource InProgressStyle}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Status}"
+                             Value="Planned">
+                    <Setter Property="Style"
+                            Value="{StaticResource PlannedStyle}" />
+                </DataTrigger>
+                <!-- Mặc định nếu không có giá trị nào khớp -->
+                <DataTrigger Binding="{Binding Status}"
+                             Value="">
+                    <Setter Property="Style"
+                            Value="{StaticResource InProgressStyle}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <materialDesign:Card>
+            <Border CornerRadius="20,20,20,20">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="39*" />
+                        <ColumnDefinition Width="41*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0"
+                          Margin="8,24,8,4"
+                          Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="150" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="127*" />
+                            <ColumnDefinition Width="25*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Row="0"
+                                    Margin="0,0,0,150"
+                                    Grid.RowSpan="2">
+                            <TextBox x:Name="TitleTextBox"
+                                     Margin="0"
+                                     FontSize="18"
+                                     Style="{StaticResource MaterialDesignTextBox}" />
+                        </StackPanel>
+                        <materialDesign:Badged Grid.Column="1"
+                                               Grid.Row="0"
+                                               Height="0"
+                                               Width="0" />
+                        <TextBox x:Name="DescriptionTextBox"
+                                 Grid.Row="1"
+                                 VerticalAlignment="Top"
+                                 Style="{StaticResource MaterialDesignTextBox}"
+                                 Text="Description"
+                                 TextWrapping="Wrap"
+                                 HorizontalAlignment="Left" />
+                        <TextBlock x:Name="StatusTextBlock"
+                                   Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                   Text="Status"
+                                   HorizontalAlignment="Right"
+                                   Margin="0,0,0,15"
+                                   Width="80"
+                                   Grid.ColumnSpan="2" />
+                    </Grid>
+                    <Separator Grid.Row="1"
+                               Margin="8,0,8,23"
+                               Style="{StaticResource MaterialDesignDarkSeparator}"
+                               Grid.ColumnSpan="2"
+                               Grid.RowSpan="2" />
+                    <StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                Grid.ColumnSpan="2">
+                        <Label Content="Priority: "
+                               VerticalAlignment="Center" />
+                        <ComboBox x:Name="PriorityComboBox"
+                                  materialDesign:HintAssist.Hint="Priority"
+                                  Style="{StaticResource MaterialDesignComboBox}"
+                                  Width="242"
+                                  Margin="20,0,0,0">
+                            <ComboBoxItem Content="High" />
+                            <ComboBoxItem Content="Medium" />
+                            <ComboBoxItem Content="Low" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,10,0,10"
+                                Grid.Row="3"
+                                Grid.ColumnSpan="2">
+                        <Label Content="Category: "
+                               VerticalAlignment="Center" />
+                        <ComboBox x:Name="CategoryComboBox"
+                                  materialDesign:HintAssist.Hint="Category"
+                                  Margin="10,0,10,0"
+                                  Style="{StaticResource MaterialDesignComboBox}"
+                                  Width="242" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="4"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+                        <Label Content="Created Date: "
+                               VerticalAlignment="Center" />
+                        <TextBlock VerticalAlignment="Center"
+                                   x:Name="CreatedDateTextBlock"
+                                   Text="{Binding CreatedDate, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="5"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                Grid.ColumnSpan="2"
+                                Margin="50,10,0,0">
+                        <Button x:Name="UpdateBtn"
+                                Content="Update"
+                                Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                Command="{Binding SaveCommand}"
+                                Margin="0,0,10,0"
+                                MinWidth="100"
+                                Click="UpdateBtn_Click" />
+                        <Button x:Name="CancelBtn"
+                                Content="Cancel"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                                Margin="10,0,0,0"
+                                MinWidth="100"
+                                Click="CancelBtn_Click" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </materialDesign:Card>
+
+        <Calendar materialDesign:CalendarAssist.Orientation="Horizontal"
+                  x:Name="DueTimeDate"
+                  Grid.Column="2" />
+    </Grid>
+
+</UserControl>

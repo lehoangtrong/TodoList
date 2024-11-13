@@ -24,10 +24,12 @@ namespace TodoList.Pages
     /// </summary>
     public partial class CategoryPage : Page
     {
-        private CategoryService _categoryService = new();
-        private List<Category> _categories;
+        public List<Category> Category { get; set; }
         private int _currentPage = 0;  // Current page index
         private const int _itemsPerPage = 20;  // Items per page
+        public event EventHandler AddCategory;
+        public event EventHandler<Category> DeleteCategory;
+        public event EventHandler<Category> UpdateCategory;
 
         public CategoryPage()
         {
@@ -42,24 +44,23 @@ namespace TodoList.Pages
 
         private void LoadCategories()
         {
-            _categories = _categoryService.GetAllCategorys();
             DisplayCurrentPage();
         }
 
         private void DisplayCurrentPage()
         {
-            if (_categories != null && _categories.Count > 0)
+            if (Category != null && Category.Count > 0)
             {
-                int totalItems = _categories.Count;
+                int totalItems = Category.Count;
                 int totalPages = (int)Math.Ceiling((double)totalItems / _itemsPerPage);
 
                 // Get the items for the current page
-                var pagedData = _categories.Skip(_currentPage * _itemsPerPage).Take(_itemsPerPage).ToList();
+                var pagedData = Category.Skip(_currentPage * _itemsPerPage).Take(_itemsPerPage).ToList();
                 CategoryDataGrid.ItemsSource = pagedData;
             }
             else
             {
-                CategoryDataGrid.ItemsSource = null; // Clear data grid if no categories are found
+                CategoryDataGrid.ItemsSource = null;
             }
         }
 
@@ -70,11 +71,7 @@ namespace TodoList.Pages
 
         private async void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            var categoryUserControl = new CategoryUserControl();
-            // Show the UserControl in the DialogHost
-            DialogHost.CloseDialogCommand.Execute(null, this);
-            await DialogHost.Show(categoryUserControl, "RootDialog");
-
+            AddCategory?.Invoke(this, EventArgs.Empty);
             // Reload categories and refresh the DataGrid
             LoadCategories();
         }
@@ -91,7 +88,7 @@ namespace TodoList.Pages
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            int totalPages = (int)Math.Ceiling((double)_categories.Count / _itemsPerPage);
+            int totalPages = (int)Math.Ceiling((double)Category.Count / _itemsPerPage);
             if (_currentPage < totalPages - 1)
             {
                 _currentPage++;
@@ -112,7 +109,8 @@ namespace TodoList.Pages
             {
                 return;
             }
-            _categoryService.RemoveCategory(selectedCategory);
+            DeleteCategory?.Invoke(this, selectedCategory);
+
             LoadCategories();
         }
 
@@ -124,11 +122,8 @@ namespace TodoList.Pages
                 MessageBox.Show("Please select category before updating", "Select one", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
             }
-            var categoryUserControl = new CategoryUserControl();
-            // Show the UserControl in the DialogHost
-            categoryUserControl.EditedOne = selectedCategory;
-            await DialogHost.Show(categoryUserControl, "RootDialog");
 
+            UpdateCategory?.Invoke(this, selectedCategory);
             // Reload categories and refresh the DataGrid
             LoadCategories();
         }

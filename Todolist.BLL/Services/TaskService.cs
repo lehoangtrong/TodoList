@@ -19,6 +19,7 @@ namespace Todolist.BLL.Services
             Important,
             Planned,
             Completed,
+            Category,
             All
         }
         public List<TaskJob> GetAllTaskJobs()
@@ -43,7 +44,7 @@ namespace Todolist.BLL.Services
 
         public List<TaskJob?> Search(string keyword)
         {
-            
+
             return _repo.Search(keyword);
         }
 

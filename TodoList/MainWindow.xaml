@@ -15,7 +15,6 @@
         Height="734"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
-
     <materialDesign:DialogHost x:Name="DialogHostMain"
                                Identifier="DialogHostMain">
         <Grid Margin="20">
