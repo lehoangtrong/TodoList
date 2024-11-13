@@ -117,6 +117,7 @@ namespace TodoList
             SetButtonHighlight(PlannedBtn, button == PlannedBtn);
             SetButtonHighlight(AllBtn, button == AllBtn);
             SetButtonHighlight(CategoryBtn, button == CategoryBtn);
+            SetButtonHighlight(QuitBtn, button == QuitBtn);
         }
 
         private void SetButtonHighlight(Button button, bool isHighlighted)
@@ -237,7 +238,7 @@ namespace TodoList
         private void QuitBtn_Click(object sender, RoutedEventArgs e)
         {
             // Hiển thị hộp thoại xác nhận
-            var result = MessageBox.Show("Are you sure you want to quit?","Confirm Quit",MessageBoxButton.YesNo,MessageBoxImage.Question);
+            var result = MessageBox.Show("Are you sure you want to quit?", "Confirm Quit", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             // Nếu người dùng chọn Yes, thoát ứng dụng
             if (result == MessageBoxResult.Yes)
@@ -248,8 +249,45 @@ namespace TodoList
             else
             {
                 // Thông báo rằng họ đã chọn ở lại ứng dụng
-                MessageBox.Show("You choose to stay in the app","Cancelled",MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show("You choose to stay in the app", "Cancelled", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+        }
+
+        private void DarkModeToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            PaletteHelper palette = new PaletteHelper();
+
+            ITheme theme = palette.GetTheme();
+
+            if (DarkModeToggle.IsChecked.Value)
+            {
+                theme.SetBaseTheme(Theme.Dark);
+            }
+            else
+            {
+                theme.SetBaseTheme(Theme.Light);
+            }
+            palette.SetTheme(theme);
+        }
+
+        private void DarkModeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            var paletteHelper = new PaletteHelper();
+            ITheme theme = paletteHelper.GetTheme();
+
+            if (DarkModeToggle.IsChecked == true)
+            {
+                theme.SetBaseTheme(Theme.Dark);
+                DarkModeToggle.Content = new PackIcon { Kind = PackIconKind.WeatherNight };
+            }
+            else
+            {
+                theme.SetBaseTheme(Theme.Light);
+                DarkModeToggle.Content = new PackIcon { Kind = PackIconKind.WeatherSunny };
+            }
+
+            paletteHelper.SetTheme(theme);
+
         }
     }
 }

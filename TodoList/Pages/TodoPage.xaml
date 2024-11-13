@@ -12,7 +12,13 @@
       d:DesignHeight="450"
       d:DesignWidth="800"
       Title="TodoPage"
-      Background="White"
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+      TextElement.FontWeight="Regular"
+      TextOptions.TextRenderingMode="Auto"
+      TextElement.FontSize="14"
+      TextOptions.TextFormattingMode="Ideal"
+      Background="{DynamicResource MaterialDesignPaper}"
+      FontFamily="{materialDesign:MaterialDesignFont}"
       Loaded="Page_Loaded">
 
     <Page.Resources>
@@ -33,7 +39,9 @@
             <!-- Row for Task List -->
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center">
+        <Grid Grid.Row="0"
+              Grid.ColumnSpan="2"
+              VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="5*" />
@@ -63,7 +71,10 @@
                     Click="SearchBtn_Click" />
         </Grid>
 
-        <Grid Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center">
+        <Grid Grid.Row="1"
+              Grid.ColumnSpan="2"
+              VerticalAlignment="Center"
+              Margin="0 0 0 10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
@@ -74,23 +85,27 @@
                       Height="30"
                       Margin="0,10,200,0"
                       SelectedIndex="0"
-                      SelectionChanged="FilterComboBox_SelectionChanged" Grid.Column="1" VerticalAlignment="Top">
-                <ComboBoxItem Content="Filter By"/>
+                      SelectionChanged="FilterComboBox_SelectionChanged"
+                      Grid.Column="1"
+                      Style="{StaticResource MaterialDesignComboBox}"
+                      VerticalAlignment="Top">
+                <ComboBoxItem Content="Filter By" />
                 <ComboBoxItem Content="All" />
-                <ComboBoxItem Content="Completed"/>
+                <ComboBoxItem Content="Completed" />
                 <ComboBoxItem Content="Pending" />
-                <ComboBoxItem Content="In Process"/>
+                <ComboBoxItem Content="In Process" />
             </ComboBox>
 
             <ComboBox x:Name="SortComboBox"
-                        Width="180"
-                        Height="30"
-                        Margin="190,10,10,0"
-                        SelectedIndex="0"
-                        SelectionChanged="SortComboBox_SelectionChanged"
-                        Grid.Column="1"
-                        VerticalAlignment="Top">
-                <ComboBoxItem Content="Sort Priority or Due Date"/>
+                      Width="180"
+                      Height="30"
+                      Margin="190,10,10,0"
+                      SelectedIndex="0"
+                      SelectionChanged="SortComboBox_SelectionChanged"
+                      Grid.Column="1"
+                      Style="{StaticResource MaterialDesignComboBox}"
+                      VerticalAlignment="Top">
+                <ComboBoxItem Content="Sort Priority or Due Date" />
                 <ComboBoxItem Content="Due Date Ascending" />
                 <ComboBoxItem Content="Due Date Descending" />
                 <ComboBoxItem Content="Priority Ascending" />
@@ -100,9 +115,10 @@
         </Grid>
 
         <ScrollViewer Grid.Row="2"
-                      VerticalScrollBarVisibility="Auto"
                       Grid.ColumnSpan="2"
-                      Margin="0,10,0,0">
+                      Margin="0,10,0,0"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
             <ItemsControl x:Name="TasksListItem"
                           Margin="10">
                 <ItemsControl.ItemTemplate>
@@ -132,7 +148,8 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <StackPanel Grid.Column="0"
+                                            Margin="0,0,10,0">
                                     <TextBlock Text="{Binding Title}"
                                                FontSize="16"
                                                FontWeight="SemiBold"

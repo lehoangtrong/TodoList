@@ -39,7 +39,7 @@ namespace TodoList.UserControls
                 Title = TaskTitleTextBox.Text,
                 Description = DescriptionTextBox.Text,
                 Status = (StatusButton.SelectedItem as ComboBoxItem)?.Content.ToString(),
-                DueDate = DueDateDatePicker.SelectedDate ?? DateTime.Now,
+                DueDate = GetDueDateTime(),
                 Priority = PriorityComboBox.Text,
                 CreatedDate = DateTime.Now,
                 CategoryId = int.TryParse(CategoryComboBox.SelectedValue?.ToString(), out int categoryId) ? categoryId : (int?)null
@@ -71,7 +71,7 @@ namespace TodoList.UserControls
             if (hasError) isValid = false;
 
             // Check DueDateDatePicker
-            hasError = !DueDateDatePicker.SelectedDate.HasValue;
+            hasError = GetDueDateTime() == null;
             SetValidationError(DueDateDatePicker, DueDateErrorText, hasError, "Due Date is required.");
             if (hasError) isValid = false;
 
@@ -112,6 +112,14 @@ namespace TodoList.UserControls
                 control.ToolTip = null;
                 control.ClearValue(BorderBrushProperty);
             }
+        }
+
+        private DateTime GetDueDateTime()
+        {
+            DateTime dueDate = DueDateDatePicker.SelectedDate ?? DateTime.Today; // If no date is selected, default to today
+            TimeSpan dueTime = DueTimeTimePicker.SelectedTime?.TimeOfDay ?? TimeSpan.Zero; // If no time is selected, default to 00:00:00
+
+            return dueDate.Date + dueTime;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

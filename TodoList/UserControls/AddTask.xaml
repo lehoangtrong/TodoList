@@ -5,12 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:TodoList.UserControls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             Background="White"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextOptions.TextRenderingMode="Auto"
+             TextElement.FontSize="14"
+             TextOptions.TextFormattingMode="Ideal"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="{materialDesign:MaterialDesignFont}"
              mc:Ignorable="d"
              d:DesignWidth="500"
-             Width="500"
-             Loaded="UserControl_Loaded"
-             Height="570">
+             Loaded="UserControl_Loaded">
     <Grid Margin="20">
         <StackPanel>
             <TextBlock Text="Add Task"
@@ -63,9 +67,16 @@
             </StackPanel>
 
             <StackPanel Margin="0,0,0,10">
-                <DatePicker x:Name="DueDateDatePicker"
-                            materialDesign:HintAssist.Hint="Due Date"
-                            Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                <StackPanel>
+                    <DatePicker x:Name="DueDateDatePicker"
+                                Margin="0,0,0,10"
+                                materialDesign:HintAssist.Hint="Due Date"
+                                Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                    <materialDesign:TimePicker x:Name="DueTimeTimePicker"
+                                               materialDesign:HintAssist.Hint="Due Time"
+                                               Margin="0,0,0,10"
+                                               Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
+                </StackPanel>
                 <TextBlock x:Name="DueDateErrorText"
                            Text="Due Date is required."
                            Foreground="Red"

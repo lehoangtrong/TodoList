@@ -7,8 +7,11 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:uc="clr-namespace:TodoList.UserControls"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Medium"
+        TextElement.FontWeight="Regular"
+        TextOptions.TextRenderingMode="Auto"
         TextElement.FontSize="14"
+        TextOptions.TextFormattingMode="Ideal"
+        Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{materialDesign:MaterialDesignFont}"
         Title="Todo List App"
         Width="1063"
@@ -25,21 +28,22 @@
 
 
             <Border CornerRadius="10"
-                    Background="#F0F0F0">
+                    Background="{StaticResource AttentionToActionBrush}">
                 <StackPanel Grid.Column="0"
-                            Background="#F0F0F0"
                             Width="200"
                             Margin="10">
 
                     <TextBlock Text="Menu"
                                HorizontalAlignment="Center"
                                Margin="10"
+                               Style="{StaticResource MaterialDesignBody1TextBlock}"
                                FontSize="16"
                                FontWeight="Bold" />
 
                     <Button x:Name="TodayBtn"
                             Content="Today"
                             Margin="10"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
                             Click="TodayBtn_Click"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left">
@@ -56,6 +60,7 @@
                     <Button x:Name="UpcomingBtn"
                             Content="Upcoming"
                             Margin="10"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Left"
                             Click="UpcomingBtn_Click">
@@ -72,6 +77,7 @@
                     <Button x:Name="ImportantBtn"
                             Margin="10"
                             Content="Important"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
                             Click="ImportantBtn_Click"
                             HorizontalContentAlignment="Left"
                             HorizontalAlignment="Stretch">
@@ -88,6 +94,7 @@
                     <Button x:Name="PlannedBtn"
                             Margin="10"
                             Content="Planned"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
                             Click="PlannedBtn_Click"
                             HorizontalContentAlignment="Left"
                             HorizontalAlignment="Stretch">
@@ -104,6 +111,7 @@
                     <Button x:Name="CompletedBtn"
                             Content="Completed"
                             Margin="10"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
                             Click="CompletedBtn_Click"
                             HorizontalContentAlignment="Left"
                             HorizontalAlignment="Stretch">
@@ -120,6 +128,7 @@
                     <Button x:Name="AllBtn"
                             Content="All"
                             Margin="10"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
                             Click="AllBtn_Click"
                             HorizontalContentAlignment="Left"
                             HorizontalAlignment="Stretch">
@@ -136,6 +145,7 @@
                     <Button x:Name="CategoryBtn"
                             Content="Categories"
                             Margin="10"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
                             Click="CategoryBtn_Click"
                             HorizontalContentAlignment="Left"
                             HorizontalAlignment="Stretch">
@@ -154,13 +164,15 @@
                             Content="Quit"
                             Margin="10"
                             Click="QuitBtn_Click"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
                             HorizontalContentAlignment="Left"
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Bottom">     
+                            VerticalAlignment="Bottom">
                         <Button.ContentTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ExitToApp"                               Margin="0,0,5,0" />
+                                    <materialDesign:PackIcon Kind="ExitToApp"
+                                                             Margin="0,0,5,0" />
                                     <TextBlock Text="{Binding}" />
                                 </StackPanel>
                             </DataTemplate>
@@ -174,20 +186,31 @@
 
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
+                <ToggleButton x:Name="DarkModeToggle"
+                              HorizontalAlignment="Right"
+                              Grid.Row="0"
+                              Margin="0 10 0 10"
+                              Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                              Click="DarkModeToggle_Click">
+                    <materialDesign:PackIcon Kind="WeatherNight" />
+                </ToggleButton>
+
                 <Frame x:Name="FrameTodo"
+                       Grid.Row="1"
                        NavigationUIVisibility="Hidden" />
 
                 <Button x:Name="AddTaskBtn"
                         Content="Add Task"
                         Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                        Grid.Row="1"
                         Margin="10"
                         HorizontalAlignment="Right"
-                        Click="AddTaskBtn_Click" />
+                        Click="AddTaskBtn_Click"
+                        Grid.Row="2" />
             </Grid>
         </Grid>
 
@@ -204,8 +227,6 @@
                                Margin="10"
                                HorizontalAlignment="Center" />
                 </StackPanel>
-
-
             </Grid>
         </materialDesign:DialogHost.DialogContent>
     </materialDesign:DialogHost>
