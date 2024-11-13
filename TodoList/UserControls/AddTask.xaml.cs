@@ -34,12 +34,23 @@ namespace TodoList.UserControls
         {
             if (!IsValid()) return;
 
+            DateTime dueDateTime = DateTime.Now;
+
+            DateTime date = DueDateDatePicker.SelectedDate ?? DateTime.Now;
+
+            string timeText = string.IsNullOrWhiteSpace(DueTimeTextBox.Text) ? "12:00" : DueTimeTextBox.Text;
+
+            if (TimeSpan.TryParse(timeText, out TimeSpan time))
+            {
+                dueDateTime = date.Date + time;
+            }
+
             TaskJob job = new TaskJob
             {
                 Title = TaskTitleTextBox.Text,
                 Description = DescriptionTextBox.Text,
                 Status = (StatusButton.SelectedItem as ComboBoxItem)?.Content.ToString(),
-                DueDate = DueDateDatePicker.SelectedDate ?? DateTime.Now,
+                DueDate = dueDateTime,
                 Priority = PriorityComboBox.Text,
                 CreatedDate = DateTime.Now,
                 CategoryId = int.TryParse(CategoryComboBox.SelectedValue?.ToString(), out int categoryId) ? categoryId : (int?)null
@@ -73,7 +84,31 @@ namespace TodoList.UserControls
             // Check DueDateDatePicker
             hasError = !DueDateDatePicker.SelectedDate.HasValue;
             SetValidationError(DueDateDatePicker, DueDateErrorText, hasError, "Due Date is required.");
-            if (hasError) isValid = false;
+            if (hasError)
+            {
+                isValid = false;
+            }
+            else
+            {
+                DateTime selectedDate = DueDateDatePicker.SelectedDate.Value;
+                if (selectedDate < DateTime.Now.Date) 
+                {
+                    hasError = true;
+                    SetValidationError(DueDateDatePicker, DueDateErrorText, hasError, "Due Date cannot be in the past.");
+                    isValid = false;
+                }
+            }
+
+            string timeText = DueTimeTextBox.Text.Trim(); 
+            hasError = string.IsNullOrWhiteSpace(timeText); 
+            SetValidationError(DueTimeTextBox, null, hasError, "Time format must be HH:mm."); 
+
+            if (!hasError)
+            {
+                bool isTimeValid = TimeSpan.TryParse(timeText, out TimeSpan parsedTime); ;
+                SetValidationError(DueTimeTextBox, null, !isTimeValid, "Time format must be HH:mm.");
+                if (!isTimeValid) isValid = false;
+            }
 
             // Check PriorityComboBox
             hasError = PriorityComboBox.SelectedItem == null;
