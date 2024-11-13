@@ -25,10 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Windows\CategoryWindow.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Resources\finish.mp3" />
   </ItemGroup>
 
@@ -54,10 +50,6 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Utils\" />
   </ItemGroup>
 
   <ItemGroup>
