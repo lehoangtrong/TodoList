@@ -233,5 +233,23 @@ namespace TodoList
             // loading screen while saving
             _taskService.AddTaskJob(newTask);
         }
+
+        private void QuitBtn_Click(object sender, RoutedEventArgs e)
+        {
+            // Hiển thị hộp thoại xác nhận
+            var result = MessageBox.Show("Are you sure you want to quit?","Confirm Quit",MessageBoxButton.YesNo,MessageBoxImage.Question);
+
+            // Nếu người dùng chọn Yes, thoát ứng dụng
+            if (result == MessageBoxResult.Yes)
+            {
+                Application.Current.Shutdown();
+            }
+            // Nếu người dùng chọn No, không làm gì cả và ứng dụng vẫn hoạt động
+            else
+            {
+                // Thông báo rằng họ đã chọn ở lại ứng dụng
+                MessageBox.Show("You choose to stay in the app","Cancelled",MessageBoxButton.OK,MessageBoxImage.Information);
+            }
+        }
     }
 }

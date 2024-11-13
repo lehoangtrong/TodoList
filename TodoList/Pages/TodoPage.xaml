@@ -26,12 +26,14 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <!-- Row for Title and Search -->
+            <RowDefinition Height="Auto" />
+            <!-- Row for Filter and Sort -->
             <RowDefinition Height="*" />
+            <!-- Row for Task List -->
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0"
-              Grid.ColumnSpan="2"
-              VerticalAlignment="Center">
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="5*" />
@@ -46,6 +48,7 @@
                        VerticalAlignment="Center"
                        Grid.ColumnSpan="2"
                        Width="224" />
+
             <TextBox x:Name="SearchTextBox"
                      Style="{StaticResource MaterialDesignTextBox}"
                      Width="386"
@@ -60,11 +63,46 @@
                     Click="SearchBtn_Click" />
         </Grid>
 
-        <ScrollViewer Grid.Row="1"
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <ComboBox x:Name="FilterComboBox"
+                      Width="180"
+                      Height="30"
+                      Margin="0,10,200,0"
+                      SelectedIndex="0"
+                      SelectionChanged="FilterComboBox_SelectionChanged" Grid.Column="1" VerticalAlignment="Top">
+                <ComboBoxItem Content="Filter By"/>
+                <ComboBoxItem Content="All" />
+                <ComboBoxItem Content="Completed"/>
+                <ComboBoxItem Content="Pending" />
+                <ComboBoxItem Content="In Process"/>
+            </ComboBox>
+
+            <ComboBox x:Name="SortComboBox"
+                        Width="180"
+                        Height="30"
+                        Margin="190,10,10,0"
+                        SelectedIndex="0"
+                        SelectionChanged="SortComboBox_SelectionChanged"
+                        Grid.Column="1"
+                        VerticalAlignment="Top">
+                <ComboBoxItem Content="Sort Priority or Due Date"/>
+                <ComboBoxItem Content="Due Date Ascending" />
+                <ComboBoxItem Content="Due Date Descending" />
+                <ComboBoxItem Content="Priority Ascending" />
+                <ComboBoxItem Content="Priority Descending" />
+            </ComboBox>
+
+        </Grid>
+
+        <ScrollViewer Grid.Row="2"
                       VerticalScrollBarVisibility="Auto"
                       Grid.ColumnSpan="2"
                       Margin="0,10,0,0">
-            <!-- Add ScrollViewer -->
             <ItemsControl x:Name="TasksListItem"
                           Margin="10">
                 <ItemsControl.ItemTemplate>
@@ -90,29 +128,20 @@
                                 </Style>
                             </materialDesign:Card.Style>
                             <Grid>
-
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-
-                                <!-- Nội dung chi tiết của Task -->
-                                <StackPanel Grid.Column="0"
-                                            Margin="0,0,10,0">
-                                    <!-- Tiêu đề -->
+                                <StackPanel Grid.Column="0" Margin="0,0,10,0">
                                     <TextBlock Text="{Binding Title}"
                                                FontSize="16"
                                                FontWeight="SemiBold"
                                                TextWrapping="Wrap" />
-
-                                    <!-- Mô tả -->
                                     <TextBlock Text="{Binding Description}"
                                                FontSize="14"
                                                Foreground="Gray"
                                                TextWrapping="Wrap"
                                                Margin="0,5,0,0" />
-
-                                    <!-- Thời gian đến hạn (Due Date) -->
                                     <StackPanel Orientation="Horizontal"
                                                 Margin="0,5,0,0">
                                         <materialDesign:PackIcon Kind="ClockOutline"
@@ -121,27 +150,19 @@
                                                    FontSize="12"
                                                    Foreground="Gray" />
                                     </StackPanel>
-
-                                    <!-- Ngày tạo (Created Date) -->
                                     <TextBlock Text="{Binding CreatedDate, StringFormat='Created: {0:dd/MM/yyyy}'}"
                                                FontSize="12"
                                                Foreground="Gray"
                                                Margin="0,5,0,0" />
-
-                                    <!-- Độ ưu tiên (Priority) -->
                                     <TextBlock Text="{Binding Priority, StringFormat='Priority: {0}'}"
                                                FontSize="12"
                                                Foreground="Gray"
                                                Margin="0,5,0,0" />
-
-                                    <!-- Trạng thái (Status) -->
                                     <TextBlock Text="{Binding Status}"
                                                FontSize="12"
                                                Foreground="Gray"
                                                Margin="0,5,0,0" />
                                 </StackPanel>
-
-                                <!-- Mark as done (Status) -->
                                 <CheckBox x:Name="DoneCheckBox"
                                           Grid.Column="1"
                                           Style="{StaticResource MaterialDesignActionDarkCheckBox}"

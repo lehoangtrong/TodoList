@@ -36,6 +36,7 @@ namespace TodoList.Pages
         public event EventHandler<TaskJob>? ShowDetail;
         private IWavePlayer waveOut;
         private Mp3FileReader mp3Reader;
+        private bool isAscending = true;
         public TodoPage()
         {
             InitializeComponent();
@@ -153,9 +154,79 @@ namespace TodoList.Pages
                 }
             });
         }
-        public void SetTaskType(TaskService.TaskType taskType)
+
+        private void FilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CurrentTaskType = taskType;
+            string filter = ((ComboBoxItem)FilterComboBox.SelectedItem).Content.ToString();
+
+            // Kiểm tra xem TasksListItem có null không
+            if (TasksListItem != null)
+            {
+                if (filter == "All")
+                {
+                    TasksListItem.ItemsSource = TasksList;
+                }
+                else
+                {
+                    // Lọc danh sách công việc dựa trên trạng thái
+                    TasksListItem.ItemsSource = TasksList?.Where(t => t.Status.Equals(filter, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+            }
+
         }
+
+
+        // Event handler for sorting selection
+        private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Kiểm tra nếu TasksListItem và TasksList không phải null
+            if (TasksListItem == null || TasksList == null)
+            {
+                return; // Nếu bất kỳ đối tượng nào là null, thì không làm gì cả
+            }
+
+            string sortCriteria = ((ComboBoxItem)SortComboBox.SelectedItem).Content.ToString();
+
+            if (sortCriteria == "Due Date Ascending")
+            {
+                // Sắp xếp theo ngày đến hạn tăng dần
+                TasksListItem.ItemsSource = TasksList.OrderBy(t => t.DueDate).ToList();
+            }
+            else if (sortCriteria == "Due Date Descending")
+            {
+                // Sắp xếp theo ngày đến hạn giảm dần
+                TasksListItem.ItemsSource = TasksList.OrderByDescending(t => t.DueDate).ToList();
+            }
+            else if (sortCriteria == "Priority Ascending")
+            {
+                // Sắp xếp theo độ ưu tiên tăng dần (Low -> Medium -> High)
+                TasksListItem.ItemsSource = TasksList.OrderBy(t => GetPriorityRank(t.Priority)).ToList();
+            }
+            else if (sortCriteria == "Priority Descending")
+            {
+                // Sắp xếp theo độ ưu tiên giảm dần (High -> Medium -> Low)
+                TasksListItem.ItemsSource = TasksList.OrderByDescending(t => GetPriorityRank(t.Priority)).ToList();
+            }
+        }
+
+        // Hàm để ánh xạ độ ưu tiên thành thứ tự số học
+        private int GetPriorityRank(string priority)
+        {
+            switch (priority)
+            {
+                case "Low":
+                    return 1;
+                case "Medium":
+                    return 2;
+                case "High":
+                    return 3;
+                default:
+                    return 0; // Default case if priority is not recognized
+            }
+        }
+
+
+
+
     }
 }
