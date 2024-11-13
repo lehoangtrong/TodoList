@@ -30,6 +30,7 @@ namespace TodoList.Pages
     public partial class TodoPage : Page
     {
         public List<TaskJob>? TasksList { get; set; }
+        public List<TaskJob>? FilteredTasksList { get; set; }
         // Define the event handler delegate
         public event EventHandler<TaskJob>? MarkDone;
         public event EventHandler<string>? Search;
@@ -159,55 +160,51 @@ namespace TodoList.Pages
         {
             string filter = ((ComboBoxItem)FilterComboBox.SelectedItem).Content.ToString();
 
-            // Kiểm tra xem TasksListItem có null không
             if (TasksListItem != null)
             {
                 if (filter == "All")
                 {
-                    TasksListItem.ItemsSource = TasksList;
+                    FilteredTasksList = TasksList; // No filter applied, use the full list
                 }
                 else
                 {
-                    // Lọc danh sách công việc dựa trên trạng thái
-                    TasksListItem.ItemsSource = TasksList?.Where(t => t.Status.Equals(filter, StringComparison.OrdinalIgnoreCase)).ToList();
+                    FilteredTasksList = TasksList?
+                        .Where(t => t.Status.Equals(filter, StringComparison.OrdinalIgnoreCase))
+                        .ToList(); // Filter the list based on the selected status
                 }
-            }
 
+                TasksListItem.ItemsSource = FilteredTasksList;
+            }
         }
 
-
-        // Event handler for sorting selection
         private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Kiểm tra nếu TasksListItem và TasksList không phải null
-            if (TasksListItem == null || TasksList == null)
+            if (TasksListItem == null || (TasksList == null && FilteredTasksList == null))
             {
-                return; // Nếu bất kỳ đối tượng nào là null, thì không làm gì cả
+                return; // Nếu không có dữ liệu thì không thực hiện gì
             }
 
             string sortCriteria = ((ComboBoxItem)SortComboBox.SelectedItem).Content.ToString();
+            var listToSort = FilteredTasksList ?? TasksList; // Dùng danh sách đã lọc nếu có, nếu không dùng TasksList
 
             if (sortCriteria == "Due Date Ascending")
             {
-                // Sắp xếp theo ngày đến hạn tăng dần
-                TasksListItem.ItemsSource = TasksList.OrderBy(t => t.DueDate).ToList();
+                TasksListItem.ItemsSource = listToSort.OrderBy(t => t.DueDate).ToList();
             }
             else if (sortCriteria == "Due Date Descending")
             {
-                // Sắp xếp theo ngày đến hạn giảm dần
-                TasksListItem.ItemsSource = TasksList.OrderByDescending(t => t.DueDate).ToList();
+                TasksListItem.ItemsSource = listToSort.OrderByDescending(t => t.DueDate).ToList();
             }
             else if (sortCriteria == "Priority Ascending")
             {
-                // Sắp xếp theo độ ưu tiên tăng dần (Low -> Medium -> High)
-                TasksListItem.ItemsSource = TasksList.OrderBy(t => GetPriorityRank(t.Priority)).ToList();
+                TasksListItem.ItemsSource = listToSort.OrderBy(t => GetPriorityRank(t.Priority)).ToList();
             }
             else if (sortCriteria == "Priority Descending")
             {
-                // Sắp xếp theo độ ưu tiên giảm dần (High -> Medium -> Low)
-                TasksListItem.ItemsSource = TasksList.OrderByDescending(t => GetPriorityRank(t.Priority)).ToList();
+                TasksListItem.ItemsSource = listToSort.OrderByDescending(t => GetPriorityRank(t.Priority)).ToList();
             }
         }
+
 
         // Hàm để ánh xạ độ ưu tiên thành thứ tự số học
         private int GetPriorityRank(string priority)
