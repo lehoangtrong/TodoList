@@ -164,13 +164,13 @@ namespace TodoList.Pages
             {
                 if (filter == "All")
                 {
-                    FilteredTasksList = TasksList; // No filter applied, use the full list
+                    FilteredTasksList = TasksList; 
                 }
                 else
                 {
                     FilteredTasksList = TasksList?
                         .Where(t => t.Status.Equals(filter, StringComparison.OrdinalIgnoreCase))
-                        .ToList(); // Filter the list based on the selected status
+                        .ToList(); 
                 }
 
                 TasksListItem.ItemsSource = FilteredTasksList;
@@ -181,11 +181,11 @@ namespace TodoList.Pages
         {
             if (TasksListItem == null || (TasksList == null && FilteredTasksList == null))
             {
-                return; // Nếu không có dữ liệu thì không thực hiện gì
+                return; 
             }
 
             string sortCriteria = ((ComboBoxItem)SortComboBox.SelectedItem).Content.ToString();
-            var listToSort = FilteredTasksList ?? TasksList; // Dùng danh sách đã lọc nếu có, nếu không dùng TasksList
+            var listToSort = FilteredTasksList ?? TasksList; 
 
             if (sortCriteria == "Due Date Ascending")
             {
@@ -205,8 +205,6 @@ namespace TodoList.Pages
             }
         }
 
-
-        // Hàm để ánh xạ độ ưu tiên thành thứ tự số học
         private int GetPriorityRank(string priority)
         {
             switch (priority)
