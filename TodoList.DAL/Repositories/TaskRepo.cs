@@ -47,6 +47,7 @@ namespace Todolist.DAL.Repositories
 
             // Duyệt qua danh sách các task và kiểm tra tất cả các trường
             var result = list.Where(t => t.GetType().GetProperties()
+            .Where(prop => prop.Name != nameof(TaskJob.Id))
             .Any(prop => prop.GetValue(t) != null && prop.GetValue(t).ToString().ToLower().Contains(keyword))).ToList();
 
             if (result.Count <= 0 || result == null)
