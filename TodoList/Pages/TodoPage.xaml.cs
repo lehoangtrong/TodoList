@@ -20,6 +20,7 @@ using System.Windows.Threading;
 using Todolist.BLL.Services;
 using Todolist.DAL.Entities;
 using TodoList.UserControls;
+using static System.Net.WebRequestMethods;
 using static Todolist.BLL.Services.TaskService;
 
 namespace TodoList.Pages
@@ -32,7 +33,6 @@ namespace TodoList.Pages
         public List<TaskJob>? TasksList { get; set; }
         // Define the event handler delegate
         public event EventHandler<TaskJob>? MarkDone;
-        public event EventHandler<string>? Search;
         public event EventHandler<TaskJob>? ShowDetail;
         private IWavePlayer waveOut;
         private Mp3FileReader mp3Reader;
@@ -53,25 +53,45 @@ namespace TodoList.Pages
 
         private void SearchBtn_Click(object sender, RoutedEventArgs e)
         {
-            string keyword = SearchTextBox.Text.Trim();
-            if (string.IsNullOrWhiteSpace(keyword))
+            try
             {
-                // return search all tasks
-                Search?.Invoke(this, "all");
-                return;
+                var keyword = SearchTextBox.Text?.Trim() ?? string.Empty;
+
+                if (string.IsNullOrWhiteSpace(keyword))
+                {
+                    // Nên hiển thị thông báo cho người dùng
+                    MessageBox.Show("Vui lòng nhập từ khóa tìm kiếm", "Thông báo");
+                    SearchTextBox.Focus();
+                    return;
+                }
+
+                if (TasksList == null)
+                {
+                    MessageBox.Show("Không có dữ liệu để tìm kiếm", "Thông báo");
+                    return;
+                }
+
+                var searchResults = TasksList
+                    .Where(task => task?.Title != null &&
+                                  task.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                TasksListItem.ItemsSource = searchResults;
+
+                // Thông báo kết quả tìm kiếm
+                if (!searchResults.Any())
+                {
+                    MessageBox.Show($"Không tìm thấy kết quả nào cho từ khóa: {keyword}", "Thông báo");
+                    SearchTextBox.Focus();
+                    return;
+                }
             }
-
-            // Invoke the external event handler
-            Search?.Invoke(this, keyword);
-
-            RefreshPage();
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi khi tìm kiếm: {ex.Message}", "Lỗi");
+            }
         }
 
-        private void RefreshPage()
-        {
-            TasksListItem.ItemsSource = null;
-            TasksListItem.ItemsSource = TasksList;
-        }
 
         private void UpdateTaskStatus(object sender, string newStatus)
         {

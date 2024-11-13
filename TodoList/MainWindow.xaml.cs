@@ -60,8 +60,6 @@ namespace TodoList
             TodoPage todoPage = new TodoPage();
             todoPage.TodoTextBlock.Text = title;
             todoPage.MarkDone += TodoPage_MarkDone;
-
-            todoPage.Search += TodoPage_SearchHandler;
             todoPage.ShowDetail += TodoPage_ShowDetail;
 
             await Task.Run(() =>
@@ -92,19 +90,6 @@ namespace TodoList
         {
             _taskService.UpdateTaskJob(e);
             LoadPage(_currentTaskType);
-        }
-
-        private void TodoPage_SearchHandler(object? sender, string e)
-        {
-            if (e == null)
-            {
-                LoadPage(_currentTaskType);
-                return;
-            }
-
-            TodoPage todoPage = (TodoPage)sender;
-            todoPage.TasksList = _taskService.Search(e);
-            FrameTodo.Navigate(todoPage);
         }
 
         private void SetButton(Button button)
