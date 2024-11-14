@@ -11,11 +11,10 @@
              TextOptions.TextRenderingMode="Auto"
              TextElement.FontSize="14"
              TextOptions.TextFormattingMode="Ideal"
-             Background="{DynamicResource MaterialDesignPaper}"
              FontFamily="{materialDesign:MaterialDesignFont}"
-             d:DesignHeight="450"
              d:DesignWidth="800"
-             Loaded="UserControl_Loaded">
+             Loaded="UserControl_Loaded"
+             Height="651">
     <UserControl.Resources>
         <!-- Style cho Completed -->
         <Style x:Key="CompletedStyle"
@@ -76,135 +75,226 @@
 
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <materialDesign:Card>
-            <Border CornerRadius="20,20,20,20">
-                <Grid Margin="20">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="39*" />
-                        <ColumnDefinition Width="41*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="0"
-                          Margin="8,24,8,4"
-                          Grid.ColumnSpan="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="150" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="127*" />
-                            <ColumnDefinition Width="25*" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Horizontal"
-                                    Grid.Row="0"
-                                    Margin="0,0,0,150"
-                                    Grid.RowSpan="2">
-                            <TextBox x:Name="TitleTextBox"
-                                     Margin="0"
-                                     FontSize="18"
-                                     Style="{StaticResource MaterialDesignTextBox}" />
-                        </StackPanel>
-                        <materialDesign:Badged Grid.Column="1"
-                                               Grid.Row="0"
-                                               Height="0"
-                                               Width="0" />
-                        <TextBox x:Name="DescriptionTextBox"
-                                 Grid.Row="1"
-                                 VerticalAlignment="Top"
-                                 Style="{StaticResource MaterialDesignTextBox}"
-                                 Text="Description"
-                                 TextWrapping="Wrap"
-                                 HorizontalAlignment="Left" />
-                        <TextBlock x:Name="StatusTextBlock"
-                                   Style="{StaticResource MaterialDesignBody2TextBlock}"
-                                   Text="Status"
-                                   HorizontalAlignment="Right"
-                                   Margin="0,0,0,15"
-                                   Width="80"
-                                   Grid.ColumnSpan="2" />
-                    </Grid>
-                    <Separator Grid.Row="1"
-                               Margin="8,0,8,23"
-                               Style="{StaticResource MaterialDesignDarkSeparator}"
-                               Grid.ColumnSpan="2"
-                               Grid.RowSpan="2" />
-                    <StackPanel Grid.Row="2"
-                                Orientation="Horizontal"
-                                Grid.ColumnSpan="2">
-                        <Label Content="Priority: "
-                               VerticalAlignment="Center" />
+
+        <materialDesign:Card Margin="0,0,10,0"
+                             Background="{DynamicResource MaterialDesignPaper}"
+                             UniformCornerRadius="15">
+            <Border Padding="25">
+                <StackPanel>
+                    <!-- Header Section with enhanced typography -->
+                    <TextBlock Text="Task Details"
+                               Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                               Foreground="{DynamicResource PrimaryHueMidBrush}"
+                               Margin="0,0,0,25"
+                               FontWeight="Bold" />
+
+                    <!-- Title Section with floating label -->
+                    <TextBox x:Name="TitleTextBox"
+                             materialDesign:TextFieldAssist.HasClearButton="True"
+                             materialDesign:HintAssist.Hint="Task Title"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource PrimaryHueMidBrush}"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             Margin="0,0,0,20"
+                             FontSize="16" />
+
+                    <!-- Description Section with floating label -->
+                    <TextBox x:Name="DescriptionTextBox"
+                             materialDesign:TextFieldAssist.HasClearButton="True"
+                             materialDesign:HintAssist.Hint="Task Description"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             TextWrapping="Wrap"
+                             MinHeight="120"
+                             Margin="0,0,0,25"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto" />
+
+                    <!-- Status and Priority with enhanced visuals -->
+                    <DockPanel LastChildFill="True"
+                               Margin="0,0,0,25">
+                        <ComboBox x:Name="StatusComboBox"
+                                  materialDesign:HintAssist.Hint="Status"
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  DockPanel.Dock="Right"
+                                  Width="200"
+                                  Margin="10,0,0,0">
+                            <ComboBoxItem>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Clock"
+                                                             Foreground="Gray"
+                                                             Margin="0,0,8,0" />
+                                    <TextBlock Text="Pending" />
+                                </StackPanel>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CheckCircle"
+                                                             Foreground="Green"
+                                                             Margin="0,0,8,0" />
+                                    <TextBlock Text="Completed" />
+                                </StackPanel>
+                            </ComboBoxItem>
+                        </ComboBox>
+
                         <ComboBox x:Name="PriorityComboBox"
                                   materialDesign:HintAssist.Hint="Priority"
-                                  Style="{StaticResource MaterialDesignComboBox}"
-                                  Width="242"
-                                  Margin="20,0,0,0">
-                            <ComboBoxItem Content="High" />
-                            <ComboBoxItem Content="Medium" />
-                            <ComboBoxItem Content="Low" />
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                  Width="200"
+                                  Margin="0,0,10,0">
+                            <ComboBoxItem>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="FlagOutline"
+                                                             Foreground="Red"
+                                                             Margin="0,0,8,0" />
+                                    <TextBlock Text="High" />
+                                </StackPanel>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="FlagOutline"
+                                                             Foreground="Orange"
+                                                             Margin="0,0,8,0" />
+                                    <TextBlock Text="Medium" />
+                                </StackPanel>
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="FlagOutline"
+                                                             Foreground="Green"
+                                                             Margin="0,0,8,0" />
+                                    <TextBlock Text="Low" />
+                                </StackPanel>
+                            </ComboBoxItem>
                         </ComboBox>
-                    </StackPanel>
+                    </DockPanel>
 
+                    <!-- Category with enhanced visuals -->
+                    <ComboBox x:Name="CategoryComboBox"
+                              materialDesign:HintAssist.Hint="Category"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Margin="0,0,0,25" />
+
+                    <!-- Created Date with card effect -->
+                    <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}"
+                                         UniformCornerRadius="8"
+                                         Padding="16,12"
+                                         Margin="0,0,0,25">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CalendarClock"
+                                                     Width="24"
+                                                     Height="24"
+                                                     VerticalAlignment="Center"
+                                                     Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                            <TextBlock Text="Created: "
+                                       Margin="12,0"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Medium" />
+                            <TextBlock x:Name="CreatedDateTextBlock"
+                                       Text="{Binding CreatedDate, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </materialDesign:Card>
+
+                    <!-- Action Buttons with elevation and hover effects -->
                     <StackPanel Orientation="Horizontal"
-                                Margin="0,10,0,10"
-                                Grid.Row="3"
-                                Grid.ColumnSpan="2">
-                        <Label Content="Category: "
-                               VerticalAlignment="Center" />
-                        <ComboBox x:Name="CategoryComboBox"
-                                  materialDesign:HintAssist.Hint="Category"
-                                  Margin="10,0,10,0"
-                                  Style="{StaticResource MaterialDesignComboBox}"
-                                  Width="242" />
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="4"
-                                Orientation="Horizontal"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Left">
-                        <Label Content="Created Date: "
-                               VerticalAlignment="Center" />
-                        <TextBlock VerticalAlignment="Center"
-                                   x:Name="CreatedDateTextBlock"
-                                   Text="{Binding CreatedDate, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="5"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Left"
-                                Grid.ColumnSpan="2"
-                                Margin="50,10,0,0">
+                                HorizontalAlignment="Right">
                         <Button x:Name="UpdateBtn"
-                                Content="Update"
-                                Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                Command="{Binding SaveCommand}"
-                                Margin="0,0,10,0"
-                                MinWidth="100"
-                                Click="UpdateBtn_Click" />
-                        <Button x:Name="CancelBtn"
-                                Content="Cancel"
                                 Style="{StaticResource MaterialDesignRaisedButton}"
-                                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
-                                Margin="10,0,0,0"
-                                MinWidth="100"
-                                Click="CancelBtn_Click" />
+                                Click="UpdateBtn_Click"
+                                Background="{DynamicResource PrimaryHueMidBrush}"
+                                BorderThickness="0"
+                                materialDesign:ButtonAssist.CornerRadius="8"
+                                materialDesign:ElevationAssist.Elevation="Dp2"
+                                Height="45"
+                                Width="171"
+                                Margin="0,0,8,0">
+                            <Button.Resources>
+                                <Style TargetType="Button"
+                                       BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource PrimaryHueDarkBrush}" />
+                                            <Setter Property="materialDesign:ElevationAssist.Elevation"
+                                                    Value="Dp4" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Resources>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Plus"
+                                                         Margin="0,0,8,0" />
+                                <TextBlock Text="SAVE CHANGES" />
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="CancelBtn"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                materialDesign:ButtonAssist.CornerRadius="8"
+                                Click="CancelBtn_Click"
+                                Height="45"
+                                Width="110">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Close"
+                                                         Margin="0,0,8,0" />
+                                <TextBlock Text="CANCEL" />
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
-                </Grid>
+                </StackPanel>
             </Border>
         </materialDesign:Card>
 
-        <Calendar materialDesign:CalendarAssist.Orientation="Horizontal"
-                  x:Name="DueTimeDate"
-                  Grid.Column="2" />
+        <!-- Calendar Section with improved styling -->
+        <materialDesign:Card Grid.Column="1"
+                             UniformCornerRadius="15"
+                             Background="{DynamicResource MaterialDesignPaper}"
+                             Padding="16">
+            <StackPanel>
+                <!-- Header with icon -->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,16">
+                    <materialDesign:PackIcon Kind="CalendarClock"
+                                             Width="24"
+                                             Height="24"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,8,0"
+                                             Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                    <TextBlock Text="Due Date &amp; Time"
+                               Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                               FontWeight="Bold"
+                               Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                </StackPanel>
+
+                <!-- Calendar with enhanced styling -->
+                <Calendar x:Name="DueTimeDate"
+                          materialDesign:CalendarAssist.SelectionColor="{DynamicResource SecondaryHueMidBrush}"
+                          materialDesign:CalendarAssist.HeaderBackground="{DynamicResource PrimaryHueMidBrush}"
+                          Style="{StaticResource MaterialDesignCalendarPortrait}"
+                          Background="Transparent"
+                          Margin="8" />
+
+                <!-- Time Picker -->
+                <materialDesign:TimePicker x:Name="DueTimePicker"
+                                           Style="{StaticResource MaterialDesignOutlinedTimePicker}"
+                                           materialDesign:HintAssist.Hint="Select Time"
+                                           Margin="8,16" />
+
+                <!-- Selected date and time display -->
+                <StackPanel Margin="0,16,0,0">
+                    <TextBlock Text="{Binding ElementName=DueTimeDate, Path=SelectedDate, StringFormat='Date: {0:d MMMM yyyy}'}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,8"
+                               FontWeight="Medium" />
+                    <TextBlock Text="{Binding ElementName=DueTimePicker, Path=SelectedTime, StringFormat='Time: {0:HH:mm}'}"
+                               HorizontalAlignment="Center"
+                               FontWeight="Medium" />
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:Card>
     </Grid>
 
 </UserControl>

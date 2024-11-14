@@ -9,185 +9,214 @@
       xmlns:entities="clr-namespace:Todolist.DAL.Entities;assembly=Todolist.DAL"
       xmlns:converters="clr-namespace:TodoList.Converters"
       mc:Ignorable="d"
-      d:DesignHeight="450"
-      d:DesignWidth="800"
+      d:DesignHeight="650"
+      d:DesignWidth="1000"
       Title="TodoPage"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       TextElement.FontWeight="Regular"
       TextOptions.TextRenderingMode="Auto"
       TextElement.FontSize="14"
       TextOptions.TextFormattingMode="Ideal"
-      Background="{DynamicResource MaterialDesignPaper}"
       FontFamily="{materialDesign:MaterialDesignFont}"
       Loaded="Page_Loaded">
 
     <Page.Resources>
         <converters:StatusToIsDoneConverter x:Key="StatusToIsDoneConverter" />
+        <Style x:Key="TaskCardStyle"
+               TargetType="materialDesign:Card">
+            <Setter Property="Margin"
+                    Value="0,0,0,12" />
+            <Setter Property="Padding"
+                    Value="16" />
+            <Setter Property="UniformCornerRadius"
+                    Value="8" />
+            <Setter Property="materialDesign:ElevationAssist.Elevation"
+                    Value="Dp2" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="materialDesign:ElevationAssist.Elevation"
+                            Value="Dp4" />
+                </Trigger>
+                <DataTrigger Binding="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
+                             Value="true">
+                    <Setter Property="Background"
+                            Value="{DynamicResource MaterialDesignBackground}" />
+                    <Setter Property="Opacity"
+                            Value="0.7" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
 
-    <Grid Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="649*" />
-            <ColumnDefinition Width="151*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <!-- Row for Title and Search -->
-            <RowDefinition Height="Auto" />
-            <!-- Row for Filter and Sort -->
-            <RowDefinition Height="*" />
-            <!-- Row for Task List -->
-        </Grid.RowDefinitions>
+    <materialDesign:Card Margin="32"
+                         UniformCornerRadius="12">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0"
-              Grid.ColumnSpan="2"
-              VerticalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="5*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock x:Name="TodoTextBlock"
-                       Text="Today's Tasks"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Margin="10,0,0,0"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       Grid.ColumnSpan="2"
-                       Width="224" />
+            <!-- Header Section -->
+            <Grid Grid.Row="0"
+                  Margin="24,24,24,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="SearchTextBox"
-                     Style="{StaticResource MaterialDesignTextBox}"
-                     Width="386"
-                     Height="30"
-                     FontSize="16"
-                     Grid.Column="1"
-                     materialDesign:HintAssist.Hint="Search tasks..." />
-            <Button Content="Search"
-                    Width="80"
-                    Height="30"
-                    Grid.Column="2"
-                    Click="SearchBtn_Click" />
-        </Grid>
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="CalendarToday"
+                                             Width="32"
+                                             Height="32"
+                                             Margin="0,0,12,0" />
+                    <TextBlock Text="Today's Tasks"
+                               x:Name="TodoTextBlock"
+                               FontSize="28"
+                               FontWeight="Medium"
+                               VerticalAlignment="Center" />
+                </StackPanel>
 
-        <Grid Grid.Row="1"
-              Grid.ColumnSpan="2"
-              VerticalAlignment="Center"
-              Margin="0 10 0 10">
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right">
-                <ComboBox x:Name="FilterComboBox"
-                          Width="180"
-                          Height="30"
-                          Margin="10 0"
-                          SelectedIndex="0"
-                          SelectionChanged="FilterComboBox_SelectionChanged"
-                          Style="{StaticResource MaterialDesignComboBox}"
-                          Grid.ColumnSpan="2">
-                    <ComboBoxItem Content="All" />
-                    <ComboBoxItem Content="Completed" />
-                    <ComboBoxItem Content="Pending" />
-                    <ComboBoxItem Content="In Process" />
-                </ComboBox>
-                <ComboBox x:Name="SortComboBox"
-                          Width="180"
-                          Margin="10 0"
-                          Height="30"
-                          SelectedIndex="0"
-                          SelectionChanged="SortComboBox_SelectionChanged"
-                          Grid.Column="1"
-                          Style="{StaticResource MaterialDesignComboBox}"
-                          VerticalAlignment="Top">
-                    <ComboBoxItem Content="Sort Priority or Due Date" />
-                    <ComboBoxItem Content="Due Date Ascending" />
-                    <ComboBoxItem Content="Due Date Descending" />
-                    <ComboBoxItem Content="Priority Ascending" />
-                    <ComboBoxItem Content="Priority Descending" />
-                </ComboBox>
-            </StackPanel>
+                <Grid Grid.Column="1"
+                      Margin="24,0">
+                    <TextBox x:Name="SearchTextBox"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             materialDesign:HintAssist.Hint="Search tasks..."
+                             materialDesign:TextFieldAssist.HasClearButton="True"
+                             materialDesign:TextFieldAssist.PrefixText="🔍">
+                    </TextBox>
+                </Grid>
 
-        </Grid>
+                <Button Grid.Column="2"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Click="SearchBtn_Click"
+                        Content="Search" />
+            </Grid>
 
-        <ScrollViewer Grid.Row="2"
-                      Grid.ColumnSpan="2"
-                      Margin="0,10,0,0"
-                      VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled">
-            <ItemsControl x:Name="TasksListItem"
-                          Margin="10">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <materialDesign:Card Margin="5"
-                                             Padding="10"
-                                             MouseLeftButtonDown="Card_MouseLeftButtonDown">
-                            <materialDesign:Card.Style>
-                                <Style TargetType="materialDesign:Card">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
-                                                     Value="false">
-                                            <Setter Property="Background"
-                                                    Value="{DynamicResource MaterialDesignCardSelectedBackground}" />
-                                        </DataTrigger>
+            <!-- Filters Section -->
+            <Grid Grid.Row="1"
+                  Margin="24,0,24,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
-                                                     Value="true">
-                                            <Setter Property="Background"
-                                                    Value="{DynamicResource AttentionToActionBrush}" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </materialDesign:Card.Style>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0"
-                                            Margin="0,0,10,0">
-                                    <TextBlock Text="{Binding Title}"
-                                               FontSize="16"
-                                               FontWeight="SemiBold"
-                                               TextWrapping="Wrap" />
-                                    <TextBlock Text="{Binding Description}"
-                                               FontSize="14"
-                                               Foreground="Gray"
-                                               TextWrapping="Wrap"
-                                               Margin="0,5,0,0" />
-                                    <StackPanel Orientation="Horizontal"
-                                                Margin="0,5,0,0">
-                                        <materialDesign:PackIcon Kind="ClockOutline"
-                                                                 Margin="0,0,5,0" />
-                                        <TextBlock Text="{Binding DueDate, StringFormat='{}{0:dd/MM/yyyy h:mm tt}'}"
-                                                   FontSize="12"
-                                                   Foreground="Gray" />
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <ComboBox x:Name="FilterComboBox"
+                              Width="200"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              materialDesign:HintAssist.Hint="Filter Status"
+                              SelectionChanged="FilterComboBox_SelectionChanged"
+                              Margin="0,0,10,0">
+                        <ComboBoxItem Content="All Tasks" />
+                        <ComboBoxItem Content="Completed" />
+                        <ComboBoxItem Content="Pending" />
+                    </ComboBox>
+
+                    <ComboBox x:Name="SortComboBox"
+                              Width="200"
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              materialDesign:HintAssist.Hint="Sort By"
+                              SelectionChanged="SortComboBox_SelectionChanged">
+                        <ComboBoxItem Content="Priority &amp; Due Date" />
+                        <ComboBoxItem Content="Due Date ↑" />
+                        <ComboBoxItem Content="Due Date ↓" />
+                        <ComboBoxItem Content="Priority ↑" />
+                        <ComboBoxItem Content="Priority ↓" />
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+
+            <!-- Tasks List -->
+            <ScrollViewer Grid.Row="2"
+                          Margin="24,0,24,24"
+                          VerticalScrollBarVisibility="Hidden">
+                <ItemsControl x:Name="TasksListItem">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:Card Style="{StaticResource TaskCardStyle}"
+                                                 Margin="10"
+                                                 MouseLeftButtonDown="Card_MouseLeftButtonDown">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0"
+                                                Margin="0,0,16,0">
+                                        <TextBlock Text="{Binding Title}"
+                                                   FontSize="18"
+                                                   FontWeight="Medium"
+                                                   TextWrapping="Wrap" />
+
+                                        <TextBlock Text="{Binding Description}"
+                                                   FontSize="14"
+                                                   Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,8,0,0" />
+
+                                        <WrapPanel Margin="0,12,0,0"
+                                                   Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="0,0,24,0">
+                                                <materialDesign:PackIcon Kind="Clock"
+                                                                         VerticalAlignment="Center" />
+                                                <TextBlock Text="{Binding DueDate, StringFormat='{}{0:dd MMM yyyy, HH:mm}'}"
+                                                           Margin="4,0,0,0"
+                                                           VerticalAlignment="Center" />
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="0,0,24,0">
+                                                <materialDesign:PackIcon Kind="Flag"
+                                                                         VerticalAlignment="Center" />
+                                                <TextBlock Text="{Binding Priority}"
+                                                           Margin="4,0,0,0"
+                                                           VerticalAlignment="Center" />
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="InformationOutline"
+                                                                         VerticalAlignment="Center" />
+                                                <TextBlock Text="{Binding Status}"
+                                                           Margin="4,0,0,0"
+                                                           VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </WrapPanel>
                                     </StackPanel>
-                                    <TextBlock Text="{Binding CreatedDate, StringFormat='Created: {0:dd/MM/yyyy}'}"
-                                               FontSize="12"
-                                               Foreground="Gray"
-                                               Margin="0,5,0,0" />
-                                    <TextBlock Text="{Binding Priority, StringFormat='Priority: {0}'}"
-                                               FontSize="12"
-                                               Foreground="Gray"
-                                               Margin="0,5,0,0" />
-                                    <TextBlock Text="{Binding Status}"
-                                               FontSize="12"
-                                               Foreground="Gray"
-                                               Margin="0,5,0,0" />
-                                </StackPanel>
-                                <CheckBox x:Name="DoneCheckBox"
-                                          Grid.Column="1"
-                                          Style="{StaticResource MaterialDesignActionDarkCheckBox}"
-                                          Width="35"
-                                          Height="35"
-                                          IsChecked="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
-                                          ToolTip="Mark as Done"
-                                          PreviewMouseLeftButtonDown="DoneCheckBox_PreviewMouseLeftButtonDown" />
-                            </Grid>
-                        </materialDesign:Card>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-    </Grid>
+                                    <CheckBox Grid.Column="1"
+                                              Style="{StaticResource MaterialDesignActionDarkCheckBox}"
+                                              IsChecked="{Binding Status, Converter={StaticResource StatusToIsDoneConverter}}"
+                                              PreviewMouseLeftButtonDown="DoneCheckBox_PreviewMouseLeftButtonDown"
+                                              VerticalAlignment="Center"
+                                              Width="32"
+                                              Height="32"
+                                              Margin="5" />
+
+                                    <Button Grid.Column="2"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="Delete Task"
+                                            Width="40"
+                                            Height="40"
+                                            Margin="8,0,0,0"
+                                            Click="DeleteTaskButton_Click">
+                                        <materialDesign:PackIcon Kind="Delete" />
+                                    </Button>
+
+                                </Grid>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </materialDesign:Card>
 </Page>

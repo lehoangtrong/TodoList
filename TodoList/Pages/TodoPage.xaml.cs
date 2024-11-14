@@ -34,9 +34,9 @@ namespace TodoList.Pages
         // Define the event handler delegate
         public event EventHandler<TaskJob>? MarkDone;
         public event EventHandler<TaskJob>? ShowDetail;
+        public event EventHandler<TaskJob>? DeleteTask;
         private IWavePlayer waveOut;
         private Mp3FileReader mp3Reader;
-        private bool isAscending = true;
         public TodoPage()
         {
             InitializeComponent();
@@ -182,7 +182,7 @@ namespace TodoList.Pages
             // Kiểm tra xem TasksListItem có null không
             if (TasksListItem != null)
             {
-                if (filter == "All")
+                if (filter == "All Tasks")
                 {
                     TasksListItem.ItemsSource = TasksList;
                 }
@@ -205,27 +205,28 @@ namespace TodoList.Pages
                 return; // Nếu bất kỳ đối tượng nào là null, thì không làm gì cả
             }
 
+            // delete last character of sortCriteria
             string sortCriteria = ((ComboBoxItem)SortComboBox.SelectedItem).Content.ToString();
 
-            if (sortCriteria == "Due Date Ascending")
+            if (sortCriteria == "Due Date ↑")
             {
                 // Sắp xếp theo ngày đến hạn tăng dần
-                TasksListItem.ItemsSource = TasksList.OrderBy(t => t.DueDate).ToList();
+                TasksListItem.ItemsSource = TasksList?.OrderBy(t => t.DueDate).ToList();
             }
-            else if (sortCriteria == "Due Date Descending")
+            else if (sortCriteria == "Due Date ↓")
             {
                 // Sắp xếp theo ngày đến hạn giảm dần
-                TasksListItem.ItemsSource = TasksList.OrderByDescending(t => t.DueDate).ToList();
+                TasksListItem.ItemsSource = TasksList?.OrderByDescending(t => t.DueDate).ToList();
             }
-            else if (sortCriteria == "Priority Ascending")
+            else if (sortCriteria == "Priority ↑")
             {
                 // Sắp xếp theo độ ưu tiên tăng dần (Low -> Medium -> High)
-                TasksListItem.ItemsSource = TasksList.OrderBy(t => GetPriorityRank(t.Priority)).ToList();
+                TasksListItem.ItemsSource = TasksList?.OrderBy(t => GetPriorityRank(t.Priority)).ToList();
             }
-            else if (sortCriteria == "Priority Descending")
+            else if (sortCriteria == "Priority ↓")
             {
                 // Sắp xếp theo độ ưu tiên giảm dần (High -> Medium -> Low)
-                TasksListItem.ItemsSource = TasksList.OrderByDescending(t => GetPriorityRank(t.Priority)).ToList();
+                TasksListItem.ItemsSource = TasksList?.OrderByDescending(t => GetPriorityRank(t.Priority)).ToList();
             }
         }
 
@@ -245,8 +246,20 @@ namespace TodoList.Pages
             }
         }
 
+        private void DeleteTaskButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var task = (TaskJob)button.DataContext;
+            if (task != null)
+            {
+                MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure to delete this task?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    // Raise the DeleteTask event
+                    DeleteTask?.Invoke(this, task);
 
-
-
+                }
+            }
+        }
     }
 }

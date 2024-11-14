@@ -26,7 +26,7 @@ namespace TodoList.Pages
     {
         public List<Category> Category { get; set; }
         private int _currentPage = 0;  // Current page index
-        private const int _itemsPerPage = 20;  // Items per page
+        private const int _itemsPerPage = 5;  // Items per page
         public event EventHandler AddCategory;
         public event EventHandler<Category> DeleteCategory;
         public event EventHandler<Category> UpdateCategory;
@@ -53,6 +53,7 @@ namespace TodoList.Pages
             {
                 int totalItems = Category.Count;
                 int totalPages = (int)Math.Ceiling((double)totalItems / _itemsPerPage);
+                CategoryCountText.Text = $"{totalItems.ToString()} Categories";
 
                 // Get the items for the current page
                 var pagedData = Category.Skip(_currentPage * _itemsPerPage).Take(_itemsPerPage).ToList();
@@ -66,7 +67,7 @@ namespace TodoList.Pages
 
         private void UpdatePageNumber()
         {
-            PageNumberTextBlock.Text = $"Page {_currentPage + 1}";
+            PageNumberTextBlock.Text = $"Page {_currentPage + 1} of {Math.Ceiling((double)Category.Count / _itemsPerPage)}";
         }
 
         private async void AddButton_Click(object sender, RoutedEventArgs e)
@@ -126,6 +127,20 @@ namespace TodoList.Pages
             UpdateCategory?.Invoke(this, selectedCategory);
             // Reload categories and refresh the DataGrid
             LoadCategories();
+        }
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Lấy từ khóa tìm kiếm từ hộp tìm kiếm
+            string keyword = SearchBox.Text.Trim().ToLower();
+
+            // Tìm kiếm trong danh sách các danh mục theo từ khóa
+            var filteredCategories = Category
+                .Where(c => c.Type.ToLower().Contains(keyword))
+                .ToList();
+
+            // Hiển thị kết quả tìm kiếm lên DataGrid
+            CategoryDataGrid.ItemsSource = filteredCategories.Skip(_currentPage * _itemsPerPage).Take(_itemsPerPage);
+            UpdatePageNumber();
         }
     }
 }

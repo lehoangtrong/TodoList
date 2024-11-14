@@ -55,8 +55,8 @@ namespace Todolist.BLL.Services
                 tasks.RemoveAll(x => x.Status.Equals("Completed"));
             return type switch
             {
-                TaskType.Today => tasks.Where(x => x.DueDate == DateTime.Today).ToList(),
-                TaskType.Upcoming => tasks.Where(x => x.DueDate > DateTime.Today).ToList(),
+                TaskType.Today => tasks.Where(x => x.DueDate.HasValue && x.DueDate.Value.Date == DateTime.Today.Date).ToList(),
+                TaskType.Upcoming => tasks.Where(x => x.DueDate > DateTime.Today.Date).ToList(),
                 TaskType.Important => tasks.Where(x => x.Priority == "High").ToList(),
                 TaskType.Planned => tasks.Where(x => x.Status == "Pending").ToList(),
                 TaskType.Completed => tasks.Where(x => x.Status == "Completed").ToList(),

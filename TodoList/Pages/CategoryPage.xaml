@@ -6,107 +6,193 @@
       xmlns:local="clr-namespace:TodoList.Pages"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d"
-      d:DesignHeight="450"
-      d:DesignWidth="800"
+      d:DesignHeight="650"
+      d:DesignWidth="1000"
       Title="CategoryPage"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       TextElement.FontWeight="Regular"
       TextOptions.TextRenderingMode="Auto"
       TextElement.FontSize="14"
       TextOptions.TextFormattingMode="Ideal"
-      Background="{DynamicResource MaterialDesignPaper}"
       FontFamily="{materialDesign:MaterialDesignFont}"
       Loaded="Page_Loaded">
-
     <materialDesign:DialogHost x:Name="DialogHost"
-                               Margin="20"
                                Identifier="RootDialog">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <materialDesign:Card Margin="32"
+                             UniformCornerRadius="12">
+            <Grid Margin="24">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-            <!-- DataGrid for Category List -->
-            <DataGrid x:Name="CategoryDataGrid"
-                      AutoGenerateColumns="False"
-                      Margin="0,0,0,10"
-                      Style="{StaticResource MaterialDesignDataGrid}"
-                      CanUserAddRows="False"
-                      AlternatingRowBackground="{DynamicResource MaterialDesignBackground}"
-                      GridLinesVisibility="None"
-                      ColumnHeaderHeight="40">
+                <!-- Header -->
+                <Grid Grid.Row="0"
+                      Margin="0,0,0,24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Id"
-                                        Binding="{Binding Id}"
-                                        Width="*" />
-                    <DataGridTextColumn Header="Type"
-                                        Binding="{Binding Type}"
-                                        Width="*" />
-                    <DataGridTextColumn Header="Description"
-                                        Binding="{Binding Description}"
-                                        Width="*" />
-                    <DataGridTextColumn Header="Create Date"
-                                        Binding="{Binding CreatedDate, StringFormat='{}{0:yyyy-MM-dd}'}"
-                                        Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="CategoryOutline"
+                                                 Width="32"
+                                                 Height="32"
+                                                 Margin="0,0,12,0" />
+                        <StackPanel>
+                            <TextBlock Text="Categories"
+                                       FontSize="28"
+                                       FontWeight="Medium" />
+                            <TextBlock x:Name="CategoryCountText"
+                                       Text="0 categories"
+                                       FontSize="14"
+                                       Foreground="{DynamicResource MaterialDesignBodyLight}" />
+                        </StackPanel>
+                    </StackPanel>
 
-            <!-- Pagination Controls -->
-            <StackPanel Orientation="Horizontal"
-                        Grid.Row="1"
-                        HorizontalAlignment="Right"
-                        Margin="0,10,0,0">
-                <Button x:Name="PreviousButton"
-                        Content="Previous"
-                        Margin="5"
-                        Width="97"
-                        Style="{StaticResource MaterialDesignRaisedButton}"
-                        Click="PreviousButton_Click" />
+                    <TextBox Grid.Column="1"
+                             x:Name="SearchBox"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             materialDesign:HintAssist.Hint="Search categories..."
+                             materialDesign:TextFieldAssist.HasClearButton="True"
+                             materialDesign:TextFieldAssist.PrefixText="🔍"
+                             Margin="10 0"
+                             TextChanged="SearchBox_TextChanged" />
 
-                <TextBlock x:Name="PageNumberTextBlock"
-                           FontWeight="Bold"
-                           FontSize="16"
-                           Margin="10,0,10,0"
-                           VerticalAlignment="Center"
-                           TextAlignment="Center" />
+                    <Button Grid.Column="2"
+                            Style="{StaticResource MaterialDesignFloatingActionButton}"
+                            ToolTip="Add New Category"
+                            Click="AddButton_Click">
+                        <materialDesign:PackIcon Kind="Plus"
+                                                 Height="24"
+                                                 Width="24" />
+                    </Button>
+                </Grid>
 
-                <Button x:Name="NextButton"
-                        Content="Next"
-                        Margin="5"
-                        Width="80"
-                        Style="{StaticResource MaterialDesignRaisedButton}"
-                        Click="NextButton_Click" />
-            </StackPanel>
+                <!-- Search and Filter -->
 
-            <!-- Action Buttons -->
-            <StackPanel Orientation="Horizontal"
-                        Grid.Row="2"
-                        HorizontalAlignment="Center"
-                        Margin="0,20,0,0">
-                <Button x:Name="AddButton"
-                        Content="Add"
-                        Margin="5"
-                        Width="80"
-                        Style="{StaticResource MaterialDesignRaisedButton}"
-                        Click="AddButton_Click" />
 
-                <Button x:Name="UpdateButton"
-                        Content="Update"
-                        Margin="5"
-                        Width="80"
-                        Style="{StaticResource MaterialDesignRaisedButton}"
-                        Click="UpdateButton_Click" />
+                <!-- Categories DataGrid -->
+                <materialDesign:Card Grid.Row="2"
+                                     UniformCornerRadius="8"
+                                     Padding="0"
+                                     materialDesign:ElevationAssist.Elevation="Dp1">
+                    <DataGrid x:Name="CategoryDataGrid"
+                              AutoGenerateColumns="False"
+                              Style="{StaticResource MaterialDesignDataGrid}"
+                              CanUserAddRows="False"
+                              GridLinesVisibility="None"
+                              BorderThickness="0"
+                              Background="Transparent"
+                              RowHeight="52"
+                              ColumnHeaderHeight="48"
+                              SelectionMode="Single"
+                              SelectionUnit="FullRow"
+                              materialDesign:DataGridAssist.CellPadding="16 8"
+                              materialDesign:DataGridAssist.ColumnHeaderPadding="16 8">
 
-                <Button x:Name="DeleteButton"
-                        Content="Delete"
-                        Margin="5"
-                        Width="80"
-                        Style="{StaticResource MaterialDesignRaisedButton}"
-                        Click="DeleteButton_Click" />
-            </StackPanel>
-        </Grid>
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridRow"
+                                   BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter Property="Background"
+                                                Value="{DynamicResource MaterialDesignSelection}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID"
+                                                Binding="{Binding Id}"
+                                                Width="Auto"
+                                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                            <DataGridTextColumn Header="Type"
+                                                Binding="{Binding Type}"
+                                                Width="1*"
+                                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                            <DataGridTextColumn Header="Description"
+                                                Binding="{Binding Description}"
+                                                Width="2*"
+                                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                            <DataGridTextColumn Header="Created Date"
+                                                Binding="{Binding CreatedDate, StringFormat='{}{0:MMM dd, yyyy}'}"
+                                                Width="*"
+                                                ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                            <DataGridTemplateColumn Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                    Width="40"
+                                                    Height="40"
+                                                    Padding="0"
+                                                    Click="UpdateButton_Click">
+                                                <materialDesign:PackIcon Kind="Pencil" />
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                    Width="40"
+                                                    Height="40"
+                                                    Padding="0"
+                                                    Margin="8,0,0,0"
+                                                    Click="DeleteButton_Click">
+                                                <materialDesign:PackIcon Kind="Delete" />
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </materialDesign:Card>
+
+                <!-- Pagination -->
+                <Grid Grid.Row="3"
+                      Margin="0,24,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <StackPanel Grid.Column="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button x:Name="PreviousButton"
+                                Style="{StaticResource MaterialDesignIconButton}"
+                                Click="PreviousButton_Click">
+                            <materialDesign:PackIcon Kind="ChevronLeft" />
+                        </Button>
+
+                        <TextBlock x:Name="PageNumberTextBlock"
+                                   Text="Page 1 of 5"
+                                   VerticalAlignment="Center"
+                                   Margin="16,0" />
+
+                        <Button x:Name="NextButton"
+                                Style="{StaticResource MaterialDesignIconButton}"
+                                Click="NextButton_Click">
+                            <materialDesign:PackIcon Kind="ChevronRight" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </materialDesign:Card>
     </materialDesign:DialogHost>
 </Page>
