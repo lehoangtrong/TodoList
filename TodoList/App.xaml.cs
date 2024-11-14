@@ -24,8 +24,17 @@ namespace TodoList
             mainWindow = new MainWindow();
             mainWindow.Show();
 
-            // Load tray icon
-            _notifyIcon.Icon = new System.Drawing.Icon("Resources/iconv2.ico");
+            var iconUri = new Uri("pack://application:,,,/TodoList;component/Resources/iconv2.ico");
+            var streamResourceInfo = Application.GetResourceStream(iconUri);
+            if (streamResourceInfo != null)
+            {
+                using (var stream = streamResourceInfo.Stream)
+                {
+                    _notifyIcon.Icon = new Icon(stream);
+                }
+            }
+
+
             _notifyIcon.Visible = true;
             _notifyIcon.Text = "Todo App";
 
