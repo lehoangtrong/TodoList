@@ -23,6 +23,17 @@ You can download the latest version of the application from the [Releases](https
 - Update task information.
 - Delete tasks once they are completed.
 
+## Screenshots
+
+Here are some screenshots of the application:
+
+![Screenshot 1](https://github.com/lehoangtrong/TodoList/blob/main/Images/Screenshot%202024-11-14%20205149.png)
+![Screenshot 2](https://github.com/lehoangtrong/TodoList/blob/main/Images/Screenshot%202024-11-14%20205229.png)
+![Screenshot 3](https://github.com/lehoangtrong/TodoList/blob/main/Images/Screenshot%202024-11-14%20205251.png)
+![Screenshot 4](https://github.com/lehoangtrong/TodoList/blob/main/Images/Screenshot%202024-11-14%20205313.png)
+![Screenshot 5](https://github.com/lehoangtrong/TodoList/blob/main/Images/Screenshot%202024-11-14%20205331.png)
+
+
 ## Publication Information
 
 - **Date Created**: November 14, 2024
