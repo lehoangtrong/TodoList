@@ -26,7 +26,7 @@ You can download the latest version of the application from the [Releases](https
 ## Publication Information
 
 - **Date Created**: November 14, 2024
-- **Author**: Lê Hoàng Tr?ng
+- **Author**: Le Hoang Trong
 
 ## License
 
