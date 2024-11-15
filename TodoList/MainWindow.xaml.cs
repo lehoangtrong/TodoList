@@ -16,7 +16,6 @@ using Todolist.DAL;
 using Todolist.DAL.Entities;
 using TodoList.Pages;
 using TodoList.UserControls;
-using TodoList.Windows;
 
 namespace TodoList
 {
@@ -44,6 +43,19 @@ namespace TodoList
             LoadPage(TaskService.TaskType.Today);
         }
 
+        private async void SetCount()
+        {
+            await Task.Run(() =>
+            {
+                int all = _taskService.GetTasks(TaskService.TaskType.All).Count;
+
+                Dispatcher.Invoke(() =>
+                {
+                    TodoTaskCount.Text = $"{all}";
+                });
+            });
+        }
+
         private async void LoadPage(TaskService.TaskType type)
         {
             ShowLoadingPage();
@@ -61,16 +73,18 @@ namespace TodoList
             TodoPage todoPage = new TodoPage();
             todoPage.TodoTextBlock.Text = title;
             todoPage.MarkDone += TodoPage_MarkDone;
-
-            todoPage.Search += TodoPage_SearchHandler;
             todoPage.ShowDetail += TodoPage_ShowDetail;
+            todoPage.DeleteTask += TodoPage_DeleteTask;
+
+            List<TaskJob> taskJobs = new List<TaskJob>();
 
             await Task.Run(() =>
             {
-                todoPage.TasksList = _taskService.GetTasks(type);
+                taskJobs = _taskService.GetTasks(type);
                 _currentTaskType = type;
             });
-
+            todoPage.TasksList = taskJobs;
+            SetCount();
             FrameTodo.Navigate(todoPage);
         }
 
@@ -95,17 +109,10 @@ namespace TodoList
             LoadPage(_currentTaskType);
         }
 
-        private void TodoPage_SearchHandler(object? sender, string e)
+        private void TodoPage_DeleteTask(object? sender, TaskJob e)
         {
-            if (e == null)
-            {
-                LoadPage(_currentTaskType);
-                return;
-            }
-
-            TodoPage todoPage = (TodoPage)sender;
-            todoPage.TasksList = _taskService.Search(e);
-            FrameTodo.Navigate(todoPage);
+            _taskService.RemoveTaskJob(e);
+            LoadPage(_currentTaskType);
         }
 
         private void SetButton(Button button)
@@ -115,20 +122,13 @@ namespace TodoList
             SetButtonHighlight(ImportantBtn, button == ImportantBtn);
             SetButtonHighlight(CompletedBtn, button == CompletedBtn);
             SetButtonHighlight(PlannedBtn, button == PlannedBtn);
-            SetButtonHighlight(AllBtn, button == AllBtn);
+            SetButtonHighlight(AllTasksBtn, button == AllTasksBtn);
             SetButtonHighlight(CategoryBtn, button == CategoryBtn);
         }
 
         private void SetButtonHighlight(Button button, bool isHighlighted)
         {
-            if (isHighlighted)
-            {
-                button.Style = (Style)FindResource("MaterialDesignRaisedButton");
-            }
-            else
-            {
-                button.Style = (Style)FindResource("MaterialDesignFlatButton");
-            }
+            button.Background = isHighlighted ? Brushes.LightGray : Brushes.Transparent;
         }
 
         private void ShowLoadingPage()
@@ -169,7 +169,7 @@ namespace TodoList
         private void AllBtn_Click(object sender, RoutedEventArgs e)
         {
             LoadPage(TaskService.TaskType.All);
-            SetButton(AllBtn);
+            SetButton(AllTasksBtn);
         }
 
         private void CategoryBtn_Click(object sender, RoutedEventArgs e)
@@ -232,12 +232,67 @@ namespace TodoList
             // save to database
             // loading screen while saving
             _taskService.AddTaskJob(newTask);
+
+            LoadPage(_currentTaskType);
+        }
+        private void DarkModeToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            PaletteHelper palette = new PaletteHelper();
+
+            ITheme theme = palette.GetTheme();
+
+            if (DarkModeToggle.IsChecked.Value)
+            {
+                theme.SetBaseTheme(Theme.Dark);
+            }
+            else
+            {
+                theme.SetBaseTheme(Theme.Light);
+            }
+            palette.SetTheme(theme);
         }
 
-        private void QuitBtn_Click(object sender, RoutedEventArgs e)
+        private void DarkModeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            var paletteHelper = new PaletteHelper();
+            ITheme theme = paletteHelper.GetTheme();
+
+            if (DarkModeToggle.IsChecked == true)
+            {
+                theme.SetBaseTheme(Theme.Dark);
+                DarkModeToggle.Content = new PackIcon { Kind = PackIconKind.WeatherNight };
+            }
+            else
+            {
+                theme.SetBaseTheme(Theme.Light);
+                DarkModeToggle.Content = new PackIcon { Kind = PackIconKind.WeatherSunny };
+            }
+
+            paletteHelper.SetTheme(theme);
+
+        }
+
+        private void MinimizeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Normal)
+            {
+                WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                WindowState = WindowState.Normal;
+            }
+        }
+
+        private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
             // Hiển thị hộp thoại xác nhận
-            var result = MessageBox.Show("Are you sure you want to quit?","Confirm Quit",MessageBoxButton.YesNo,MessageBoxImage.Question);
+            var result = MessageBox.Show("Are you sure you want to quit?", "Confirm Quit", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             // Nếu người dùng chọn Yes, thoát ứng dụng
             if (result == MessageBoxResult.Yes)
@@ -247,8 +302,8 @@ namespace TodoList
             // Nếu người dùng chọn No, không làm gì cả và ứng dụng vẫn hoạt động
             else
             {
-                // Thông báo rằng họ đã chọn ở lại ứng dụng
-                MessageBox.Show("You choose to stay in the app","Cancelled",MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show("Thank you for staying with us!", "Thank you", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Hide();
             }
         }
     }

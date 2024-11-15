@@ -32,36 +32,66 @@ namespace TodoList.UserControls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (TaskJob == null)
+            try
             {
-                DialogHost.CloseDialogCommand.Execute(null, null);
-                return;
+                if (TaskJob == null || Categories == null)
+                {
+                    DialogHost.CloseDialogCommand.Execute(null, null);
+                    return;
+                }
+
+                InitializeControls();
+                LoadTaskJobData();
             }
-
-            FillComboBox(Categories);
-
-            TitleTextBox.Text = TaskJob.Title;
-            DescriptionTextBox.Text = TaskJob.Description;
-            StatusTextBlock.Text = TaskJob.Status;
-            DueTimeDate.SelectedDate = TaskJob.DueDate;
-            PriorityComboBox.SelectedIndex = TaskJob.Priority switch
+            catch (Exception ex)
             {
-                "Low" => 0,
-                "Medium" => 1,
-                "High" => 2,
-                _ => 0
-            };
-
-            CategoryComboBox.SelectedValue = TaskJob.CategoryId;
-            CreatedDateTextBlock.Text = TaskJob.CreatedDate?.ToString("dd/MM/yyyy hh:mm tt");
+                ShowError($"Error loading task details: {ex.Message}");
+                DialogHost.CloseDialogCommand.Execute(null, null);
+            }
         }
 
-        private void FillComboBox(List<Category> categories)
+        private void InitializeControls()
         {
-            CategoryComboBox.ItemsSource = categories;
+            CategoryComboBox.ItemsSource = Categories;
             CategoryComboBox.DisplayMemberPath = "Type";
             CategoryComboBox.SelectedValuePath = "Id";
-            CategoryComboBox.SelectedIndex = 0;
+        }
+
+        private void LoadTaskJobData()
+        {
+            TitleTextBox.Text = TaskJob.Title;
+            DescriptionTextBox.Text = TaskJob.Description;
+            StatusComboBox.SelectedIndex = TaskJob.Status switch
+            {
+                "Pending" => 0,
+                "Completed" => 1,
+                _ => 0
+            };
+            CategoryComboBox.SelectedValue = TaskJob.CategoryId;
+            CreatedDateTextBlock.Text = TaskJob.CreatedDate?.ToString("dd/MM/yyyy hh:mm tt");
+
+            LoadDueDateAndTime();
+            LoadPriority();
+        }
+
+        private void LoadDueDateAndTime()
+        {
+            if (TaskJob.DueDate.HasValue)
+            {
+                DueTimeDate.SelectedDate = TaskJob.DueDate.Value.Date;
+                DueTimePicker.SelectedTime = TaskJob.DueDate.Value;
+            }
+        }
+
+        private void LoadPriority()
+        {
+            PriorityComboBox.SelectedIndex = TaskJob.Priority switch
+            {
+                "High" => 0,
+                "Medium" => 1,
+                "Low" => 2,
+                _ => 0
+            };
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
@@ -71,37 +101,79 @@ namespace TodoList.UserControls
 
         private void UpdateBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsValid()) return;
-            TaskJob updatedTask = new TaskJob();
-            updatedTask.Id = TaskJob.Id;
-            updatedTask.Title = TitleTextBox.Text;
-            updatedTask.Description = DescriptionTextBox.Text;
-            updatedTask.Status = StatusTextBlock.Text;
-            updatedTask.DueDate = DueTimeDate.SelectedDate;
-            updatedTask.Priority = PriorityComboBox.Text;
-            updatedTask.CategoryId = (int)CategoryComboBox.SelectedValue;
-            updatedTask.CreatedDate = TaskJob.CreatedDate;
+            if (!ValidateInput()) return;
 
+            var updatedTask = CreateUpdatedTask();
             UpdateTask?.Invoke(this, updatedTask);
-
             DialogHost.CloseDialogCommand.Execute(null, null);
         }
 
-        private bool IsValid()
+        private TaskJob CreateUpdatedTask()
+        {
+            return new TaskJob
+            {
+                Id = TaskJob.Id,
+                Title = TitleTextBox.Text.Trim(),
+                Description = DescriptionTextBox.Text.Trim(),
+                Status = GetSelectedStatus(),
+                DueDate = GetSelectedDateTime(),
+                Priority = GetSelectedPriority(),
+                CategoryId = (int)CategoryComboBox.SelectedValue,
+                CreatedDate = TaskJob.CreatedDate
+            };
+        }
+
+        private string GetSelectedStatus()
+        {
+            var selectedItem = (ComboBoxItem)StatusComboBox.SelectedItem;
+            var stackPanel = (StackPanel)selectedItem.Content;
+            return ((TextBlock)stackPanel.Children[1]).Text;
+        }
+
+        private string GetSelectedPriority()
+        {
+            var priorityItem = (ComboBoxItem)PriorityComboBox.SelectedItem;
+            var priorityStack = (StackPanel)priorityItem.Content;
+            return ((TextBlock)priorityStack.Children[1]).Text;
+        }
+
+        private DateTime? GetSelectedDateTime()
+        {
+            if (!DueTimeDate.SelectedDate.HasValue || !DueTimePicker.SelectedTime.HasValue)
+                return null;
+
+            var selectedDate = DueTimeDate.SelectedDate.Value;
+            var selectedTime = DueTimePicker.SelectedTime.Value;
+            return selectedDate.Date.Add(selectedTime.TimeOfDay);
+        }
+
+        private bool ValidateInput()
         {
             if (string.IsNullOrWhiteSpace(TitleTextBox.Text))
             {
-                MessageBox.Show("Title is required", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowError("Title is required");
                 return false;
             }
 
-            if (DueTimeDate.SelectedDate == null)
+            if (!DueTimeDate.SelectedDate.HasValue || !DueTimePicker.SelectedTime.HasValue)
             {
-                MessageBox.Show("Due date is required", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowError("Due date and time are required");
+                return false;
+            }
+
+            var selectedDateTime = GetSelectedDateTime();
+            if (selectedDateTime < DateTime.Now)
+            {
+                ShowError("Due date cannot be in the past");
                 return false;
             }
 
             return true;
+        }
+
+        private void ShowError(string message)
+        {
+            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

@@ -3,210 +3,268 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:uc="clr-namespace:TodoList.UserControls"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Medium"
-        TextElement.FontSize="14"
-        FontFamily="{materialDesign:MaterialDesignFont}"
         Title="Todo List App"
-        Width="1063"
-        Height="734"
-        WindowStartupLocation="CenterScreen"
-        Loaded="Window_Loaded">
-    <materialDesign:DialogHost x:Name="DialogHostMain"
-                               Identifier="DialogHostMain">
-        <Grid Margin="20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        Width="1200"
+        Height="800"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen">
 
+    <Window.Resources>
+        <Style x:Key="MenuButton"
+               TargetType="Button"
+               BasedOn="{StaticResource MaterialDesignFlatButton}">
+            <Setter Property="Height"
+                    Value="48" />
+            <Setter Property="Margin"
+                    Value="0,4" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource MaterialDesignBody}" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="Padding"
+                    Value="16,0" />
+            <!-- Thêm Tag để track trạng thái Selected -->
+            <Setter Property="Tag"
+                    Value="False" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="{DynamicResource MaterialDesignDivider}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
 
-            <Border CornerRadius="10"
-                    Background="#F0F0F0">
-                <StackPanel Grid.Column="0"
-                            Background="#F0F0F0"
-                            Width="200"
-                            Margin="10">
+    <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}"
+                         UniformCornerRadius="15"
+                         Padding="0">
 
-                    <TextBlock Text="Menu"
-                               HorizontalAlignment="Center"
-                               Margin="10"
-                               FontSize="16"
-                               FontWeight="Bold" />
+        <materialDesign:DialogHost x:Name="DialogHostMain"
+                                   Identifier="DialogHostMain">
+            <Grid>
+                <!-- Custom Title Bar -->
+                <DockPanel VerticalAlignment="Top"
+                           Height="32"
+                           Background="{DynamicResource PrimaryHueDarkBrush}">
+                    <TextBlock Text="Todo List"
+                               Margin="15,0,0,0"
+                               VerticalAlignment="Center"
+                               Foreground="White" />
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                DockPanel.Dock="Right">
+                        <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                Height="32"
+                                Width="32"
+                                Padding="4"
+                                Click="MinimizeBtn_Click">
+                            <materialDesign:PackIcon Kind="WindowMinimize" />
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                Height="32"
+                                Width="32"
+                                Padding="4"
+                                Click="MaximizeBtn_Click">
+                            <materialDesign:PackIcon Kind="WindowMaximize" />
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                Height="32"
+                                Width="32"
+                                Padding="4"
+                                Click="CloseBtn_Click">
+                            <materialDesign:PackIcon Kind="Close" />
+                        </Button>
+                    </StackPanel>
+                </DockPanel>
 
-                    <Button x:Name="TodayBtn"
-                            Content="Today"
-                            Margin="10"
-                            Click="TodayBtn_Click"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Left">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="CalendarToday"
-                                                             Margin="0,0,5,0" />
-                                    <TextBlock Text="{Binding}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
-                    <Button x:Name="UpcomingBtn"
-                            Content="Upcoming"
-                            Margin="10"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Left"
-                            Click="UpcomingBtn_Click">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="CalendarPlus"
-                                                             Margin="0,0,5,0" />
-                                    <TextBlock Text="{Binding}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
-                    <Button x:Name="ImportantBtn"
-                            Margin="10"
-                            Content="Important"
-                            Click="ImportantBtn_Click"
-                            HorizontalContentAlignment="Left"
-                            HorizontalAlignment="Stretch">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Star"
-                                                             Margin="0,0,5,0" />
-                                    <TextBlock Text="{Binding}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
-                    <Button x:Name="PlannedBtn"
-                            Margin="10"
-                            Content="Planned"
-                            Click="PlannedBtn_Click"
-                            HorizontalContentAlignment="Left"
-                            HorizontalAlignment="Stretch">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Calendar"
-                                                             Margin="0,0,5,0" />
-                                    <TextBlock Text="{Binding}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
-                    <Button x:Name="CompletedBtn"
-                            Content="Completed"
-                            Margin="10"
-                            Click="CompletedBtn_Click"
-                            HorizontalContentAlignment="Left"
-                            HorizontalAlignment="Stretch">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Check"
-                                                             Margin="0,0,5,0" />
-                                    <TextBlock Text="{Binding}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
-                    <Button x:Name="AllBtn"
-                            Content="All"
-                            Margin="10"
-                            Click="AllBtn_Click"
-                            HorizontalContentAlignment="Left"
-                            HorizontalAlignment="Stretch">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ViewList"
-                                                             Margin="0,0,5,0" />
-                                    <TextBlock Text="{Binding}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
-                    <Button x:Name="CategoryBtn"
-                            Content="Categories"
-                            Margin="10"
-                            Click="CategoryBtn_Click"
-                            HorizontalContentAlignment="Left"
-                            HorizontalAlignment="Stretch">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Folder"
-                                                             Margin="0,0,5,0" />
-                                    <TextBlock Text="{Binding}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
+                <Grid Margin="0,32,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="280" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                    <Button x:Name="QuitBtn"
-                            Content="Quit"
-                            Margin="10"
-                            Click="QuitBtn_Click"
-                            HorizontalContentAlignment="Left"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Bottom">     
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ExitToApp"                               Margin="0,0,5,0" />
-                                    <TextBlock Text="{Binding}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
+                    <!-- Left Menu Panel -->
+                    <Border Background="{DynamicResource MaterialDesignCardBackground}">
+                        <DockPanel>
+                            <!-- Menu Items -->
+                            <StackPanel Margin="0,20,0,0">
+                                <Button x:Name="TodayBtn"
+                                        Style="{StaticResource MenuButton}"
+                                        Click="TodayBtn_Click">
+                                    <DockPanel Width="220">
+                                        <materialDesign:PackIcon Kind="CalendarToday"
+                                                                 Width="22"
+                                                                 Height="22"
+                                                                 Margin="0,0,15,0"
+                                                                 VerticalAlignment="Center" />
+                                        <TextBlock Text="Today"
+                                                   FontSize="14"
+                                                   VerticalAlignment="Center" />
+                                    </DockPanel>
+                                </Button>
 
+                                <Button x:Name="UpcomingBtn"
+                                        Style="{StaticResource MenuButton}"
+                                        Click="UpcomingBtn_Click">
+                                    <DockPanel Width="220">
+                                        <materialDesign:PackIcon Kind="CalendarPlus"
+                                                                 Width="22"
+                                                                 Height="22"
+                                                                 Margin="0,0,15,0"
+                                                                 VerticalAlignment="Center" />
+                                        <TextBlock Text="Upcoming"
+                                                   FontSize="14"
+                                                   VerticalAlignment="Center" />
+                                    </DockPanel>
+                                </Button>
 
-                </StackPanel>
-            </Border>
+                                <Button x:Name="AllTasksBtn"
+                                        Style="{StaticResource MenuButton}"
+                                        Click="AllBtn_Click">
+                                    <DockPanel Width="220">
+                                        <materialDesign:PackIcon Kind="ViewList"
+                                                                 Width="22"
+                                                                 Height="22"
+                                                                 Margin="0,0,15,0"
+                                                                 VerticalAlignment="Center" />
+                                        <TextBlock Text="All Tasks"
+                                                   FontSize="14"
+                                                   VerticalAlignment="Center" />
+                                        <TextBlock Text="5"
+                                                   x:Name="TodoTaskCount"
+                                                   Background="{DynamicResource PrimaryHueMidBrush}"
+                                                   Foreground="White"
+                                                   Padding="8,2"
+                                                   HorizontalAlignment="Right" />
+                                    </DockPanel>
+                                </Button>
 
+                                <Separator Margin="20,10" />
 
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+                                <TextBlock Text="LISTS"
+                                           Margin="25,10"
+                                           Opacity="0.6"
+                                           Foreground="{DynamicResource MaterialDesignBody}"
+                                           FontSize="17" />
 
-                <Frame x:Name="FrameTodo"
-                       NavigationUIVisibility="Hidden" />
+                                <Button x:Name="ImportantBtn"
+                                        Style="{StaticResource MenuButton}"
+                                        Click="ImportantBtn_Click">
+                                    <DockPanel Width="220">
+                                        <materialDesign:PackIcon Kind="Star"
+                                                                 Width="22"
+                                                                 Height="22"
+                                                                 Margin="0,0,15,0"
+                                                                 VerticalAlignment="Center" />
+                                        <TextBlock Text="Important"
+                                                   FontSize="14"
+                                                   VerticalAlignment="Center" />
+                                    </DockPanel>
+                                </Button>
 
-                <Button x:Name="AddTaskBtn"
-                        Content="Add Task"
-                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                        Grid.Row="1"
-                        Margin="10"
-                        HorizontalAlignment="Right"
-                        Click="AddTaskBtn_Click" />
+                                <Button x:Name="PlannedBtn"
+                                        Style="{StaticResource MenuButton}"
+                                        Click="PlannedBtn_Click">
+                                    <DockPanel Width="220">
+                                        <materialDesign:PackIcon Kind="Calendar"
+                                                                 Width="22"
+                                                                 Height="22"
+                                                                 Margin="0,0,15,0"
+                                                                 VerticalAlignment="Center" />
+                                        <TextBlock Text="Planned"
+                                                   FontSize="14"
+                                                   VerticalAlignment="Center" />
+                                    </DockPanel>
+                                </Button>
+
+                                <Button x:Name="CompletedBtn"
+                                        Style="{StaticResource MenuButton}"
+                                        Click="CompletedBtn_Click">
+                                    <DockPanel Width="220">
+                                        <materialDesign:PackIcon Kind="CheckCircle"
+                                                                 Width="22"
+                                                                 Height="22"
+                                                                 Margin="0,0,15,0"
+                                                                 VerticalAlignment="Center" />
+                                        <TextBlock Text="Completed"
+                                                   FontSize="14"
+                                                   VerticalAlignment="Center" />
+                                    </DockPanel>
+                                </Button>
+
+                                <Button x:Name="CategoryBtn"
+                                        Style="{StaticResource MenuButton}"
+                                        Click="CategoryBtn_Click">
+                                    <DockPanel Width="220">
+                                        <materialDesign:PackIcon Kind="CategoryOutline"
+                                                                 Width="22"
+                                                                 Height="22"
+                                                                 Margin="0,0,15,0"
+                                                                 VerticalAlignment="Center" />
+                                        <TextBlock Text="Categories"
+                                                   FontSize="14"
+                                                   VerticalAlignment="Center" />
+                                    </DockPanel>
+                                </Button>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Main Content Area -->
+                    <Grid Grid.Column="1"
+                          Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Top Bar -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <!-- Settings and Profile -->
+                            <StackPanel Grid.Column="1"
+                                        Orientation="Horizontal">
+                                <ToggleButton x:Name="DarkModeToggle"
+                                              Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                              ToolTip="Toggle Dark Mode"
+                                              Click="DarkModeToggle_Click">
+                                    <materialDesign:PackIcon Kind="WeatherNight" />
+                                </ToggleButton>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Tasks List -->
+                        <Frame x:Name="FrameTodo"
+                               Grid.Row="1"
+                               NavigationUIVisibility="Hidden"
+                               Margin="0,20" />
+
+                        <!-- Add Task Button -->
+                        <Button x:Name="AddTaskBtn"
+                                Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                materialDesign:ButtonAssist.CornerRadius="8"
+                                Click="AddTaskBtn_Click"
+                                Grid.Row="1"
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Right"
+                                Margin="0,0,16,16">
+                            <materialDesign:PackIcon Kind="Plus"
+                                                     Height="24"
+                                                     Width="24" />
+                        </Button>
+                    </Grid>
+                </Grid>
             </Grid>
-        </Grid>
-
-        <materialDesign:DialogHost.DialogContent>
-            <Grid x:Name="DialogContentGrid">
-                <!-- Hiệu ứng loading -->
-                <StackPanel x:Name="LoadingPanel"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Visibility="Collapsed">
-                    <ProgressBar IsIndeterminate="True"
-                                 Width="150" />
-                    <TextBlock Text="Loading..."
-                               Margin="10"
-                               HorizontalAlignment="Center" />
-                </StackPanel>
-
-
-            </Grid>
-        </materialDesign:DialogHost.DialogContent>
-    </materialDesign:DialogHost>
+        </materialDesign:DialogHost>
+    </materialDesign:Card>
 </Window>

@@ -29,89 +29,91 @@ namespace TodoList.UserControls
         {
             InitializeComponent();
         }
-
         private void AddTaskButton_Click(object sender, RoutedEventArgs e)
         {
             if (!IsValid()) return;
 
             TaskJob job = new TaskJob
             {
-                Title = TaskTitleTextBox.Text,
-                Description = DescriptionTextBox.Text,
-                Status = (StatusButton.SelectedItem as ComboBoxItem)?.Content.ToString(),
-                DueDate = DueDateDatePicker.SelectedDate ?? DateTime.Now,
-                Priority = PriorityComboBox.Text,
+                Title = TaskTitleTextBox.Text.Trim(),
+                Description = DescriptionTextBox.Text.Trim(),
+                Status = GetSelectedStatus(),
+                DueDate = GetSelectedDateTime(),
+                Priority = GetSelectedPriority(),
                 CreatedDate = DateTime.Now,
                 CategoryId = int.TryParse(CategoryComboBox.SelectedValue?.ToString(), out int categoryId) ? categoryId : (int?)null
             };
 
             Job = job;
-
-            // close dialog
             DialogHost.CloseDialogCommand.Execute(null, null);
+        }
+
+        private string GetSelectedStatus()
+        {
+            var selectedItem = (ComboBoxItem)StatusComboBox.SelectedItem;
+            var stackPanel = (StackPanel)selectedItem.Content;
+            return ((TextBlock)stackPanel.Children[1]).Text;
+        }
+
+        private string GetSelectedPriority()
+        {
+            var priorityItem = (ComboBoxItem)PriorityComboBox.SelectedItem;
+            var priorityStack = (StackPanel)priorityItem.Content;
+            return ((TextBlock)priorityStack.Children[1]).Text;
+        }
+
+        private DateTime? GetSelectedDateTime()
+        {
+            if (!DueDateDatePicker.SelectedDate.HasValue || !DueTimeTimePicker.SelectedTime.HasValue)
+                return null;
+
+            var selectedDate = DueDateDatePicker.SelectedDate.Value;
+            var selectedTime = DueTimeTimePicker.SelectedTime.Value;
+            return selectedDate.Date.Add(selectedTime.TimeOfDay);
         }
 
         private bool IsValid()
         {
             bool isValid = true;
 
-            // Check TaskTitleTextBox
-            bool hasError = string.IsNullOrWhiteSpace(TaskTitleTextBox.Text);
-            SetValidationError(TaskTitleTextBox, TaskTitleErrorText, hasError, "Task Title is required.");
-            if (hasError) isValid = false;
+            if (string.IsNullOrWhiteSpace(TaskTitleTextBox.Text))
+            {
+                TaskTitleErrorText.Visibility = Visibility.Visible;
+                isValid = false;
+            }
+            else
+            {
+                TaskTitleErrorText.Visibility = Visibility.Collapsed;
+            }
 
-            // Check TaskNameTextBox
-            hasError = string.IsNullOrWhiteSpace(TaskNameTextBox.Text);
-            SetValidationError(TaskNameTextBox, TaskNameErrorText, hasError, "Task Name is required.");
-            if (hasError) isValid = false;
+            if (string.IsNullOrWhiteSpace(TaskNameTextBox.Text))
+            {
+                TaskNameErrorText.Visibility = Visibility.Visible;
+                isValid = false;
+            }
+            else
+            {
+                TaskNameErrorText.Visibility = Visibility.Collapsed;
+            }
 
-            // Check DescriptionTextBox
-            hasError = string.IsNullOrWhiteSpace(DescriptionTextBox.Text);
-            SetValidationError(DescriptionTextBox, DescriptionErrorText, hasError, "Description is required.");
-            if (hasError) isValid = false;
-
-            // Check DueDateDatePicker
-            hasError = !DueDateDatePicker.SelectedDate.HasValue;
-            SetValidationError(DueDateDatePicker, DueDateErrorText, hasError, "Due Date is required.");
-            if (hasError) isValid = false;
-
-            // Check PriorityComboBox
-            hasError = PriorityComboBox.SelectedItem == null;
-            SetValidationError(PriorityComboBox, null, hasError, "Priority is required.");
-            if (hasError) isValid = false;
-
-            // Check CategoryComboBox
-            hasError = CategoryComboBox.SelectedItem == null;
-            SetValidationError(CategoryComboBox, null, hasError, "Category is required.");
-            if (hasError) isValid = false;
-
-            // Check StatusButton
-            hasError = StatusButton.SelectedItem == null;
-            SetValidationError(StatusButton, null, hasError, "Status is required.");
-            if (hasError) isValid = false;
+            if (string.IsNullOrWhiteSpace(DescriptionTextBox.Text))
+            {
+                DescriptionErrorText.Visibility = Visibility.Visible;
+                isValid = false;
+            }
+            else
+            {
+                DescriptionErrorText.Visibility = Visibility.Collapsed;
+            }
 
             return isValid;
         }
 
-
-        private void SetValidationError(Control control, TextBlock errorTextBlock, bool hasError, string errorMessage)
+        private DateTime GetDueDateTime()
         {
-            if (hasError)
-            {
-                if (errorTextBlock != null)
-                    errorTextBlock.Visibility = Visibility.Visible;
-
-                control.ToolTip = errorMessage;
-                control.BorderBrush = Brushes.Red;
-            }
-            else
-            {
-                if (errorTextBlock != null)
-                    errorTextBlock.Visibility = Visibility.Collapsed;
-
-                control.ToolTip = null;
-                control.ClearValue(BorderBrushProperty);
-            }
+            DateTime dueDate = DueDateDatePicker.SelectedDate ?? DateTime.Today;
+            TimeSpan dueTime = DueTimeTimePicker.SelectedTime?.TimeOfDay ?? TimeSpan.Zero;
+            return dueDate.Date + dueTime;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -121,10 +123,18 @@ namespace TodoList.UserControls
 
         private void LoadCategories()
         {
-            CategoryComboBox.ItemsSource = Categories;
-            CategoryComboBox.SelectedValuePath = "Id";
-            CategoryComboBox.DisplayMemberPath = "Type";
-            CategoryComboBox.SelectedIndex = 0;
+            if (Categories != null)
+            {
+                CategoryComboBox.ItemsSource = Categories;
+                CategoryComboBox.SelectedValuePath = "Id";
+                CategoryComboBox.DisplayMemberPath = "Type";
+                CategoryComboBox.SelectedIndex = 0;
+            }
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogHost.CloseDialogCommand.Execute(null, null);
         }
     }
 }

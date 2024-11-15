@@ -3,26 +3,41 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:TodoList.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d"
       d:DesignHeight="450"
       d:DesignWidth="800"
-      Background="White"
+      Background="{DynamicResource MaterialDesignPaper}"
+      FontFamily="{materialDesign:MaterialDesignFont}"
       Title="LoadingPage">
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0">
+        <!-- Central StackPanel for loading elements -->
+        <StackPanel VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+
+            <!-- Circular ProgressBar as an alternative to CircularProgressIndicator -->
             <ProgressBar IsIndeterminate="True"
-                         Width="700"
-                         HorizontalAlignment="Center" />
+                         Width="100"
+                         Height="100"
+                         HorizontalAlignment="Center"
+                         Style="{DynamicResource MaterialDesignCircularProgressBar}" />
+
+            <!-- Loading Text Block with Style and Font Size -->
             <TextBlock Text="Loading..."
                        FontSize="24"
                        FontWeight="Bold"
-                       Margin="0,0,0,10"
-                       HorizontalAlignment="Center" />
+                       HorizontalAlignment="Center"
+                       Margin="0,10,0,0"
+                       Foreground="{DynamicResource MaterialDesignBody}" />
+
+            <!-- Secondary Loading Message -->
+            <TextBlock Text="Please wait while we prepare things for you..."
+                       FontSize="16"
+                       Foreground="Gray"
+                       HorizontalAlignment="Center"
+                       Margin="0,5,0,0" />
+
         </StackPanel>
     </Grid>
 </Page>
