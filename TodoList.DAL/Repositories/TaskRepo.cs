@@ -13,35 +13,50 @@ namespace Todolist.DAL.Repositories
 
         private TodoApplicationPrn212Context _context;
 
-        public List<TaskJob> GetAll()
+        public TaskRepo()
         {
             _context = new TodoApplicationPrn212Context();
+        }
+
+        public List<TaskJob> GetAll()
+        {
             return _context.TaskJobs.Include("Category").ToList();
         }
 
         public void Add(TaskJob entity)
         {
-            _context = new TodoApplicationPrn212Context();
             _context.TaskJobs.Add(entity);
             _context.SaveChanges();
         }
 
         public void Update(TaskJob entity)
         {
-            _context = new TodoApplicationPrn212Context();
-            _context.TaskJobs.Update(entity);
+            // Kiểm tra xem thực thể đã được theo dõi bởi DbContext chưa
+            var trackedEntity = _context.TaskJobs.Local.FirstOrDefault(e => e.Id == entity.Id);
+
+            if (trackedEntity != null)
+            {
+                // Nếu đã được theo dõi, sử dụng Attach và cập nhật giá trị
+                _context.Entry(trackedEntity).CurrentValues.SetValues(entity);
+            }
+            else
+            {
+                // Nếu chưa được theo dõi, dùng Attach để thêm vào DbContext
+                _context.TaskJobs.Attach(entity);
+                _context.Entry(entity).State = EntityState.Modified;
+            }
+
+            // Lưu thay đổi vào database
             _context.SaveChanges();
         }
 
         public void Delete(TaskJob entity)
         {
-            _context = new TodoApplicationPrn212Context();
             _context.TaskJobs.Remove(entity);
             _context.SaveChanges();
         }
         public List<TaskJob?> Search(string keyword)
         {
-            _context = new TodoApplicationPrn212Context();
             var list = _context.TaskJobs.ToList();
             keyword = keyword.ToLower();
 

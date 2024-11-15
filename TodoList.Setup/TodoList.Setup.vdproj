@@ -15,25 +15,19 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_3E8E343AC9FA4B559E4CDE445B20DEE9"
+        "MsmKey" = "8:_1929853EF3B74274975697322D343C63"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_52D929C740674F229E1EF1713B9588F7"
+        "MsmKey" = "8:_1AB604321E164D75AFB4CF68941D8EEB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6DB944B0F09A4C18B968FA87ED55EE80"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_71062D3685F04D648D0B9A14F152DE04"
+        "MsmKey" = "8:_5434348C32E142739E2AE05BA9DBFFD3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -45,31 +39,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_93E8A892F05D43479E197DEAA59FA4D5"
+        "MsmKey" = "8:_967D670C7BC243178ADE1D350AD6B910"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_A28E509F397243FA8D8A2F877D413712"
+        "MsmKey" = "8:_B5DE423A456F45CA9C84EE2AE5192CE2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_ABED074F79F1495190D630612239ED89"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_BB959CE4C5394DB599CD9FCC9C1297D7"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D9F1E5B6C7E140A495A39178003A4AA8"
+        "MsmKey" = "8:_CC928750FFCF421B81E4EB793DC850AE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -130,6 +112,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -162,87 +152,7 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3E8E343AC9FA4B559E4CDE445B20DEE9"
-            {
-            "SourcePath" = "8:..\\TodoList\\bin\\Release\\net8.0-windows\\publish\\win-x86\\Microsoft.Data.SqlClient.SNI.dll"
-            "TargetName" = "8:Microsoft.Data.SqlClient.SNI.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_8778574249EF4A3EABB176B65D8ABA24"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_52D929C740674F229E1EF1713B9588F7"
-            {
-            "SourcePath" = "8:..\\TodoList\\bin\\Release\\net8.0-windows\\publish\\win-x86\\TodoList.exe"
-            "TargetName" = "8:TodoList.exe"
-            "Tag" = "8:"
-            "Folder" = "8:_8778574249EF4A3EABB176B65D8ABA24"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6DB944B0F09A4C18B968FA87ED55EE80"
-            {
-            "SourcePath" = "8:..\\TodoList\\bin\\Release\\net8.0-windows\\publish\\win-x86\\msalruntime_x86.dll"
-            "TargetName" = "8:msalruntime_x86.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_8778574249EF4A3EABB176B65D8ABA24"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_71062D3685F04D648D0B9A14F152DE04"
-            {
-            "SourcePath" = "8:..\\TodoList\\bin\\Release\\net8.0-windows\\publish\\win-x86\\WebView2Loader.dll"
-            "TargetName" = "8:WebView2Loader.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_8778574249EF4A3EABB176B65D8ABA24"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_93E8A892F05D43479E197DEAA59FA4D5"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1929853EF3B74274975697322D343C63"
             {
             "SourcePath" = "8:..\\TodoList\\bin\\Release\\net8.0-windows\\publish\\win-x86\\Todolist.DAL.pdb"
             "TargetName" = "8:Todolist.DAL.pdb"
@@ -262,10 +172,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A28E509F397243FA8D8A2F877D413712"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1AB604321E164D75AFB4CF68941D8EEB"
             {
-            "SourcePath" = "8:..\\TodoList\\bin\\Release\\net8.0-windows\\publish\\win-x86\\TodoList.pdb"
-            "TargetName" = "8:TodoList.pdb"
+            "SourcePath" = "8:..\\TodoList\\bin\\Release\\net8.0-windows\\publish\\win-x86\\Microsoft.Data.SqlClient.SNI.dll"
+            "TargetName" = "8:Microsoft.Data.SqlClient.SNI.dll"
             "Tag" = "8:"
             "Folder" = "8:_8778574249EF4A3EABB176B65D8ABA24"
             "Condition" = "8:"
@@ -282,7 +192,7 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ABED074F79F1495190D630612239ED89"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5434348C32E142739E2AE05BA9DBFFD3"
             {
             "SourcePath" = "8:..\\TodoList\\Resources\\iconv2.ico"
             "TargetName" = "8:iconv2.ico"
@@ -302,10 +212,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BB959CE4C5394DB599CD9FCC9C1297D7"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_967D670C7BC243178ADE1D350AD6B910"
             {
-            "SourcePath" = "8:..\\TodoList\\bin\\Release\\net8.0-windows\\publish\\win-x86\\appsettings.json"
-            "TargetName" = "8:appsettings.json"
+            "SourcePath" = "8:..\\TodoList\\bin\\Release\\net8.0-windows\\publish\\win-x86\\TodoList.pdb"
+            "TargetName" = "8:TodoList.pdb"
             "Tag" = "8:"
             "Folder" = "8:_8778574249EF4A3EABB176B65D8ABA24"
             "Condition" = "8:"
@@ -322,10 +232,30 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D9F1E5B6C7E140A495A39178003A4AA8"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B5DE423A456F45CA9C84EE2AE5192CE2"
             {
             "SourcePath" = "8:..\\TodoList\\bin\\Release\\net8.0-windows\\publish\\win-x86\\Todolist.BLL.pdb"
             "TargetName" = "8:Todolist.BLL.pdb"
+            "Tag" = "8:"
+            "Folder" = "8:_8778574249EF4A3EABB176B65D8ABA24"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CC928750FFCF421B81E4EB793DC850AE"
+            {
+            "SourcePath" = "8:..\\TodoList\\bin\\Release\\net8.0-windows\\publish\\win-x86\\TodoList.exe"
+            "TargetName" = "8:TodoList.exe"
             "Tag" = "8:"
             "Folder" = "8:_8778574249EF4A3EABB176B65D8ABA24"
             "Condition" = "8:"
@@ -410,7 +340,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:TodoList.Setup"
         "ProductCode" = "8:{6EC6E3C4-20E8-48B6-99CC-BA1E765A1A53}"
-        "PackageCode" = "8:{553B8299-59B6-4A57-9470-F25227ADEB9C}"
+        "PackageCode" = "8:{40A9FDE7-426C-4FD8-AA6D-B6FED9B1B094}"
         "UpgradeCode" = "8:{4942DA4C-3D81-4D96-BB82-03B279B6C9B6}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -530,7 +460,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C83BE376CC8644A2B531AA3A5DA8BE49"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_20F27CCE6BAF4149A08399465ECDB437"
             {
             "Name" = "8:TodoList"
             "Arguments" = "8:"
@@ -538,13 +468,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_52D929C740674F229E1EF1713B9588F7"
+            "Target" = "8:_CC928750FFCF421B81E4EB793DC850AE"
             "Folder" = "8:_569CB298130B44948BD408CF037EDD09"
             "WorkingFolder" = "8:_8778574249EF4A3EABB176B65D8ABA24"
-            "Icon" = "8:_ABED074F79F1495190D630612239ED89"
+            "Icon" = "8:_5434348C32E142739E2AE05BA9DBFFD3"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E948956918F5412A93C9CF5E2FBE565A"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_9AADB76B82B34977BED37D3C2193A296"
             {
             "Name" = "8:TodoList"
             "Arguments" = "8:"
@@ -552,10 +482,10 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_52D929C740674F229E1EF1713B9588F7"
+            "Target" = "8:_CC928750FFCF421B81E4EB793DC850AE"
             "Folder" = "8:_002F78AB87B24B36A96F23530BCBA0EE"
             "WorkingFolder" = "8:_8778574249EF4A3EABB176B65D8ABA24"
-            "Icon" = "8:_ABED074F79F1495190D630612239ED89"
+            "Icon" = "8:_5434348C32E142739E2AE05BA9DBFFD3"
             "Feature" = "8:"
             }
         }
