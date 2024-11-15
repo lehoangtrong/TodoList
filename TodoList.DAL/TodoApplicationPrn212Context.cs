@@ -1,80 +1,104 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Todolist.DAL.Entities;
 
-namespace Todolist.DAL;
-
-public partial class TodoApplicationPrn212Context : DbContext
+namespace Todolist.DAL
 {
-    public TodoApplicationPrn212Context()
+    public partial class TodoApplicationPrn212Context : DbContext
     {
-    }
+        private readonly string _jsonFilePath;
+        private TodoData _dataStore;
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<TaskJob> TaskJobs { get; set; }
 
-    public TodoApplicationPrn212Context(DbContextOptions<TodoApplicationPrn212Context> options)
-        : base(options)
-    {
-    }
-
-    public virtual DbSet<Category> Categories { get; set; }
-
-    public virtual DbSet<TaskJob> TaskJobs { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(GetConnectionString());
-
-    private string GetConnectionString()
-    {
-        IConfiguration config = new ConfigurationBuilder()
-             .SetBasePath(Directory.GetCurrentDirectory())
-                  .AddJsonFile("appsettings.json", true, true)
-                  .Build();
-        var strConn = config["ConnectionStrings:DefaultConnectionStringDB"];
-
-        return strConn;
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Category>(entity =>
+        public TodoApplicationPrn212Context()
         {
-            entity.HasKey(e => e.Id).HasName("PK__Category__3214EC071DA6B1B9");
+            _jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "data.json");
+            LoadJsonData();
+        }
 
-            entity.ToTable("Category");
-
-            entity.Property(e => e.CreatedDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.Description).HasMaxLength(200);
-            entity.Property(e => e.Type).HasMaxLength(80);
-        });
-
-        modelBuilder.Entity<TaskJob>(entity =>
+        public TodoApplicationPrn212Context(DbContextOptions<TodoApplicationPrn212Context> options)
+            : base(options)
         {
-            entity.HasKey(e => e.Id).HasName("PK__TaskJob__3214EC07C6101D4F");
+            _jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "data.json");
+            LoadJsonData();
+        }
 
-            entity.ToTable("TaskJob");
 
-            entity.Property(e => e.CreatedDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.Description).HasMaxLength(500);
-            entity.Property(e => e.DueDate).HasColumnType("datetime");
-            entity.Property(e => e.Priority).HasMaxLength(20);
-            entity.Property(e => e.Status)
-                .HasMaxLength(20)
-                .HasDefaultValue("Pending");
-            entity.Property(e => e.Title).HasMaxLength(100);
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseInMemoryDatabase("TodoListDb");
+            }
+        }
 
-            entity.HasOne(d => d.Category).WithMany(p => p.TaskJobs)
-                .HasForeignKey(d => d.CategoryId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK__TaskJob__Categor__2B3F6F97");
-        });
+        private void LoadJsonData()
+        {
+            try
+            {
+                if (File.Exists(_jsonFilePath))
+                {
+                    string jsonContent = File.ReadAllText(_jsonFilePath);
+                    _dataStore = JsonConvert.DeserializeObject<TodoData>(jsonContent)
+                        ?? new TodoData();
 
-        OnModelCreatingPartial(modelBuilder);
+                    // Thêm dữ liệu vào DbSet thay vì gán
+                    Categories.AddRange(_dataStore.Categories);
+                    TaskJobs.AddRange(_dataStore.TaskJobs);
+                    SaveChanges();
+                }
+                else
+                {
+                    _dataStore = new TodoData();
+                    SaveJsonData();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading JSON data: {ex.Message}");
+                _dataStore = new TodoData();
+            }
+        }
+
+        private void SaveJsonData()
+        {
+            try
+            {
+                var jsonContent = JsonConvert.SerializeObject(_dataStore, Formatting.Indented);
+                File.WriteAllText(_jsonFilePath, jsonContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving JSON data: {ex.Message}");
+            }
+        }
+
+        public override int SaveChanges()
+        {
+            try
+            {
+                // Update the JSON data store with current entity states
+                _dataStore.Categories = Categories.Local.ToList();
+                _dataStore.TaskJobs = TaskJobs.Local.ToList();
+
+                // Save to JSON file
+                SaveJsonData();
+
+                return base.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in SaveChanges: {ex.Message}");
+                throw;
+            }
+        }
+
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

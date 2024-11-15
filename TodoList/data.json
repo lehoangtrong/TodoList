@@ -1,0 +1,38 @@
+{
+  "Categories": [
+    {
+      "Id": 1,
+      "Type": "Work",
+      "Description": "Work-related tasks",
+      "CreatedDate": "2024-11-15T08:00:00"
+    },
+    {
+      "Id": 2,
+      "Type": "Personal",
+      "Description": "Personal tasks",
+      "CreatedDate": "2024-11-15T08:00:00"
+    }
+  ],
+  "TaskJobs": [
+    {
+      "Id": 1,
+      "Title": "Finish project report",
+      "Description": "Complete the final project report by end of day",
+      "Status": "Pending",
+      "DueDate": "2024-11-16T17:00:00",
+      "Priority": "High",
+      "CreatedDate": "2024-11-15T08:00:00",
+      "CategoryId": 1
+    },
+    {
+      "Id": 2,
+      "Title": "Plan weekend trip",
+      "Description": "Plan the itinerary for the weekend trip",
+      "Status": "In Progress",
+      "DueDate": "2024-11-20T09:00:00",
+      "Priority": "Medium",
+      "CreatedDate": "2024-11-15T08:00:00",
+      "CategoryId": 2
+    }
+  ]
+}
