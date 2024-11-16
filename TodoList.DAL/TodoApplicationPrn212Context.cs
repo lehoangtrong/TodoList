@@ -47,30 +47,14 @@ namespace Todolist.DAL
                     _dataStore = JsonConvert.DeserializeObject<TodoData>(jsonContent)
                         ?? new TodoData();
 
-                    foreach (var category in _dataStore.Categories)
-                    {
-                        category.Id = 0;
-                    }
-                    foreach (var taskJob in _dataStore.TaskJobs)
-                    {
-                        taskJob.Id = 0;
-                    }
-
-                    // Check if data exists in the database already
-                    if (!Categories.AsNoTracking().Any())
-                    {
-                        Categories.AddRange(_dataStore.Categories);
-                    }
-                    if (!TaskJobs.AsNoTracking().Any())
-                    {
-                        TaskJobs.AddRange(_dataStore.TaskJobs);
-                    }
-                    SaveChanges(); // Save initial data load
+                    SeedDatabaseFromDataStore();
                 }
                 else
                 {
                     _dataStore = new TodoData();
-                    SaveJsonData();
+                    _dataStore.Categories = new List<Category>(); // Initialize lists to avoid null reference exceptions
+                    _dataStore.TaskJobs = new List<TaskJob>();
+                    SaveJsonData(); // Save the initial empty datastore
                 }
             }
             catch (Exception ex)
@@ -80,6 +64,35 @@ namespace Todolist.DAL
             }
         }
 
+        private void SeedDatabaseFromDataStore()
+        {
+            //Efficiently add only new items if the database doesn't match the data store
+            var existingCategoryIds = Categories.Select(c => c.Id).ToList();
+            var newCategories = _dataStore.Categories
+                .Where(c => !existingCategoryIds.Contains(c.Id))
+                .ToList();
+
+
+            if (newCategories.Any())
+            {
+                Categories.AddRange(newCategories);
+            }
+
+
+            var existingTaskJobIds = TaskJobs.Select(t => t.Id).ToList();
+            var newTaskJobs = _dataStore.TaskJobs
+                .Where(t => !existingTaskJobIds.Contains(t.Id))
+                .ToList();
+
+            if (newTaskJobs.Any())
+            {
+                TaskJobs.AddRange(newTaskJobs);
+            }
+
+            SaveChanges();
+        }
+
+
         private void SaveJsonData()
         {
             try
@@ -88,7 +101,8 @@ namespace Todolist.DAL
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 };
-                var jsonContent = JsonConvert.SerializeObject(_dataStore, Formatting.Indented, jsonSettings);
+
+                string jsonContent = JsonConvert.SerializeObject(_dataStore, Formatting.Indented, jsonSettings);
 
                 File.WriteAllText(_jsonFilePath, jsonContent);
             }
@@ -102,13 +116,10 @@ namespace Todolist.DAL
         {
             try
             {
-                // Update the JSON data store with current entity states
-                _dataStore.Categories = Categories.ToList();
-                _dataStore.TaskJobs = TaskJobs.ToList();
+                _dataStore.Categories = Categories.Local.ToList();
+                _dataStore.TaskJobs = TaskJobs.Local.ToList();
 
-                // Save to JSON file
                 SaveJsonData();
-
                 return base.SaveChanges();
             }
             catch (Exception ex)
@@ -135,6 +146,11 @@ namespace Todolist.DAL
 
                 entity.Property(c => c.CreatedDate)
                     .HasDefaultValueSql("GETDATE()"); // Gán giá trị mặc định là ngày hiện tại
+
+                entity.HasMany(c => c.TaskJobs) // Một Category có nhiều TaskJob
+                    .WithOne(t => t.Category) // Một TaskJob thuộc về một Category
+                    .HasForeignKey(t => t.CategoryId) // Thiết lập khóa ngoại
+                    .OnDelete(DeleteBehavior.Cascade); // Xóa TaskJob khi xóa Category
             });
 
             // Cấu hình cho TaskJob

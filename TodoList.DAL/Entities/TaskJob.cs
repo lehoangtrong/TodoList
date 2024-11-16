@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Todolist.DAL.Entities;
@@ -20,6 +21,6 @@ public partial class TaskJob
     public DateTime? CreatedDate { get; set; }
 
     public int? CategoryId { get; set; }
-
+    [JsonIgnore]
     public virtual Category? Category { get; set; }
 }
